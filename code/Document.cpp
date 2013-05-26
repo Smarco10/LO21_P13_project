@@ -1,5 +1,6 @@
-#include "QHeader.h"
+#include "Document.h"
 
+/*
 Document::Document(const QString& f, const QString& t):
     filename(f),title(t),
     modified(false), // non modifié
@@ -89,3 +90,36 @@ QTextStream& operator<<(QTextStream& f, const Document& d){
     }
     return f;
 }
+
+//*/
+
+//*
+void Document::addSubNote(Note *n){
+    //load();
+    content.push_back(n);
+    modified = true;
+}
+
+void Document::addSubNote(Note *n, unsigned int pos){
+    //load();
+    std::list<Note*>::iterator it = content.begin();
+    for(unsigned int i = 0; i < pos; i++) it++;
+    content.insert(it, n);
+    modified = true;
+}
+
+void Document::removeSubNote(unsigned int pos){
+    //load();
+    std::list<Note*>::iterator it = content.begin();
+    for(unsigned int i = 0; i < pos; i++) it++;
+    content.erase(it);
+    modified = true;
+}
+
+Note* Document::getSubNote(unsigned int pos){
+    //load();
+    std::list<Note*>::iterator it = content.begin();
+    for(unsigned int i = 0; i < pos; i++) it++;
+    return *it;
+}
+//*/

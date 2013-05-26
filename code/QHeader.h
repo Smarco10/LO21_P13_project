@@ -2,22 +2,24 @@
 #define QHEADER_H
 
 #include <fstream>
+#include <list>
 
 #include <QApplication>
+#include <QMainWindow>
+#include <QVBoxLayout>
 #include <QString>
 #include <QTextStream>
 #include <QFile>
+#include <QString>
+#include <QMessageBox>
+#include <QFileDialog>
 
-class Article;
-class Document;
-class NotesManager;
-
-#include "Note.h"
-#include "Article.h"
-#include "Audio.h"
-#include "Binary.h"
-#include "Document.h"
-#include "Image.h"
-#include "Video.h"
+class NotesException{
+public:
+    NotesException(const QString& message):info(message){}
+    QString getInfo() const { return info; }
+private:
+    QString info;
+};
 
 #endif // QHEADER_H

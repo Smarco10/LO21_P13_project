@@ -1,10 +1,9 @@
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 
-#include "QHeader.h"
+#include "Note.h"
 
-QTextStream& operator<<(QTextStream& f, const Document& d);
-
+/*
 class Document {
     friend class NotesManager;
     Article** articles;
@@ -58,6 +57,26 @@ public:
     };
     ConstIterator getIterator() const { return ConstIterator(articles,nbArticles); }
 };
+//*/
+
+//*
+class Document: public Note{
+private:
+    std::list<Note*> content;
+    void operator=(const Document&);
+    Document(const Document& d):Note(0, d.title),content(d.content){}
+    //void load();
+public:
+    Document(unsigned int id, const QString& title, const std::list<Note*> content = std::list<Note*>()):Note(id, title),content(content){}
+
+    void addSubNote(Note* n);
+    void addSubNote(Note *n, unsigned int);
+    void removeSubNote(unsigned int);
+    Note* getSubNote(unsigned int pos);
+};
+//*/
+
+QTextStream& operator<<(QTextStream& f, const Document& d);
 
 #endif // DOCUMENT_H
 

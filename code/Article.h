@@ -1,10 +1,9 @@
 #ifndef ARTICLE_H
 #define ARTICLE_H
 
-#include "QHeader.h"
+#include "Note.h"
 
-QTextStream& operator<<(QTextStream& f, const Article& a);
-
+/*
 class Article {
 	friend class NotesManager;
     QString filename;
@@ -22,5 +21,24 @@ public:
     void setText(const QString& t);
 	bool isModified() const { return modified; }
 };
+//*/
+
+//*
+class Article: public Note{
+    QString content;
+    void operator=(const Article& a);
+    Article(const Article& a):Note(0, a.title), content(a.content){}
+    //void load();
+public:
+    Article(unsigned int id, const QString& title, const QString& ctt=""):Note(id, title), content(ctt){}
+    QString getContent(){//load();
+        return content;}
+    void setContent(const QString& ctt){//load();
+        content = ctt;
+        modified = true;}
+};
+//*/
+
+QTextStream& operator<<(QTextStream& f, const Article& a);
 
 #endif // ARTICLE_H

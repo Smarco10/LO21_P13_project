@@ -1,5 +1,6 @@
-#include "QHeader.h"
+#include "Article.h"
 
+/*
 Article::Article(const QString& f, const QString& ti, const QString& te):
     filename(f),title(ti),text(te),
     modified(false) // non modifié
@@ -26,3 +27,4 @@ QTextStream& operator<<(QTextStream& f, const Article& a){
     f<<a.getText()<<"\n";
     return f;
 }
+//*/

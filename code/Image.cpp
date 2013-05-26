@@ -1,2 +1,2 @@
-#include "QHeader.h"
+#include "Image.h"
 

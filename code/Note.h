@@ -3,68 +3,37 @@
 
 #include "QHeader.h"
 
-class NotesException{
+class Note
+{
+    unsigned int id;
+
+protected:
+    QString title;
+    bool loaded;
+    bool modified;
+    //virtual void load()=0;
+
 public:
-    NotesException(const QString& message):info(message){}
-    QString getInfo() const { return info; }
-private:
-    QString info;
-};
+    Note(unsigned int i, const QString& tt):id(i),title(tt),loaded(false),modified(false){}
 
-class NotesManager {
-private:
-	Document** documents;
-	Article** articles;
-	unsigned int nbDocuments;
-	unsigned int nbArticles;
-	unsigned int nbMaxDocuments;
-	unsigned int nbMaxArticles;
-	void addArticle(Article* a);
-	void addDocument(Document* d);
-	NotesManager();
-	~NotesManager();
-	NotesManager(const NotesManager&); // non défini mais privé pour empêcher la duplication
-	NotesManager& operator=(const NotesManager&); // même chose
-	static NotesManager* instance; // pointeur sur l'unique instance
-public:
-	static NotesManager& getInstance();
-	static void libererInstance();
-    Document& getDocument(const QString& filename);
-    Article& getArticle(const QString& filename);
-    Document& getNewDocument(const QString& filename);
-    Article& getNewArticle(const QString& filename);
-    void saveArticle(Article& a);
-	void saveDocument(Document& d);
+    bool getId() const {return id;}
 
-	enum typeElement { article, document};
-	class Iterator {
-		friend class NotesManager;
-		Article** currentA;
-		Document** currentD;
-		unsigned int nbRemain;
-		Iterator(Article** a, Document** d, unsigned nb):currentA(a),currentD(d),nbRemain(nb){}
-	public:
-		Iterator():nbRemain(0),currentA(0),currentD(0){}
-		bool isDone() const { return nbRemain==0; }
-		void next() { 
-			if (isDone()) throw NotesException("error, next on an iterator which is done"); 
-			nbRemain--; 
-			if (currentA) currentA++; else currentD++;
-		}
-		Article& currentArticle() { 
-			if (currentD) throw NotesException("bad use of currentArticle on Iterator");
-			return **currentA; 
-		}
-		Document& currentDocument() { 
-			if (currentA) throw NotesException("bad use of currentArticle on Iterator");
-			return **currentD; 
-		}
+    QString& getTitle() {return title;}
+    void setTitle(const QString& tt){title = tt;}
 
-	};
-	Iterator getIterator(typeElement e) { 
-		if (e==article) return Iterator(articles,0,nbArticles); 
-		else return Iterator(0,documents,nbDocuments); 
-	}
+    void setModified(const bool m){modified = m;}
+    bool isModified() const {return modified;}
+
+    void setLoaded(const bool l){loaded = l;}
+    bool getLoaded() const {return loaded;}
+
+    virtual void addSubNote(Note* n);
+    virtual void addSubNote(Note* n, unsigned int);
+    virtual void removeSubNote(unsigned int);
+    virtual Note* getSubNote(unsigned int pos=0);
+
+    //Iterator begin() const;
+    //Iterator end() const;
 };
 
 #endif
