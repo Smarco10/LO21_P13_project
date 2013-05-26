@@ -104,8 +104,8 @@ private:
 	void addDocument(Document* d);
 	NotesManager();
 	~NotesManager();
-	NotesManager(const NotesManager&); // non défini mais privé pour empêcher la duplication
-	NotesManager& operator=(const NotesManager&); // même chose
+	NotesManager(const NotesManager&); // non dÃ©fini mais privÃ© pour empÃªcher la duplication
+	NotesManager& operator=(const NotesManager&); // mÃªme chose
 	static NotesManager* instance; // pointeur sur l'unique instance
 public:
 	static NotesManager& getInstance();

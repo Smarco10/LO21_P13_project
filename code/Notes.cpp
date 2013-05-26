@@ -5,7 +5,7 @@
 
 Article::Article(const QString& f, const QString& ti, const QString& te):
 	filename(f),title(ti),text(te),
-	modified(false) // non modifiÈ 
+	modified(false) // non modifi√© 
 {}
 
 void Article::setTitle(const QString& t) {
@@ -26,7 +26,7 @@ Article& Article::operator=(const Article& a){
 
 Document::Document(const QString& f, const QString& t):
 	filename(f),title(t),
-	modified(false), // non modifiÈ 
+	modified(false), // non modifi√© 
 	articles(0),nbArticles(0),nbMaxArticles(0) // initialement, aucun article
 {}
 
@@ -130,7 +130,7 @@ void NotesManager::addDocument(Document* d){
 }
 
 Article& NotesManager::getArticle(const QString& fileName){
-	// s'il existe dÈj‡, on le  renvoie
+	// s'il existe d√©j√†, on le  renvoie
 	for(unsigned int i=0; i<nbArticles; i++){
         if (articles[i]->getFilename()==fileName) return *articles[i];
 	}
@@ -148,7 +148,7 @@ Article& NotesManager::getArticle(const QString& fileName){
 }
 
 Document& NotesManager::getDocument(const QString& fileName){
-	// on vÈrifie d'abord que le document demandÈ n'a pas dÈj‡ ÈtÈ chargÈ
+	// on v√©rifie d'abord que le document demand√© n'a pas d√©j√† √©t√© charg√©
 	for(unsigned int i=0; i<nbDocuments; i++){
         if (documents[i]->getFilename()==fileName) return *documents[i];
 	}
@@ -216,11 +216,11 @@ NotesManager::~NotesManager(){
 
 void NotesManager::saveArticle(Article& a){
 	if (a.isModified()) {
-        // CrÈation d'un objet QFile
+        // Cr√©ation d'un objet QFile
         QFile file(a.getFilename());
-        // On ouvre notre fichier en lecture seule et on vÈrifie l'ouverture
+        // On ouvre notre fichier en lecture seule et on v√©rifie l'ouverture
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-            throw NotesException("Erreur sauvegarde d'un article : impossible d'ouvrir un fichier en Ècriture");
+            throw NotesException("Erreur sauvegarde d'un article : impossible d'ouvrir un fichier en √©criture");
         QTextStream flux(&file);
         flux<<a;
         file.close();
@@ -230,11 +230,11 @@ void NotesManager::saveArticle(Article& a){
 
 void NotesManager::saveDocument(Document& d){
 	if (d.isModified()) {
-        // CrÈation d'un objet QFile
+        // Cr√©ation d'un objet QFile
         QFile file(d.getFilename());
-        // On ouvre notre fichier en lecture seule et on vÈrifie l'ouverture
+        // On ouvre notre fichier en lecture seule et on v√©rifie l'ouverture
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-            throw NotesException("Erreur sauvegarde d'un document : impossible d'ouvrir un fichier en Ècriture");
+            throw NotesException("Erreur sauvegarde d'un document : impossible d'ouvrir un fichier en √©criture");
         QTextStream flux(&file);
         flux<<d;
         file.close();
