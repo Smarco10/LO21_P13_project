@@ -6,29 +6,38 @@
 class MainWindow:public QMainWindow{
     Q_OBJECT
 private:
-    QWidget *editeur;
+    QWidget *zone;
+
+    QWidget *editorNote;
     QWidget *searchTags;
 
     QVBoxLayout *tagsLay;
+    QHBoxLayout *zoneLay;
 
     QToolBar *tbarOpen;
     QToolBar *tbarMisc;
 
-    QMenu *fichier;
-    QMenu *ouvrir;
-
-    QAction *quitter;
+    QMenu *file;
+    QMenu *open;
     QAction *article;
     QAction *image;
     QAction *audio;
     QAction *video;
     QAction *document;
+    QAction *quit;
 
-    QAction *articleI;
-    QAction *imageI;
-    QAction *audioI;
-    QAction *videoI;
-    QAction *documentI;
+    QMenu *edit;
+    QMenu *view;
+
+    QMenu *help;
+    QAction *about;
+
+    //Partie searchTags
+    QLineEdit *inputTags;
+    QLabel filterTags_n;
+    QListView *filterTags;
+    QLabel outputNotes_n;
+    QListView *outputNotes;
 
     //NotesManager *manager;
 
@@ -39,6 +48,7 @@ public:
 private slots:
     void warning();
     void noteEditor();
+    void aboutApp();
 };
 
 #endif // MAINWINDOW_H
