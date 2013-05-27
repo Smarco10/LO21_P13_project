@@ -95,7 +95,7 @@ MainWindow::MainWindow(QApplication* app){
 
     //Menu Aide
     help = menuBar()->addMenu("&Aide");
-    about = new QAction("A propos de " + QString(APP_TITLE), this);
+    about = new QAction("À propos de " + APP_TITLE, this);
     help->addAction(about);
 
     //lien des menus
@@ -152,6 +152,7 @@ void MainWindow::aboutApp(){
 
     //vider le contenu de la fenêtre avant de l'afficher
     QDialog *altWindow = new QDialog(this);
+    altWindow->setWindowTitle("À propos de " + APP_TITLE);
     QHBoxLayout *altWindowLay = new QHBoxLayout;
     altWindow->setLayout(altWindowLay);
 
@@ -162,10 +163,11 @@ void MainWindow::aboutApp(){
     bt->setFixedSize(logo->pixmap()->size() + QSize(10,10));
     logo->move(5, 5);
 
-    altWindow->layout()->addWidget(bt);
-    altWindow->layout()->addWidget(new QLabel(CREDITS, altWindow));
+    altWindow->layout()->addWidget(bt);    
+    altWindow->layout()->addWidget(new QLabel("\t\t\t\t" + APP_TITLE + "\n\n\nApplication développée dans le cadre d'un projet de LO21 à l'UTC au printemps 2013.\n\n\n\n\tDéveloppeurs:\n\n\t\tJonathan DIGUET\n\n\t\tMarc-Antoine MARTIN\n\n\n© UTC - 2013", altWindow));
 
     QObject::connect(bt, SIGNAL(clicked()), altWindow, SLOT(close()));
 
+    altWindow->setFixedSize(699, 275);
     altWindow->exec();
 }

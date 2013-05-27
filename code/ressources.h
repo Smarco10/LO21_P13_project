@@ -5,7 +5,6 @@
 
 static QString APP_TITLE("BanaNotes");
 static QString APP_LOGO("banana-logo.png");
-static QString CREDITS("Application développée dans le cadre d'un projet de LO21 à l'UTC au printemps 2013.\n\nCrédits à Jonathan DIGUET et Marc-Antoine MARTIN.");
 
 //icons
 #define ico_save QIcon("icons/save.png")
