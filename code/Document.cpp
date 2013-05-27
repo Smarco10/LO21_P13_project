@@ -1,4 +1,4 @@
-#include "Document.h"
+﻿#include "Document.h"
 
 /*
 Document::Document(const QString& f, const QString& t):

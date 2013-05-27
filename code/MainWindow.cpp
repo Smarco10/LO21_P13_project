@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+﻿#include "MainWindow.h"
 
 MainWindow::MainWindow(QApplication* app){
     //manager = &NotesManager::getInstance();

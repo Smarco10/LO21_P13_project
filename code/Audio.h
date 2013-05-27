@@ -1,4 +1,4 @@
-#ifndef AUDIO_H
+﻿#ifndef AUDIO_H
 #define AUDIO_H
 
 #include "Binary.h"

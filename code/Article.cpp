@@ -1,4 +1,4 @@
-#include "Article.h"
+﻿#include "Article.h"
 
 /*
 Article::Article(const QString& f, const QString& ti, const QString& te):

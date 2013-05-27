@@ -1,4 +1,4 @@
-#ifndef BINARY_H
+﻿#ifndef BINARY_H
 #define BINARY_H
 
 #include "Note.h"

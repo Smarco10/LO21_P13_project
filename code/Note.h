@@ -1,4 +1,4 @@
-#ifndef NOTE_H
+﻿#ifndef NOTE_H
 #define NOTE_H
 
 #include "QHeader.h"

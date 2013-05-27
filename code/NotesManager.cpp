@@ -1,4 +1,4 @@
-#include "NotesManager.h"
+﻿#include "NotesManager.h"
 
 /*
 void NotesManager::addArticle(Article* a){

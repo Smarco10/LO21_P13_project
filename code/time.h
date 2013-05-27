@@ -1,4 +1,4 @@
-#if !defined(CTIME)
+﻿#if !defined(CTIME)
 #define CTIME
 
 #include<iostream>

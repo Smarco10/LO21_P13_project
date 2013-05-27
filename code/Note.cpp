@@ -1,4 +1,4 @@
-#include "Note.h"
+﻿#include "Note.h"
 
 void Note::addSubNote(Note *n){throw NotesException("Bad using");}
 void Note::addSubNote(Note *n, unsigned int pos){throw NotesException("Bad using");}

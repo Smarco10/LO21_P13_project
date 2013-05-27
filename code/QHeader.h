@@ -1,4 +1,4 @@
-#ifndef QHEADER_H
+﻿#ifndef QHEADER_H
 #define QHEADER_H
 
 #include <fstream>
@@ -23,6 +23,7 @@
 #include <QString>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QTextCodec>
 
 class NotesException{
 public:
@@ -31,8 +32,6 @@ public:
 private:
     QString info;
 };
-
-QString::fromUtf8("éèçàù");
 
 #include "ressources.h"
 

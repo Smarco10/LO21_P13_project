@@ -1,4 +1,4 @@
-#ifndef RESSOURCES_H
+﻿#ifndef RESSOURCES_H
 #define RESSOURCES_H
 
 #include "QHeader.h"
