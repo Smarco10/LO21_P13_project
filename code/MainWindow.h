@@ -24,6 +24,8 @@ private:
     QAction *audio;
     QAction *video;
     QAction *document;
+    QAction *print;
+    QAction *save;
     QAction *quit;
 
     QMenu *edit;

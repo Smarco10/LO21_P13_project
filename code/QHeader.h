@@ -5,7 +5,9 @@
 #include <list>
 
 #include <QApplication>
+#include <QtGui>
 #include <QMainWindow>
+#include <QDialog>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLineEdit>
@@ -30,7 +32,6 @@ private:
     QString info;
 };
 
-static QString APP_TITLE("BanaNotes");
-static QString CREDITS("Application développée dans le cadre d'un projet de LO21 à l'UTC au printemps 2013.\n\nCrédits à Jonathan DIGUET et Marc-Antoine MARTIN.");
+#include "ressources.h"
 
 #endif // QHEADER_H

@@ -4,6 +4,7 @@ MainWindow::MainWindow(QApplication* app){
     //manager = &NotesManager::getInstance();
 
     setWindowTitle(APP_TITLE);
+    setWindowIcon(QIcon(APP_LOGO));
 
     zone = new QWidget;
     editorNote = new QWidget;
@@ -19,13 +20,15 @@ MainWindow::MainWindow(QApplication* app){
     inputTags->setParent(searchTags);
     inputTags->setText("All");
 
-    filterTags_n.setText("Filtres");
+    filterTags_n.setText("Filtres:");
     filterTags_n.setParent(searchTags);
+    filterTags_n.setAlignment(Qt::AlignHCenter);
     filterTags = new QListView;
     filterTags->setParent(searchTags);
 
-    outputNotes_n.setText("Filtres");
+    outputNotes_n.setText("Résultat:");
     outputNotes_n.setParent(searchTags);
+    outputNotes_n.setAlignment(Qt::AlignHCenter);
     outputNotes = new QListView;
     outputNotes->setParent(searchTags);
 
@@ -49,27 +52,38 @@ MainWindow::MainWindow(QApplication* app){
     file = menuBar()->addMenu("&Fichier");
 
     open = file->addMenu("&Ouvrir");
-    quit = new QAction(QIcon("icons/quitter.png"), "Quitter", this);
+
+    save = new QAction(ico_save, "Sauver", this);
+    save->setDisabled(true);
+    file->addAction(save);
+    tbarMisc->addAction(save);
+
+    print = new QAction(ico_print, "Imprimer", this);
+    print->setDisabled(true);
+    file->addAction(print);
+    tbarMisc->addAction(print);
+
+    quit = new QAction(ico_quit, "Quitter", this);
     file->addAction(quit);
     tbarMisc->addAction(quit);
 
-    article = new QAction(QIcon("icons/article.png"), "Article(s)", this);
+    article = new QAction(ico_article, "Article(s)", this);
     open->addAction(article);
     tbarOpen->addAction(article);
 
-    image = new QAction(QIcon("icons/image.png"), "Image(s)", this);
+    image = new QAction(ico_image, "Image(s)", this);
     open->addAction(image);
     tbarOpen->addAction(image);
 
-    audio = new QAction(QIcon("icons/audio.png"), "Enregistrement(s) Audio", this);
+    audio = new QAction(ico_audio, "Enregistrement(s) Audio", this);
     open->addAction(audio);
     tbarOpen->addAction(audio);
 
-    video = new QAction(QIcon("icons/video.png"), "Enregistrement(s) Video", this);
+    video = new QAction(ico_video, "Enregistrement(s) Video", this);
     open->addAction(video);
     tbarOpen->addAction(video);
 
-    document = new QAction(QIcon("icons/document.png"), "Document(s)", this);
+    document = new QAction(ico_document, "Document(s)", this);
     open->addAction(document);
     tbarOpen->addAction(document);
 
@@ -91,9 +105,11 @@ MainWindow::MainWindow(QApplication* app){
     QObject::connect(video, SIGNAL(triggered()), this, SLOT(warning()));
     QObject::connect(document, SIGNAL(triggered()), this, SLOT(warning()));
 
-    QObject::connect(about, SIGNAL(triggered()), this, SLOT(aboutApp()));
-
+    QObject::connect(save, SIGNAL(triggered()), this, SLOT(warning()));
+    QObject::connect(print, SIGNAL(triggered()), this, SLOT(warning()));
     QObject::connect(quit, SIGNAL(triggered()), app, SLOT(quit()));
+
+    QObject::connect(about, SIGNAL(triggered()), this, SLOT(aboutApp()));
 }
 
 MainWindow::~MainWindow(){
@@ -132,5 +148,24 @@ void MainWindow::noteEditor(){
 
 void MainWindow::aboutApp(){
     //Afficher le logo en gros avec les crédit à côté genre Google Chrome
-    QMessageBox::information(NULL, "A propos de " + APP_TITLE, CREDITS, QMessageBox::Accepted);
+    //QMessageBox::information(NULL, "A propos de " + APP_TITLE, CREDITS, QMessageBox::Accepted);
+
+    //vider le contenu de la fenêtre avant de l'afficher
+    QDialog *altWindow = new QDialog(this);
+    QHBoxLayout *altWindowLay = new QHBoxLayout;
+    altWindow->setLayout(altWindowLay);
+
+    //redimenssion le logo avant de l'afficher
+    QPushButton *bt = new QPushButton(altWindow);
+    QLabel *logo = new QLabel(bt);
+    logo->setPixmap(QPixmap(APP_LOGO));
+    bt->setFixedSize(logo->pixmap()->size() + QSize(10,10));
+    logo->move(5, 5);
+
+    altWindow->layout()->addWidget(bt);
+    altWindow->layout()->addWidget(new QLabel(CREDITS, altWindow));
+
+    QObject::connect(bt, SIGNAL(clicked()), altWindow, SLOT(close()));
+
+    altWindow->exec();
 }
