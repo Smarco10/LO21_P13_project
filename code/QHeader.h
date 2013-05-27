@@ -32,6 +32,8 @@ private:
     QString info;
 };
 
+QString::fromUtf8("éèçàù");
+
 #include "ressources.h"
 
 #endif // QHEADER_H
