@@ -4,7 +4,7 @@
 #include "QHeader.h"
 
 static QString APP_TITLE("BanaNotes");
-static QString APP_LOGO("banana-logo.png");
+static QString APP_LOGO("logo.png");
 
 //icons
 #define ico_save QIcon("icons/save.png")

@@ -147,27 +147,51 @@ void MainWindow::noteEditor(){
 }
 
 void MainWindow::aboutApp(){
-    //Afficher le logo en gros avec les crédit à côté genre Google Chrome
-    //QMessageBox::information(NULL, "A propos de " + APP_TITLE, CREDITS, QMessageBox::Accepted);
+    //Afficher le logo en gros avec les crédits à côté genre Google Chrome
 
-    //vider le contenu de la fenêtre avant de l'afficher
+    //création de la fenêtre
     QDialog *altWindow = new QDialog(this);
     altWindow->setWindowTitle("À propos de " + APP_TITLE);
     QHBoxLayout *altWindowLay = new QHBoxLayout;
     altWindow->setLayout(altWindowLay);
 
-    //redimenssion le logo avant de l'afficher
+    //partie logo
     QPushButton *bt = new QPushButton(altWindow);
     QLabel *logo = new QLabel(bt);
     logo->setPixmap(QPixmap(APP_LOGO));
     bt->setFixedSize(logo->pixmap()->size() + QSize(10,10));
     logo->move(5, 5);
-
-    altWindow->layout()->addWidget(bt);    
-    altWindow->layout()->addWidget(new QLabel("\t\t\t\t" + APP_TITLE + "\n\n\nApplication développée dans le cadre d'un projet de LO21 à l'UTC au printemps 2013.\n\n\n\n\tDéveloppeurs:\n\n\t\tJonathan DIGUET\n\n\t\tMarc-Antoine MARTIN\n\n\n© UTC - 2013", altWindow));
-
+    altWindow->layout()->addWidget(bt);
     QObject::connect(bt, SIGNAL(clicked()), altWindow, SLOT(close()));
 
-    altWindow->setFixedSize(699, 275);
+    //partie texte
+    QWidget *text = new QWidget(altWindow);
+    text->setLayout(new QVBoxLayout());
+    altWindow->layout()->addWidget(text);
+
+    QLabel *title = new QLabel(APP_TITLE, altWindow);
+    title->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    title->setFont(QFont(title->font().family(), 24));
+    text->layout()->addWidget(title);
+
+    QLabel *desc = new QLabel("Application développée dans le cadre d'un projet de LO21 à l'UTC au printemps 2013.", altWindow);
+    text->layout()->addWidget(desc);
+
+    QLabel *dev = new QLabel("<u>Développeurs</u>:<BLOCKQUOTE>Jonathan DIGUET<br/><br/>Marc-Antoine MARTIN</BLOCKQUOTE>", altWindow);
+    text->layout()->addWidget(dev);
+
+    //partie texte 2
+    QWidget *text2 = new QWidget(text);
+    text2->setLayout(new QHBoxLayout());
+    text->layout()->addWidget(text2);
+
+    QLabel *link = new QLabel("<a href=\"https://github.com/Smarco10/LO21_P13_project\">https://github.com/Smarco10/LO21_P13_project</a> ", altWindow);
+    link->setAlignment(Qt::AlignBottom | Qt::AlignLeft);
+    text2->layout()->addWidget(link);
+
+    QLabel *credits = new QLabel("© <i>UTC - 2013</i> ", altWindow);
+    credits->setAlignment(Qt::AlignBottom | Qt::AlignRight);
+    text2->layout()->addWidget(credits);
+
     altWindow->exec();
 }
