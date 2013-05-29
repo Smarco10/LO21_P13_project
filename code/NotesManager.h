@@ -7,8 +7,9 @@
 class NotesManager {
 private:
     std::set<Note> notes ;
-    unsigned int getNbNotes(){ return notes.size;}
+    unsigned int getNbNotes(){ return notes.size();}
     //coder operateur < > pour le find;
+    void addNote(const Note &n);
 
     NotesManager();
     ~NotesManager();
@@ -20,7 +21,7 @@ public:
     static void libererInstance();
 
     Note& getNote(const unsigned int id);
-    Note& getNewNote(const QString& filename);
+    Note& getNewNote(const QString& title);
     void saveNote(Note& n);
 
     enum typeElement { article, document};

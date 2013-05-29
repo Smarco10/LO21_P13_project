@@ -1,6 +1,6 @@
 ﻿#include "NotesManager.h"
 
-void NotesManager::addNote(Note* n){
+void NotesManager::addNote(const Note& n){
     notes.insert(n);
 }
 
