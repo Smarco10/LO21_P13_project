@@ -1,58 +1,29 @@
 ﻿#include "NotesManager.h"
 
-/*
-void NotesManager::addArticle(Article* a){
-    if (nbArticles==nbMaxArticles){
-        Article** newArticles= new Article*[nbMaxArticles+5];
-        for(unsigned int i=0; i<nbArticles; i++) newArticles[i]=articles[i];
-        Article** oldArticles=articles;
-        articles=newArticles;
-        nbMaxArticles+=5;
-        if (oldArticles) delete[] oldArticles;
-    }
-    articles[nbArticles++]=a;
+void NotesManager::addNote(Note* n){
+    notes.insert(n);
 }
 
-void NotesManager::addDocument(Document* d){
-    if (nbDocuments==nbMaxDocuments){
-        Document** newDocuments= new Document*[nbMaxDocuments+5];
-        for(unsigned int i=0; i<nbDocuments; i++) newDocuments[i]=documents[i];
-        Document** oldDocuments=documents;
-        documents=newDocuments;
-        nbMaxDocuments+=5;
-        if (oldDocuments) delete[] oldDocuments;
+Note& NotesManager::getNote(const unsigned int id){
+   std::set<Note>::iterator it= notes.find(id);
+   if(it==notes.end())
+   {    //ouberture de la note existante
+       QFile fichier(id);
+       fichier.open(QIODevice::ReadOnly | QIODevice::Text);// sur pour les parametres?
+       QTextStream flux(&fichier);
+       QString title=flux.readLine();
+       Note* n=new Note(id,title);
+       addNote(n);
+       return *n;
     }
-    documents[nbDocuments++]=d;
-}
-
-Article& NotesManager::getArticle(const QString& fileName){
-    // s'il existe déjà, on le  renvoie
-    for(unsigned int i=0; i<nbArticles; i++){
-        if (articles[i]->getFilename()==fileName) return *articles[i];
-    }
-    // sinon, il faut le loader
-    QFile fichier(fileName);
-    fichier.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream flux(&fichier);
-
-    QString title=flux.readLine();
-    QString text=flux.readAll();
-    fichier.close();
-    Article* a=new Article(fileName,title,text);
-    addArticle(a);
-    return *a;
-}
-
-Document& NotesManager::getDocument(const QString& fileName){
-    // on vérifie d'abord que le document demandé n'a pas déjà été chargé
-    for(unsigned int i=0; i<nbDocuments; i++){
-        if (documents[i]->getFilename()==fileName) return *documents[i];
-    }
+    /* // on vérifie d'abord que le document demandé n'a pas déjà été chargé
+   // notes.iterator it=notes.find(filename);
+    if(it==it.end){// a arranger avec un operateur de comparaison ou autre
     QFile fichier(fileName);
     fichier.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream flux(&fichier);
     QString title=flux.readLine();
-    Document* d=new Document(fileName,title);
+    Note* d=new Note(fileName,title);
     QString ligne;
     while(! flux.atEnd())
     {
@@ -60,22 +31,16 @@ Document& NotesManager::getDocument(const QString& fileName){
         (*d)<<(getArticle(ligne));
 
     }
-    addDocument(d);
-    return *d;
+    addNote(n);
+    return *n;
+}*/
 }
 
-Document& NotesManager::getNewDocument(const QString& filename){
-    Document* d=new Document(filename,"");
-    d->modified=true;
-    addDocument(d);
+Note& NotesManager::getNewNote(QString title){
+    Note* n=new Note(QTime::currentTime().toString(),title);
+    n->modified=true;
+    addNote(d);
     return *d;
-}
-
-Article& NotesManager::getNewArticle(const QString& filename){
-    Article* a=new Article(filename,"","");
-    a->modified=true;
-    addArticle(a);
-    return *a;
 }
 
 
@@ -92,9 +57,8 @@ void NotesManager::libererInstance(){
 }
 
 
-NotesManager::NotesManager():
-    documents(0),articles(0),nbDocuments(0),nbArticles(0),nbMaxDocuments(0),nbMaxArticles(0)
-    {}
+NotesManager::NotesManager()
+{}
 
 
 NotesManager::~NotesManager(){
@@ -138,3 +102,6 @@ void NotesManager::saveDocument(Document& d){
     }
 }
 //*/
+Note<set>::iterator::operator==(Notes<set>::Iterator it){
+
+}

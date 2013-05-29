@@ -32,6 +32,8 @@ public:
     virtual void removeSubNote(unsigned int);
     virtual Note* getSubNote(unsigned int pos=0);
 
+    bool operator<(const Note&  n1,const Note& n2)const{ return n1.id<n2.id;}
+
     //Iterator begin() const;
     //Iterator end() const;
 };
