@@ -19,7 +19,7 @@ private:
 public:
     static NotesManager& getInstance();
     static void libererInstance();
-
+    const QString& getFileName(Note& n){ return QString(n.getId())+QString(n.getTitle());}
     Note& getNote(const unsigned int id);
     Note& getNewNote(const QString& title);
     void saveNote(Note& n);
