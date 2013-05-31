@@ -23,7 +23,6 @@ public:
 };
 //*/
 
-//*
 class Article: public Note{
     QString content;
     void operator=(const Article& a);
@@ -32,17 +31,14 @@ class Article: public Note{
 public:
     Article(const QString& id, const QString& title, const QString& ctt=""):Note(id, title), content(ctt){}
 
-    QString getContent(){//load();
+    QString getContent(){load();
         return content;}
 
-    void setContent(const QString& ctt){//load();
+    void setContent(const QString& ctt){load();
         content = ctt;
         modified = true;}
 
-    void Article::setTitle(const QString& t){ modified=true; title=t;}
+    QTextStream& save(QTextStream& f);
 };
-//*/
-
-QTextStream& operator<<(QTextStream& f, const Article& a);
 
 #endif // ARTICLE_H

@@ -16,10 +16,10 @@ protected:
 public:
     Note(const QString& i, const QString& tt):id(i),title(tt),loaded(false),modified(false){}
 
-    QString& getId() const {return id;}
+    QString& getId() {return id;}
 
     QString& getTitle() {return title;}
-    void setTitle(const QString& tt){title = tt;}
+    void setTitle(const QString& tt){title = tt; modified = true;}
 
     void setModified(const bool m){modified = m;}
     bool isModified() const {return modified;}
@@ -32,8 +32,11 @@ public:
     virtual void removeSubNote(unsigned int);
     virtual Note* getSubNote(unsigned int pos=0);
 
-    bool operator<(const Note&  n1,const Note& n2)const{ return n1.id<n2.id;}
+    bool operator<(const Note& n)const{ return this->id < n.id;}
+    virtual QTextStream& save(QTextStream&) = 0;
 };
+
+QTextStream& operator<<(QTextStream& f, Note& n);
 
 #endif
 

@@ -8,22 +8,24 @@ class Binary: public Note{
     QString path;
     Binary(const Binary& b):Note(0, b.title), desc(b.desc),path(b.path){}
     void operator=(const Binary& b);
-    //void load();
+    virtual void load() = 0;
 
 public:
     Binary(const QString& id, const QString& title, const QString& d="", const QString& p=""):Note(id, title), desc(d),path(p){}
 
-    QString& getDesc() {//load();
+    QString& getDesc() {load();
         return desc;}
-    void setDesc(const QString& d){//load();
+    void setDesc(const QString& d){load();
         desc = d;
         modified = true;}
 
-    QString& getPath() {//load();
+    QString& getPath() {load();
         return path;}
-    void setPath(const QString& p){//load();
+    void setPath(const QString& p){load();
         path = p;
         modified = true;}
+
+    virtual QTextStream& save(QTextStream& f) = 0;
 };
 
 #endif // BINARY_H

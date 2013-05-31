@@ -1,10 +1,11 @@
 ﻿#include "Image.h"
 
-Image::load(){
+void Image::load(){
     //récupère les information pouvant manquer
 }
 
-QTextStream& operator<<(QTextStream& f, const Image& i){
-    f<<i.getTitle()<<"\n";
+QTextStream& Image::save(QTextStream& f){
+    f<<this->getTitle()<<"\n";
+    f<<this->getDesc()<<"\n";
     return f;
 }

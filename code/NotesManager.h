@@ -3,30 +3,35 @@
 
 #include "QHeader.h"
 #include "Note.h"
+#include "Article.h"
+#include "Document.h"
 
 class NotesManager {
 private:
-    std::set<Note> notes ;
+    std::set<Note*> notes;
     unsigned int getNbNotes(){ return notes.size();}
     //coder operateur < > pour le find;
-    void addNote(const Note &n);
+    void addNote(Note* n);
 
-    NotesManager();
+    NotesManager(){};
     ~NotesManager();
     NotesManager(const NotesManager&); // non défini mais privé pour empêcher la duplication
     NotesManager& operator=(const NotesManager&);// même chose
+
+    friend class Document;
     static NotesManager* instance; // pointeur sur l'unique instance
+    Note* noteConstructor(const QString& type, const QString& id, const QString& title);
+    static QString typeNote(const QString& id);
+    static QString getId();
 public:
     static NotesManager& getInstance();
     static void libererInstance();
-    const QString& getFileName(Note& n){ return QString(n.getId())+QString(n.getTitle());}
-    Note& getNote(const unsigned int id);
-    Note& getNewNote(const QString& title);
+
+    const QString& getFilename(Note& n){ return n.getId();}
+
+    Note& getNote(QString& id);
+    Note& getNewNote(const QString& type, const QString& title);
     void saveNote(Note& n);
-
-    enum typeElement { article, document};
-
 };
-
 
 #endif // NOTESMANAGER_H

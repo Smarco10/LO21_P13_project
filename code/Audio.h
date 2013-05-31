@@ -6,12 +6,12 @@
 class Audio: public Binary{
     Audio(const Audio& a):Binary(0, a.title){}
     void operator=(const Audio& a);
-    //void load();
+    void load();
 public:
     Audio(const QString& id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
-};
 
-QTextStream& operator<<(QTextStream& f, const Audio& a);
+    QTextStream& save(QTextStream& f);
+};
 
 #endif // AUDIO_H
 

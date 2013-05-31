@@ -1,10 +1,11 @@
 ﻿#include "Audio.h"
 
-Audio::load(){
+void Audio::load(){
     //récupère les information pouvant manquer
 }
 
-QTextStream& operator<<(QTextStream& f, const Audio& a){
-    f<<a.getTitle()<<"\n";
+QTextStream& Audio::save(QTextStream& f){
+    f<<this->getTitle()<<"\n";
+    f<<this->getDesc()<<"\n";
     return f;
 }

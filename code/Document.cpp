@@ -1,4 +1,5 @@
 ﻿#include "Document.h"
+#include "NotesManager.h"
 
 /*
 Document::Document(const QString& f, const QString& t):
@@ -113,15 +114,13 @@ Note* Document::getSubNote(unsigned int pos){
     return *it;
 }
 
-#include "NotesManager.h"
-
 void Document::load(){
     //récupère les information pouvant manquer comme la liste des notes
     //Vérifie si on a besoin d'annalyser le fichier (liste pleine)
     if(content.size() > 0)
         return;
 
-    QFile fichier(id);
+    QFile fichier(getId());
     if(!fichier.open(QIODevice::ReadOnly | QIODevice::Text)){
         throw NotesException("Can't open document file");
     }
@@ -133,24 +132,24 @@ void Document::load(){
          //Pour chaques ligne, enregistre la note et l'ajoute au document
           QString subfile = flux.readLine();
           //vérifie que le fichier n'est pas déjà dans la liste
-          for(std::list<Note*>::iterator it= content.begin(); it < content.end(); it++)
-              if((*it)->getFilename() == subfile)
-                  return;
-          if(it != content.end())
-              //fichier trouvé dans la liste on sort
-              break;
+          for(std::list<Note*>::iterator it = content.begin(); it != content.end(); it++)
+              if((*it)->getId() == subfile)
+                  //passe au fichier suivant
+                  continue;
 
-          //récupérer le type dans le fichier workspace
+          //si fichier non présent dans la liste
+          //création d'une note en mémoire, catcher les exceptions
           Note& note = NotesManager::instance->getNote(subfile);
-          //ajoute le fichier
+
+          //ajoute le fichier à la listte
           addSubNote(&note);
      }
 }
 
-QTextStream& operator<<(QTextStream& f, const Document& d){
-    f<<d.getTitle()<<"\n";
-    for(unsigned int i=0; i<d.content.size(); i++){
-        f<<(d.getSubNote(i))->getFilename()<<"\n";
+QTextStream& Document::save(QTextStream& f){
+    f<<this->getTitle()<<"\n";
+    for(unsigned int i=0; i<this->getNbSubNotes(); i++){
+        f<<(this->getSubNote(i))->getId()<<"\n";
     }
     return f;
 }

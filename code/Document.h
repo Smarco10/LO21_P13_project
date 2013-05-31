@@ -59,7 +59,6 @@ public:
 };
 //*/
 
-//*
 class Document: public Note{
 private:
     std::list<Note*> content;
@@ -73,10 +72,10 @@ public:
     void addSubNote(Note *n, unsigned int);
     void removeSubNote(unsigned int);
     Note* getSubNote(unsigned int pos);
-};
-//*/
 
-QTextStream& operator<<(QTextStream& f, const Document& d);
+    unsigned int getNbSubNotes() {return content.size();}
+    QTextStream& save(QTextStream& f);
+};
 
 #endif // DOCUMENT_H
 

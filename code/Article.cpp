@@ -1,11 +1,11 @@
 ﻿#include "Article.h"
 
-Article::load(){
-    //récupère les information pouvant manquer commen le contenu
+void Article::load(){
+    //récupère les information pouvant manquer comme le contenu
 }
 
-QTextStream& operator<<(QTextStream& f, const Article& a){
-    f<<a.getTitle()<<"\n";
-    f<<a.getText()<<"\n";
+QTextStream& Article::save(QTextStream& f){
+    f<<this->getTitle()<<"\n";
+    f<<this->getContent()<<"\n";
     return f;
 }

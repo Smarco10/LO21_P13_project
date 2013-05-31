@@ -6,12 +6,11 @@
 class Video: public Binary{
     Video(const Video& v):Binary(0, v.title){}
     void operator=(const Video& v);
-    //void load();
+    void load();
 public:
     Video(const QString& id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
+    QTextStream& save(QTextStream& f);
 };
-
-QTextStream& operator<<(QTextStream& f, const Video& a);
 
 #endif // VIDEO_H
 

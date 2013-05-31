@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <list>
+#include <set>
 
 #include <QApplication>
 #include <QtGui>

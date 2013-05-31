@@ -1,10 +1,11 @@
 ﻿#include "Video.h"
 
-Video::load(){
+void Video::load(){
     //récupère les information pouvant manquer
 }
 
-QTextStream& operator<<(QTextStream& f, const Video& v){
-    f<<v.getTitle()<<"\n";
+QTextStream& Video::save(QTextStream& f){
+    f<<this->getTitle()<<"\n";
+    f<<this->getDesc()<<"\n";
     return f;
 }

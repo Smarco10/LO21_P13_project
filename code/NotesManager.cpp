@@ -1,21 +1,21 @@
 ﻿#include "NotesManager.h"
 
-void NotesManager::addNote(const Note* n){
+void NotesManager::addNote(Note* n){
     notes.insert(n);
-    n->modified = false;
+    n->setModified(true);
 }
 
-Note& NotesManager::getNote(QString id){
+Note& NotesManager::getNote(QString& id){
     //regarde si la note est dans la liste
-   std::set<Note*>::iterator it= notes.find(id);
+   std::set<Note*>::iterator it= notes.end()/*notes.find(id)*/;
 
    if(it==notes.end())
    {
        //si note non existante dans la liste on la charge et si elle n'existe pas on la crée
        //Récupérer son type dans le fichier workspace
-       typeNote(id);
-
-       QString title = "";
+       QString type;
+       QString title;
+       Note* n = NULL;
 
        QFile fichier(id);
        if(fichier.exists()){
@@ -23,58 +23,63 @@ Note& NotesManager::getNote(QString id){
                 //si fichier n'a pu être ouvert, on créer une nouvelle Note
                throw NotesException("Error can't open Note file");
            }
+
            QTextStream flux(&fichier);
            title = flux.readLine();
 
            fichier.close();
+
+           //on récupère le type de la note
+           type = typeNote(id);
        } else {
-           id = getId();
+           //Erreur
+           throw NotesException("File doesn't exist");
        }
 
-       Note* n = NULL;
-
-       switch(type){
-       case "Article":
-           if(title == "") title = "Article_" + id;
-           n = new Article(id, title);
-           break;
-       case "Document":
-           if(title == "") title = "Document_" + id;
-           n = new Document(id, title);
-           break;
-       default:
-           //type inconnu on laisse à NULL
-           break;
-       }
+       n = noteConstructor(type, id, title);
+       if(n == NULL)
+           NotesException("Can't create a note of type: " + type);
 
        addNote(n);
        return *n;
     }
 
-    return *it;
-
-    /* // on vérifie d'abord que le document demandé n'a pas déjà été chargé
-   // notes.iterator it=notes.find(filename);
-    if(it==it.end){// a arranger avec un operateur de comparaison ou autre
-    QFile fichier(fileName);
-    fichier.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream flux(&fichier);
-    QString title=flux.readLine();
-    Note* d=new Note(fileName,title);
-    QString ligne;
-    while(! flux.atEnd())
-    {
-        ligne = flux.readLine();
-        (*d)<<(getArticle(ligne));
-
-    }
-    addNote(n);
-    return *n;
-}*/
+    return *(*it);
 }
 
-QString getId(){
+Note& NotesManager::getNewNote(const QString& type, const QString& title){
+    Note* n = NULL;
+
+    n = noteConstructor(type, getId(), title);
+
+    if(n == NULL)
+        throw NotesException("Can't create a note of type: " + type);
+
+    addNote(n);
+    return *n;
+}
+
+Note* NotesManager::noteConstructor(const QString& type, const QString& id, const QString& title){
+    //Rajouter les types ici ...
+
+    if(type == "Article"){
+        return new Article(id, title);
+    } else if(type == "Document"){
+        return new Document(id, title);
+    }
+
+    //type inconnu on laisse à NULL
+    return NULL;
+}
+
+QString NotesManager::getId(){
+    //retourne le l'heure locale en miliseconde depuis 1970 dans un QString
     return QString::number(QDateTime::currentMSecsSinceEpoch());
+}
+
+QString NotesManager::typeNote(const QString& id){
+    //récupérer le type de la note dans le fichier workspace en XML
+    return "" + id;
 }
 
 NotesManager* NotesManager::instance=0; // pointeur sur l'unique instance
@@ -88,10 +93,9 @@ void NotesManager::libererInstance(){
     instance=0;
 }
 
-
 NotesManager::~NotesManager(){
-    for(std::set<Note*>::iterator it=notes.begin(); it < notes.end(); it++){
-        saveNote(*it);
+    for(std::set<Note*>::iterator it=notes.begin(); it != notes.end(); it++){
+        saveNote(*(*it));
         delete *it;
     }
 
@@ -101,14 +105,16 @@ NotesManager::~NotesManager(){
 void NotesManager::saveNote(Note& n){
     if (n.isModified()) {
         // Création d'un objet QFile
-        QFile file(n.getFilename());
+        QFile file(n.getId());
+
         // On ouvre notre fichier en écriture seule et on vérifie l'ouverture
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
             throw NotesException("Erreur sauvegarde d'une note : impossible d'ouvrir un fichier en écriture");
+
         QTextStream flux(&file);
         flux<<n;
         file.close();
-        n.modified=false;
+        n.setModified(false);
     }
 }
 
