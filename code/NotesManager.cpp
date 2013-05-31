@@ -118,3 +118,8 @@ void NotesManager::saveNote(Note& n){
     }
 }
 
+void NotesManager::changeWorkSpace(const QString& path){
+    //vérifier l'intégrité du fichier workspace
+    //vider la liste de notes en sauvant toutes les notes
+    //charger toutes les notes du workspace si tout vas bien.
+}

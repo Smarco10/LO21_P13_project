@@ -4,6 +4,7 @@
 #include "Note.h"
 
 class Binary: public Note{
+protected:
     QString desc;
     QString path;
     Binary(const Binary& b):Note(0, b.title), desc(b.desc),path(b.path){}

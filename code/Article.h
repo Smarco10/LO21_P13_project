@@ -40,5 +40,32 @@ public:
 
     QTextStream& save(QTextStream& f);
 };
+/*
+class ArticleEditor: public QWidget{
+Q_OBJECT
+private:
+    QVBoxLayout *lay;
+    QLineEdit *titre;
+    QTextEdit *texte;
+    QPushButton *sauver;
+    Article *ressource;
+
+public:
+    ArticleEditeur(Article*, QWidget* parent=NULL);
+    ~ArticleEditeur();
+    bool isRessource(void *a){return ressource == a;}
+
+    QLabel *visualisateurText;
+    QTabWidget *onglets;
+
+signals:
+    void updateVTs(QString);
+
+public slots:
+    void saved();
+    void modified(QString);
+    void modified();
+    void updateArticle(QString var="");
+};*/
 
 #endif // ARTICLE_H

@@ -15,7 +15,7 @@ void Image::load(){
         path = flux.readLine();
      //récupère la description du fichier
      while(!flux.atEnd())
-         desc += readline();
+         desc += flux.readLine();
 }
 
 QTextStream& Image::save(QTextStream& f){

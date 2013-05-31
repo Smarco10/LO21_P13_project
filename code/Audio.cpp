@@ -15,7 +15,7 @@ void Audio::load(){
         path = flux.readLine();
      //récupère la description du fichier
      while(!flux.atEnd())
-         desc += readline();
+         desc += flux.readLine();
 }
 
 QTextStream& Audio::save(QTextStream& f){

@@ -13,7 +13,7 @@ private:
     //coder operateur < > pour le find;
     void addNote(Note* n);
 
-    NotesManager(){};
+    NotesManager(){}
     ~NotesManager();
     NotesManager(const NotesManager&); // non défini mais privé pour empêcher la duplication
     NotesManager& operator=(const NotesManager&);// même chose
@@ -23,6 +23,7 @@ private:
     Note* noteConstructor(const QString& type, const QString& id, const QString& title);
     static QString typeNote(const QString& id);
     static QString getId();
+    static void changeWorkSpace(const QString& path);
 public:
     static NotesManager& getInstance();
     static void libererInstance();
