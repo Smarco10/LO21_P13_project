@@ -24,6 +24,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextCodec>
+#include <QDateTime>
 
 class NotesException{
 public:

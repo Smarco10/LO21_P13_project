@@ -81,27 +81,17 @@ Document& Document::operator=(const Document& m){
     }
     return *this;
 }
-
-
-QTextStream& operator<<(QTextStream& f, const Document& d){
-    f<<d.getTitle()<<"\n";
-    for(unsigned int i=0; i<d.getNbArticles(); i++){
-        f<<d.getArticle(i).getFilename()<<"\n";
-    }
-    return f;
-}
-
 //*/
 
 //*
 void Document::addSubNote(Note *n){
-    //load();
+    load();
     content.push_back(n);
     modified = true;
 }
 
 void Document::addSubNote(Note *n, unsigned int pos){
-    //load();
+    load();
     std::list<Note*>::iterator it = content.begin();
     for(unsigned int i = 0; i < pos; i++) it++;
     content.insert(it, n);
@@ -109,7 +99,7 @@ void Document::addSubNote(Note *n, unsigned int pos){
 }
 
 void Document::removeSubNote(unsigned int pos){
-    //load();
+    load();
     std::list<Note*>::iterator it = content.begin();
     for(unsigned int i = 0; i < pos; i++) it++;
     content.erase(it);
@@ -117,9 +107,51 @@ void Document::removeSubNote(unsigned int pos){
 }
 
 Note* Document::getSubNote(unsigned int pos){
-    //load();
+    load();
     std::list<Note*>::iterator it = content.begin();
     for(unsigned int i = 0; i < pos; i++) it++;
     return *it;
+}
+
+#include "NotesManager.h"
+
+void Document::load(){
+    //récupère les information pouvant manquer comme la liste des notes
+    //Vérifie si on a besoin d'annalyser le fichier (liste pleine)
+    if(content.size() > 0)
+        return;
+
+    QFile fichier(id);
+    if(!fichier.open(QIODevice::ReadOnly | QIODevice::Text)){
+        throw NotesException("Can't open document file");
+    }
+
+     QTextStream flux(&fichier);
+     //saute la première ligne
+     flux.readLine();
+     while(!flux.atEnd()){
+         //Pour chaques ligne, enregistre la note et l'ajoute au document
+          QString subfile = flux.readLine();
+          //vérifie que le fichier n'est pas déjà dans la liste
+          for(std::list<Note*>::iterator it= content.begin(); it < content.end(); it++)
+              if((*it)->getFilename() == subfile)
+                  return;
+          if(it != content.end())
+              //fichier trouvé dans la liste on sort
+              break;
+
+          //récupérer le type dans le fichier workspace
+          Note& note = NotesManager::instance->getNote(subfile);
+          //ajoute le fichier
+          addSubNote(&note);
+     }
+}
+
+QTextStream& operator<<(QTextStream& f, const Document& d){
+    f<<d.getTitle()<<"\n";
+    for(unsigned int i=0; i<d.content.size(); i++){
+        f<<(d.getSubNote(i))->getFilename()<<"\n";
+    }
+    return f;
 }
 //*/

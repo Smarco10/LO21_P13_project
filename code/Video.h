@@ -8,8 +8,10 @@ class Video: public Binary{
     void operator=(const Video& v);
     //void load();
 public:
-    Video(unsigned int id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
+    Video(const QString& id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
 };
+
+QTextStream& operator<<(QTextStream& f, const Video& a);
 
 #endif // VIDEO_H
 

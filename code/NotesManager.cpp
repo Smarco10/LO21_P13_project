@@ -1,21 +1,58 @@
 ﻿#include "NotesManager.h"
 
-void NotesManager::addNote(const Note& n){
+void NotesManager::addNote(const Note* n){
     notes.insert(n);
+    n->modified = false;
 }
 
-Note& NotesManager::getNote(const unsigned int id){
-   std::set<Note>::iterator it= notes.find(id);
+Note& NotesManager::getNote(QString id){
+    //regarde si la note est dans la liste
+   std::set<Note*>::iterator it= notes.find(id);
+
    if(it==notes.end())
-   {    //ouberture de la note existante
+   {
+       //si note non existante dans la liste on la charge et si elle n'existe pas on la crée
+       //Récupérer son type dans le fichier workspace
+       typeNote(id);
+
+       QString title = "";
+
        QFile fichier(id);
-       fichier.open(QIODevice::ReadOnly | QIODevice::Text);// sur pour les parametres?
-       QTextStream flux(&fichier);
-       QString title=flux.readLine();
-       Note* n=new Note(id,title);
+       if(fichier.exists()){
+           if(!fichier.open(QIODevice::ReadOnly | QIODevice::Text)){
+                //si fichier n'a pu être ouvert, on créer une nouvelle Note
+               throw NotesException("Error can't open Note file");
+           }
+           QTextStream flux(&fichier);
+           title = flux.readLine();
+
+           fichier.close();
+       } else {
+           id = getId();
+       }
+
+       Note* n = NULL;
+
+       switch(type){
+       case "Article":
+           if(title == "") title = "Article_" + id;
+           n = new Article(id, title);
+           break;
+       case "Document":
+           if(title == "") title = "Document_" + id;
+           n = new Document(id, title);
+           break;
+       default:
+           //type inconnu on laisse à NULL
+           break;
+       }
+
        addNote(n);
        return *n;
     }
+
+    return *it;
+
     /* // on vérifie d'abord que le document demandé n'a pas déjà été chargé
    // notes.iterator it=notes.find(filename);
     if(it==it.end){// a arranger avec un operateur de comparaison ou autre
@@ -36,72 +73,42 @@ Note& NotesManager::getNote(const unsigned int id){
 }*/
 }
 
-Note& NotesManager::getNewNote(QString title){
-    Note* n=new Note(QTime::currentTime().toString(),title);
-    n->modified=true;
-    addNote(d);
-    return *d;
+QString getId(){
+    return QString::number(QDateTime::currentMSecsSinceEpoch());
 }
-
-
-
 
 NotesManager* NotesManager::instance=0; // pointeur sur l'unique instance
 NotesManager& NotesManager::getInstance(){
     if (!instance) instance=new NotesManager;
     return *instance;
 }
+
 void NotesManager::libererInstance(){
     if (instance) delete instance;
     instance=0;
 }
 
 
-NotesManager::NotesManager()
-{}
-
-
 NotesManager::~NotesManager(){
-    for(unsigned int i=0; i<nbDocuments; i++){
-        saveDocument(*documents[i]);
-        delete documents[i];
+    for(std::set<Note*>::iterator it=notes.begin(); it < notes.end(); it++){
+        saveNote(*it);
+        delete *it;
     }
-    for(unsigned int i=0; i<nbArticles; i++) {
-        saveArticle(*articles[i]);
-        delete articles[i];
-    }
-    delete[] documents;
-    delete[] articles;
+
+    notes.clear();
 }
 
-void NotesManager::saveArticle(Article& a){
-    if (a.isModified()) {
+void NotesManager::saveNote(Note& n){
+    if (n.isModified()) {
         // Création d'un objet QFile
-        QFile file(a.getFilename());
-        // On ouvre notre fichier en lecture seule et on vérifie l'ouverture
+        QFile file(n.getFilename());
+        // On ouvre notre fichier en écriture seule et on vérifie l'ouverture
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-            throw NotesException("Erreur sauvegarde d'un article : impossible d'ouvrir un fichier en écriture");
+            throw NotesException("Erreur sauvegarde d'une note : impossible d'ouvrir un fichier en écriture");
         QTextStream flux(&file);
-        flux<<a;
+        flux<<n;
         file.close();
-        a.modified=false;
+        n.modified=false;
     }
 }
 
-void NotesManager::saveDocument(Document& d){
-    if (d.isModified()) {
-        // Création d'un objet QFile
-        QFile file(d.getFilename());
-        // On ouvre notre fichier en lecture seule et on vérifie l'ouverture
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-            throw NotesException("Erreur sauvegarde d'un document : impossible d'ouvrir un fichier en écriture");
-        QTextStream flux(&file);
-        flux<<d;
-        file.close();
-        d.modified=false;
-    }
-}
-//*/
-Note<set>::iterator::operator==(Notes<set>::Iterator it){
-
-}

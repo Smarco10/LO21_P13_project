@@ -11,7 +11,7 @@ class Binary: public Note{
     //void load();
 
 public:
-    Binary(unsigned int id, const QString& title, const QString& d="", const QString& p=""):Note(id, title), desc(d),path(p){}
+    Binary(const QString& id, const QString& title, const QString& d="", const QString& p=""):Note(id, title), desc(d),path(p){}
 
     QString& getDesc() {//load();
         return desc;}

@@ -28,14 +28,18 @@ class Article: public Note{
     QString content;
     void operator=(const Article& a);
     Article(const Article& a):Note(0, a.title), content(a.content){}
-    //void load();
+    void load();
 public:
-    Article(unsigned int id, const QString& title, const QString& ctt=""):Note(id, title), content(ctt){}
+    Article(const QString& id, const QString& title, const QString& ctt=""):Note(id, title), content(ctt){}
+
     QString getContent(){//load();
         return content;}
+
     void setContent(const QString& ctt){//load();
         content = ctt;
         modified = true;}
+
+    void Article::setTitle(const QString& t){ modified=true; title=t;}
 };
 //*/
 

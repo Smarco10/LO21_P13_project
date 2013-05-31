@@ -8,8 +8,10 @@ class Image: public Binary{
     void operator=(const Image& i);
     //void load();
 public:
-    Image(unsigned int id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
+    Image(const QString& id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
 };
+
+QTextStream& operator<<(QTextStream& f, const Image& a);
 
 #endif // IMAGE_H
 

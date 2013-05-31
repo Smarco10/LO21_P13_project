@@ -5,18 +5,18 @@
 
 class Note
 {
-    unsigned int id;
+    QString id;
 
 protected:
     QString title;
     bool loaded;
     bool modified;
-    //virtual void load()=0;
+    virtual void load()=0;
 
 public:
-    Note(unsigned int i, const QString& tt):id(i),title(tt),loaded(false),modified(false){}
+    Note(const QString& i, const QString& tt):id(i),title(tt),loaded(false),modified(false){}
 
-    bool getId() const {return id;}
+    QString& getId() const {return id;}
 
     QString& getTitle() {return title;}
     void setTitle(const QString& tt){title = tt;}
@@ -33,9 +33,6 @@ public:
     virtual Note* getSubNote(unsigned int pos=0);
 
     bool operator<(const Note&  n1,const Note& n2)const{ return n1.id<n2.id;}
-
-    //Iterator begin() const;
-    //Iterator end() const;
 };
 
 #endif
