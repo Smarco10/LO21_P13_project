@@ -5,6 +5,7 @@
 
 static QString APP_TITLE("BanaNotes");
 static QString APP_LOGO("logo.png");
+static QString WORKSPACE_FILENAME(".workspace");
 
 //icons
 #define ico_save QIcon("icons/save.png")
