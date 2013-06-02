@@ -1,8 +1,8 @@
 #include "Workspace.h"
 
-Workspace::Workspace():QWidget(){
+Workspace::Workspace():QWidget(),path("."){
     dom = new QDomDocument("workspace");
-    QFile xml_doc(WORKSPACE_FILENAME);
+    QFile xml_doc(path + "/" + WORKSPACE_FILENAME);
 
     if(xml_doc.exists()){
         if(!xml_doc.open(QIODevice::ReadOnly)){
@@ -134,9 +134,31 @@ void Workspace::deleteNote(const QString& path){
     modified = true;
 }
 
+void Workspace::check(){
+    //vérifie que toutes les notes sont présentent dans le dossier
+    //si absence enlève l'entrée de la note du workspace
+
+    QDomElement dom_el = dom->documentElement();
+    QDomNode nd = dom_el.firstChild();
+
+    while(!nd.isNull()){
+        QDomElement el = nd.toElement();
+        if(el.tagName() == "note" && el.hasAttribute("path")){
+            QFile note(path + "/" + el.attribute("path"));
+            if(!note.exists())
+                dom_el.removeChild(el);
+            else
+                note.close();
+        }
+        nd = nd.nextSibling();
+    }
+
+    modified = true;
+}
+
 void Workspace::updateWorkspace(){
     QString update = dom->toString();
-    QFile fichier(WORKSPACE_FILENAME);
+    QFile fichier(path + "/" + WORKSPACE_FILENAME);
     if(!fichier.open(QIODevice::WriteOnly)){
         fichier.close();
         return;

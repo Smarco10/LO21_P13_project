@@ -2,6 +2,7 @@
 #define NOTESMANAGER_H
 
 #include "QHeader.h"
+#include "Workspace.h"
 #include "Note.h"
 #include "Article.h"
 #include "Document.h"
@@ -18,12 +19,16 @@ private:
     NotesManager(const NotesManager&); // non défini mais privé pour empêcher la duplication
     NotesManager& operator=(const NotesManager&);// même chose
 
+    static Workspace *workspace;
+    static void loadWSNotes();
+    static void changeWorkSpace(const QString& path);
+
     friend class Document;
     static NotesManager* instance; // pointeur sur l'unique instance
     Note* noteConstructor(const QString& type, const QString& id, const QString& title);
     static QString typeNote(const QString& id);
     static QString getId();
-    static void changeWorkSpace(const QString& path);
+
 public:
     static NotesManager& getInstance();
     static void libererInstance();

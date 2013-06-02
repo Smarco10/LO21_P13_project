@@ -12,12 +12,12 @@ Note& NotesManager::getNote(QString& id){
    if(it==notes.end())
    {
        //si note non existante dans la liste on la charge et si elle n'existe pas on la crée
-       //Récupérer son type dans le fichier workspace
-       QString type;
+       //Récupère le type dans le fichier workspace
+       QString type = workspace->getType(id);
        QString title;
        Note* n = NULL;
 
-       QFile fichier(id);
+       QFile fichier(workspace->getPath() + "/" + id);
        if(fichier.exists()){
            if(!fichier.open(QIODevice::ReadOnly | QIODevice::Text)){
                 //si fichier n'a pu être ouvert, on créer une nouvelle Note
@@ -82,9 +82,12 @@ QString NotesManager::typeNote(const QString& id){
     return "" + id;
 }
 
-NotesManager* NotesManager::instance=0; // pointeur sur l'unique instance
+Workspace* NotesManager::workspace = NULL;
+NotesManager* NotesManager::instance = NULL; // pointeur sur l'unique instance
 NotesManager& NotesManager::getInstance(){
-    if (!instance) instance=new NotesManager;
+    if(!workspace) workspace = new Workspace;
+    loadWSNotes();
+    if(!instance) instance=new NotesManager;
     return *instance;
 }
 
@@ -100,12 +103,13 @@ NotesManager::~NotesManager(){
     }
 
     notes.clear();
+    delete workspace;
 }
 
 void NotesManager::saveNote(Note& n){
     if (n.isModified()) {
         // Création d'un objet QFile
-        QFile file(n.getId());
+        QFile file(workspace->getPath() + "/" + n.getId());
 
         // On ouvre notre fichier en écriture seule et on vérifie l'ouverture
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -115,11 +119,36 @@ void NotesManager::saveNote(Note& n){
         flux<<n;
         file.close();
         n.setModified(false);
+        //met à jour la note dans le workspace
+        workspace->addNote(n.getId(), QString(typeid(n).name()), "");
+    }
+}
+
+void NotesManager::loadWSNotes(){
+    //charger tt les éléments du workspace
+    QString lst_notes = " " + workspace->listNotes();
+
+    if(lst_notes.isEmpty())
+        return;
+
+    //toutes les notes sont séparées par des '\n'
+    int offset = 1;
+    while(offset + 1 < lst_notes.size()){
+        //récupère la note
+        QString note = lst_notes.mid(offset, lst_notes.indexOf(QChar('\n'), offset));
+        //enlève le caractère '\n' résiduel de l'opération précédente
+        if(note.at(note.size() - 1) == QChar('\n')) note.remove(note.size() - 1, 1);
+        //ajout de la note
+        instance->getNote(note);
+        offset = lst_notes.indexOf(QChar('\n'), offset) + 1;
     }
 }
 
 void NotesManager::changeWorkSpace(const QString& path){
-    //vérifier l'intégrité du fichier workspace
     //vider la liste de notes en sauvant toutes les notes
+    //vérifier l'intégrité du fichier workspace
+    workspace->setPath(path);
+    workspace->check();
     //charger toutes les notes du workspace si tout vas bien.
+    loadWSNotes();
 }

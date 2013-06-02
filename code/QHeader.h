@@ -4,6 +4,7 @@
 #include <fstream>
 #include <list>
 #include <set>
+#include <typeinfo>
 
 #include <QApplication>
 #include <QtGui>
