@@ -18,6 +18,7 @@ public:
 
 class ImageEditor: public BinaryEditor{
 Q_OBJECT
+    QImage *image;
 
 public:
     ImageEditor(Image* i, QWidget* parent=0);

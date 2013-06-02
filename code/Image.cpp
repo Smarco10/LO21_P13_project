@@ -37,7 +37,8 @@ QString Image::toTEXT(){
 }
 
 ImageEditor::ImageEditor(Image *i, QWidget *parent):BinaryEditor(i, parent){
-    //A implémenter
+    image = new QImage(path);
+    zone->layout()->addWidget(image);
 }
 
 void ImageEditor::update(QString s){

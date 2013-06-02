@@ -19,6 +19,11 @@ public:
 
 class AudioEditor: public BinaryEditor{
 Q_OBJECT
+    QSound *sound;
+    QWidget *control;
+    QHBoxLayout *controlLay;
+    QPushButton *play_bt;
+    QPushButton *stop_bt;
 
 public:
     AudioEditor(Audio* a, QWidget* parent=0);

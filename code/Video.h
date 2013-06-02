@@ -18,6 +18,12 @@ public:
 
 class VideoEditor: public BinaryEditor{
 Q_OBJECT
+    QMovie *movie;
+    QImage *frame;
+    QWidget *control;
+    QHBoxLayout *controlLay;
+    QPushButton *play_bt;
+    QPushButton *stop_bt;
 
 public:
     VideoEditor(Video* v, QWidget* parent=0);
