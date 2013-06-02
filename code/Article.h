@@ -3,26 +3,6 @@
 
 #include "Note.h"
 
-/*
-class Article {
-	friend class NotesManager;
-    QString filename;
-    QString title;
-    QString text;
-	bool modified;
-	Article(const Article&);
-	Article& operator=(const Article&);
-public:
-    Article(const QString& f, const QString& ti, const QString& te);
-    const QString& getFilename() const { return filename; }
-    const QString& getTitle() const { return title; }
-    const QString& getText() const { return text; }
-    void setTitle(const QString& t);
-    void setText(const QString& t);
-	bool isModified() const { return modified; }
-};
-//*/
-
 class Article: public Note{
     QString content;
     void operator=(const Article& a);
@@ -38,34 +18,27 @@ public:
         content = ctt;
         modified = true;}
 
+    QString toHTML();
+    QString toTEX();
+    QString toTEXT();
+
     QTextStream& save(QTextStream& f);
 };
-/*
-class ArticleEditor: public QWidget{
+
+class ArticleEditor: public NoteEditor{
 Q_OBJECT
-private:
-    QVBoxLayout *lay;
-    QLineEdit *titre;
-    QTextEdit *texte;
-    QPushButton *sauver;
-    Article *ressource;
+protected:
+    QTextEdit *content;
 
 public:
-    ArticleEditeur(Article*, QWidget* parent=NULL);
-    ~ArticleEditeur();
-    bool isRessource(void *a){return ressource == a;}
-
-    QLabel *visualisateurText;
-    QTabWidget *onglets;
+    ArticleEditor(Article* a, QWidget* parent=0);
+    ~ArticleEditor(){}
 
 signals:
-    void updateVTs(QString);
+    void updateS(QString);
 
 public slots:
-    void saved();
-    void modified(QString);
-    void modified();
-    void updateArticle(QString var="");
-};*/
+    void update(QString s="");
+};
 
 #endif // ARTICLE_H

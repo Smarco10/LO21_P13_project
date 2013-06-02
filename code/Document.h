@@ -75,6 +75,26 @@ public:
 
     unsigned int getNbSubNotes() {return content.size();}
     QTextStream& save(QTextStream& f);
+
+    QString toHTML();
+    QString toTEX();
+    QString toTEXT();
+};
+
+class DocumentEditor: public NoteEditor{
+Q_OBJECT
+protected:
+    std::list<QWidget*> content;
+
+public:
+    DocumentEditor(Document* d, QWidget* parent=0);
+    ~DocumentEditor(){}
+
+signals:
+    void updateS(QString);
+
+public slots:
+    void update(QString s="");
 };
 
 #endif // DOCUMENT_H

@@ -23,3 +23,23 @@ QTextStream& Video::save(QTextStream& f){
     f<<this->getDesc()<<"\n";
     return f;
 }
+
+QString Video::toHTML(){
+    return "";
+}
+
+QString Video::toTEX(){
+    return "";
+}
+
+QString Video::toTEXT(){
+    return "";
+}
+
+VideoEditor::VideoEditor(Video *v, QWidget *parent):BinaryEditor(v, parent){
+    //A implémenter
+}
+
+void VideoEditor::update(QString s){
+
+}

@@ -23,3 +23,24 @@ QTextStream& Audio::save(QTextStream& f){
     f<<this->getDesc()<<"\n";
     return f;
 }
+
+QString Audio::toHTML(){
+    return "";
+}
+
+QString Audio::toTEX(){
+    return "";
+}
+
+QString Audio::toTEXT(){
+    return "";
+}
+
+AudioEditor::AudioEditor(Audio *a, QWidget *parent):BinaryEditor(a, parent){
+    //Ajouter le bouton et la description
+}
+
+void AudioEditor::update(QString s){
+
+}
+

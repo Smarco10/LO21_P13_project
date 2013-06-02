@@ -4,10 +4,10 @@
 #include "QHeader.h"
 
 /* Exemple de fichier ".workspace"
-<?xml version='1.0' encoding='ISO-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <notes>
  <note path="1370104481823" tags="art;note" type="Article"/>
- <note path="1370116693235" tags="film;chaplin;yellow" type="Video"/>
+ <note path="1370116693235" tags="note;film;chaplin;yellow" type="Video"/>
 </notes>
 */
 
@@ -17,15 +17,11 @@ class Workspace: public QWidget{
     bool modified;
     void updateWorkspace();
 public:
-    Workspace();
+    Workspace(const QString& p = ".");
     ~Workspace(){if(modified) updateWorkspace();}
 
     QString getPath() {return path;}
-    void setPath(const QString& p) {path = p;
-                                    //Vérifie que path n'est pas vide sinon met le dossier courant par défaut
-                                    if(path.isEmpty()) path == ".";
-                                    //on supprime le dernier '/' si présent car ajouté automatiquement
-                                    if(path.at(path.size() - 1) == QChar('/')) path.remove(path.size() - 1, 1);}
+    void setPath(const QString& p = ".");
 
     //read
     QString listNotes();

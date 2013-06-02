@@ -27,6 +27,27 @@ public:
         modified = true;}
 
     virtual QTextStream& save(QTextStream& f) = 0;
+
+    virtual QString toHTML() = 0;
+    virtual QString toTEX() = 0;
+    virtual QString toTEXT() = 0;
+};
+
+class BinaryEditor: public NoteEditor{
+Q_OBJECT
+protected:
+    QTextEdit *desc;
+    QPushButton *path;
+
+public:
+    BinaryEditor(Binary* b, QWidget* parent=0):NoteEditor(b, parent){/*implémenter un interface*/}
+    virtual ~BinaryEditor(){}
+
+signals:
+    virtual void updateS(QString) = 0;
+
+public slots:
+    virtual void update(QString s="") = 0;
 };
 
 #endif // BINARY_H

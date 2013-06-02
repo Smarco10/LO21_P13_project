@@ -23,3 +23,23 @@ QTextStream& Image::save(QTextStream& f){
     f<<this->getDesc()<<"\n";
     return f;
 }
+
+QString Image::toHTML(){
+    return "";
+}
+
+QString Image::toTEX(){
+    return "";
+}
+
+QString Image::toTEXT(){
+    return "";
+}
+
+ImageEditor::ImageEditor(Image *i, QWidget *parent):BinaryEditor(i, parent){
+    //A implémenter
+}
+
+void ImageEditor::update(QString s){
+
+}

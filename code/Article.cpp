@@ -20,3 +20,27 @@ QTextStream& Article::save(QTextStream& f){
     f<<this->getContent()<<"\n";
     return f;
 }
+
+QString Article::toHTML(){
+    return "";
+}
+
+QString Article::toTEX(){
+    return "";
+}
+
+QString Article::toTEXT(){
+    return "";
+}
+
+ArticleEditor::ArticleEditor(Article* a, QWidget* parent):NoteEditor(a, parent){
+    content = new QTextEdit(this);
+    content->setText(a->getContent());
+    zone->layout()->addWidget(content);
+}
+
+void ArticleEditor::update(QString s){
+
+}
+
+

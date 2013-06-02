@@ -1,8 +1,16 @@
 #include "Workspace.h"
 
-Workspace::Workspace():QWidget(),path("."){
+Workspace::Workspace(const QString& p):QWidget(),path(p){
+    //Modification du dossier de travail:
+
+    //on supprime le dernier '/' si présent car ajouté automatiquement
+    if(path.at(path.size() - 1) == QChar('/')) path.remove(path.size() - 1, 1);
+
+    //on modifie le dossier courant
+    QDir::setCurrent(path);
+
     dom = new QDomDocument("workspace");
-    QFile xml_doc(path + "/" + WORKSPACE_FILENAME);
+    QFile xml_doc(WORKSPACE_FILENAME);
 
     if(xml_doc.exists()){
         if(!xml_doc.open(QIODevice::ReadOnly)){
@@ -144,11 +152,9 @@ void Workspace::check(){
     while(!nd.isNull()){
         QDomElement el = nd.toElement();
         if(el.tagName() == "note" && el.hasAttribute("path")){
-            QFile note(path + "/" + el.attribute("path"));
+            QFile note(el.attribute("path"));
             if(!note.exists())
                 dom_el.removeChild(el);
-            else
-                note.close();
         }
         nd = nd.nextSibling();
     }
@@ -158,7 +164,7 @@ void Workspace::check(){
 
 void Workspace::updateWorkspace(){
     QString update = dom->toString();
-    QFile fichier(path + "/" + WORKSPACE_FILENAME);
+    QFile fichier(WORKSPACE_FILENAME);
     if(!fichier.open(QIODevice::WriteOnly)){
         fichier.close();
         return;

@@ -34,9 +34,42 @@ public:
 
     bool operator<(const Note& n)const{ return this->id < n.id;}
     virtual QTextStream& save(QTextStream&) = 0;
+
+    virtual QString toHTML() = 0;
+    virtual QString toTEX() = 0;
+    virtual QString toTEXT() = 0;
 };
 
 QTextStream& operator<<(QTextStream& f, Note& n);
+
+class NoteEditor: public QWidget{
+Q_OBJECT
+protected:
+    QTabWidget *tabs;
+    QScrollArea *area;
+    QWidget *zone;
+    QVBoxLayout *zoneLayout;
+
+    QLineEdit *title;
+
+    Note* ressource;
+
+public:
+    NoteEditor(Note* n, QWidget* parent=0);
+    virtual ~NoteEditor(){}
+
+    QLabel *html;
+    QLabel *tex;
+    QLabel *text;
+
+signals:
+    virtual void updateS(QString);
+
+public slots:
+    void modified();
+    void modified(QString);
+    virtual void update(QString s="") = 0;
+};
 
 #endif
 

@@ -17,7 +17,7 @@ Note& NotesManager::getNote(QString& id){
        QString title;
        Note* n = NULL;
 
-       QFile fichier(workspace->getPath() + "/" + id);
+       QFile fichier(id);
        if(fichier.exists()){
            if(!fichier.open(QIODevice::ReadOnly | QIODevice::Text)){
                 //si fichier n'a pu être ouvert, on créer une nouvelle Note
@@ -97,6 +97,11 @@ void NotesManager::libererInstance(){
 }
 
 NotesManager::~NotesManager(){
+    //sauvegarde toutes les notes et le workspace avant de quitter
+    reset();
+}
+
+void NotesManager::reset(){
     for(std::set<Note*>::iterator it=notes.begin(); it != notes.end(); it++){
         saveNote(*(*it));
         delete *it;
@@ -109,7 +114,7 @@ NotesManager::~NotesManager(){
 void NotesManager::saveNote(Note& n){
     if (n.isModified()) {
         // Création d'un objet QFile
-        QFile file(workspace->getPath() + "/" + n.getId());
+        QFile file(n.getId());
 
         // On ouvre notre fichier en écriture seule et on vérifie l'ouverture
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -119,7 +124,8 @@ void NotesManager::saveNote(Note& n){
         flux<<n;
         file.close();
         n.setModified(false);
-        //met à jour la note dans le workspace
+
+        //met à jour la note dans le workspace (implémenter les tags
         workspace->addNote(n.getId(), QString(typeid(n).name()), "");
     }
 }
@@ -145,10 +151,15 @@ void NotesManager::loadWSNotes(){
 }
 
 void NotesManager::changeWorkSpace(const QString& path){
-    //vider la liste de notes en sauvant toutes les notes
+    //vider la liste de notes en sauvant toutes les notes et le workspace <=> suppression
+    instance->reset();
+
+    //Création du nouveau workspace
+    workspace = new Workspace(path);
+
     //vérifier l'intégrité du fichier workspace
-    workspace->setPath(path);
     workspace->check();
+
     //charger toutes les notes du workspace si tout vas bien.
     loadWSNotes();
 }

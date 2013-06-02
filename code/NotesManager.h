@@ -18,10 +18,11 @@ private:
     ~NotesManager();
     NotesManager(const NotesManager&); // non défini mais privé pour empêcher la duplication
     NotesManager& operator=(const NotesManager&);// même chose
+    void reset();
 
     static Workspace *workspace;
     static void loadWSNotes();
-    static void changeWorkSpace(const QString& path);
+    static void changeWorkSpace(const QString& path = ".");
 
     friend class Document;
     static NotesManager* instance; // pointeur sur l'unique instance

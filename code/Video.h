@@ -10,6 +10,24 @@ class Video: public Binary{
 public:
     Video(const QString& id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
     QTextStream& save(QTextStream& f);
+
+    QString toHTML();
+    QString toTEX();
+    QString toTEXT();
+};
+
+class VideoEditor: public BinaryEditor{
+Q_OBJECT
+
+public:
+    VideoEditor(Video* v, QWidget* parent=0);
+    ~VideoEditor(){}
+
+signals:
+    void updateS(QString);
+
+public slots:
+    void update(QString s="");
 };
 
 #endif // VIDEO_H

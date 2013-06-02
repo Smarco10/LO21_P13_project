@@ -10,6 +10,24 @@ class Image: public Binary{
 public:
     Image(const QString& id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
     QTextStream& save(QTextStream& f);
+
+    QString toHTML();
+    QString toTEX();
+    QString toTEXT();
+};
+
+class ImageEditor: public BinaryEditor{
+Q_OBJECT
+
+public:
+    ImageEditor(Image* i, QWidget* parent=0);
+    ~ImageEditor(){}
+
+signals:
+    void updateS(QString);
+
+public slots:
+    void update(QString s="");
 };
 
 #endif // IMAGE_H

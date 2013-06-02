@@ -8,7 +8,7 @@ class MainWindow:public QMainWindow{
 private:
     QWidget *zone;
 
-    QWidget *editorNote;
+    QWidget *editorNote;    
     QWidget *searchTags;
 
     QVBoxLayout *tagsLay;
@@ -16,6 +16,8 @@ private:
 
     QToolBar *tbarOpen;
     QToolBar *tbarMisc;
+
+
 
     QMenu *file;
     QMenu *open;
