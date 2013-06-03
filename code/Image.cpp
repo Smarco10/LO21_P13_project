@@ -37,7 +37,8 @@ QString Image::toTEXT(){
 }
 
 ImageEditor::ImageEditor(Image *i, QWidget *parent):BinaryEditor(i, parent){
-    image = new QImage(path);
+    image = new QLabel(parent);
+    image->setPixmap(QPixmap(i->getPath()));
     zone->layout()->addWidget(image);
 }
 

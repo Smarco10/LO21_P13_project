@@ -40,7 +40,7 @@ protected:
     QPushButton *path;
 
 public:
-    BinaryEditor(Binary* b, QWidget* parent=0):NoteEditor(b, parent){/*implémenter un interface*/}
+    BinaryEditor(Binary* b, QWidget* parent=0);
     virtual ~BinaryEditor(){}
 
 signals:

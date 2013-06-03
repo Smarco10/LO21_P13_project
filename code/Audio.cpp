@@ -38,14 +38,14 @@ QString Audio::toTEXT(){
 
 AudioEditor::AudioEditor(Audio *a, QWidget *parent):BinaryEditor(a, parent){
     //Ajouter le bouton et la description
-    sound = new QSound(path);
+    sound = new QSound(a->getPath());
 
     control = new QWidget;
-    controlLay = new QVBoxLayout;
+    controlLay = new QHBoxLayout;
 
     //changer le nom du bouton et le passer à pause quand la lecture est lancée
-    play_bt = QPushButton("lecture");
-    stop_bt = QPushButton("stop");
+    play_bt = new QPushButton("lecture");
+    stop_bt = new QPushButton("stop");
 
     controlLay->addWidget(play_bt);
     controlLay->addWidget(stop_bt);

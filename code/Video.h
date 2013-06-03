@@ -19,7 +19,7 @@ public:
 class VideoEditor: public BinaryEditor{
 Q_OBJECT
     QMovie *movie;
-    QImage *frame;
+    QLabel *frame;
     QWidget *control;
     QHBoxLayout *controlLay;
     QPushButton *play_bt;

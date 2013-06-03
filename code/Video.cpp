@@ -38,16 +38,17 @@ QString Video::toTEXT(){
 
 VideoEditor::VideoEditor(Video *v, QWidget *parent):BinaryEditor(v, parent){
     movie = new QMovie(path);
-    frame = new QImage(movie->scaledSize());
+    frame = new QLabel(parent);
+    //frame->setPixmap(QPixmap());
 
     zone->layout()->addWidget(frame);
 
     control = new QWidget;
-    controlLay = new QVBoxLayout;
+    controlLay = new QHBoxLayout;
 
     //changer le nom du bouton et le passer à pause quand la lecture est lancée
-    play_bt = QPushButton("lecture");
-    stop_bt = QPushButton("stop");
+    play_bt = new QPushButton("lecture");
+    stop_bt = new QPushButton("stop");
 
     controlLay->addWidget(play_bt);
     controlLay->addWidget(stop_bt);
@@ -55,8 +56,8 @@ VideoEditor::VideoEditor(Video *v, QWidget *parent):BinaryEditor(v, parent){
     zone->layout()->addWidget(control);
 
     //connecter play_bt et stop_bt à movie
-    QObject::connect(play_bt, SIGNAL(clicked()), sound, SLOT(start()));
-    QObject::connect(stop_bt, SIGNAL(clicked()), sound, SLOT(stop()));
+    QObject::connect(play_bt, SIGNAL(clicked()), movie, SLOT(start()));
+    QObject::connect(stop_bt, SIGNAL(clicked()), movie, SLOT(stop()));
     //récupérer l'image courante et la mettre à jour
     //QObject::connect(movie, SIGNAL(frameChanged(int)), , SLOT());
 }
