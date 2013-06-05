@@ -37,7 +37,10 @@ class BinaryEditor: public NoteEditor{
 Q_OBJECT
 protected:
     QTextEdit *desc;
-    QPushButton *path;
+    QWidget *pathZone;
+    QPushButton *chPath;
+    QLabel *path;
+    QHBoxLayout *pathLay;
 
 public:
     BinaryEditor(Binary* b, QWidget* parent=0);
@@ -48,6 +51,7 @@ signals:
 
 public slots:
     virtual void update(QString s="") = 0;
+    void changeFile();
 };
 
 #endif // BINARY_H

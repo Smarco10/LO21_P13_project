@@ -20,6 +20,7 @@ void Audio::load(){
 
 QTextStream& Audio::save(QTextStream& f){
     f<<this->getTitle()<<"\n";
+    f<<this->getPath()<<"\n";
     f<<this->getDesc()<<"\n";
     return f;
 }

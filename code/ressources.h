@@ -16,5 +16,6 @@ static QString WORKSPACE_FILENAME(".workspace");
 #define ico_audio QIcon("icons/audio.png")
 #define ico_video QIcon("icons/video.png")
 #define ico_document QIcon("icons/document.png")
+#define ico_change QIcon("icons/change.png")
 
 #endif // RESSOURCES_H

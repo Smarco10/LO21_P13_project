@@ -23,6 +23,7 @@ Q_OBJECT
     QWidget *control;
     QHBoxLayout *controlLay;
     QPushButton *play_bt;
+    QPushButton *pause_bt;
     QPushButton *stop_bt;
 
 public:

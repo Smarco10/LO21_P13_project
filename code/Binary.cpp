@@ -5,8 +5,20 @@ BinaryEditor::BinaryEditor(Binary *b, QWidget *parent):NoteEditor(b, parent){
     desc->setText(b->getDesc());
     zone->layout()->addWidget(desc);
 
-    path = new QPushButton(b->getPath());
-    zone->layout()->addWidget(path);
+    //Qlabel pour le lien et un bouton "..." à côté pour sélectionner un fichier
+    pathZone = new QWidget;
+    pathLay = new QHBoxLayout;
+    path = new QLabel("File path: " + b->getPath());
+    pathLay->addWidget(path);
+    chPath = new QPushButton(ico_change, "Changer de fichier ...");
+    pathLay->addWidget(chPath);
+    pathZone->setLayout(pathLay);
+    zone->layout()->addWidget(pathZone);
 
-    //connecter le bouton à un slot de changement d'ouverture de fichier
+    //connecte le bouton à un slot de changement de fichier
+    QObject::connect(chPath, SIGNAL(clicked()), this, SLOT(changeFile()));
+}
+
+void BinaryEditor::changeFile(){
+    ((Binary*)ressource)->setPath(QFileDialog::getOpenFileName(this));
 }

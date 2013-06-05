@@ -20,6 +20,7 @@ void Image::load(){
 
 QTextStream& Image::save(QTextStream& f){
     f<<this->getTitle()<<"\n";
+    f<<this->getPath()<<"\n";
     f<<this->getDesc()<<"\n";
     return f;
 }

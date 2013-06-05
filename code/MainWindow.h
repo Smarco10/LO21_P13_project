@@ -3,6 +3,9 @@
 
 #include "QHeader.h"
 
+//Faire un fichier de config où l'on stock les valeurs du fichier ressources.h
+//ainsi que le path par défaut qui est le dernier utilisé dans l'applis
+
 class MainWindow:public QMainWindow{
     Q_OBJECT
 private:
