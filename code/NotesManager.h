@@ -6,6 +6,9 @@
 #include "Note.h"
 #include "Article.h"
 #include "Document.h"
+#include "Audio.h"
+#include "Image.h"
+#include "Video.h"
 
 class NotesManager {
 private:

@@ -37,6 +37,11 @@ void Document::load(){
         return;
 
     QFile fichier(getId());
+
+    //on sort si le fichier n'existe pas
+    if(!fichier.exists())
+        return;
+
     if(!fichier.open(QIODevice::ReadOnly | QIODevice::Text)){
         throw NotesException("Can't open document file");
     }

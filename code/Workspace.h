@@ -16,6 +16,7 @@ class Workspace: public QWidget{
     QString path;
     bool modified;
     void updateWorkspace();
+
 public:
     Workspace(const QString& p = ".");
     ~Workspace(){if(modified) updateWorkspace();}

@@ -63,10 +63,10 @@ class Document: public Note{
 private:
     std::list<Note*> content;
     void operator=(const Document&);
-    Document(const Document& d):Note(0, d.title),content(d.content){}
+    Document(Document& d);
     void load();
 public:
-    Document(const QString& id, const QString& title, const std::list<Note*> content = std::list<Note*>()):Note(id, title),content(content){}
+    Document(const QString& id, const QString& title, const std::list<Note*> content = std::list<Note*>()):Note("Document", id, title),content(content){}
 
     void addSubNote(Note* n);
     void addSubNote(Note *n, unsigned int);

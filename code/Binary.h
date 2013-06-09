@@ -7,12 +7,12 @@ class Binary: public Note{
 protected:
     QString desc;
     QString path;
-    Binary(const Binary& b):Note(0, b.title), desc(b.desc),path(b.path){}
+    Binary(Binary& b);
     void operator=(const Binary& b);
     virtual void load() = 0;
 
 public:
-    Binary(const QString& id, const QString& title, const QString& d="", const QString& p=""):Note(id, title), desc(d),path(p){}
+    Binary(const QString& type, const QString& id, const QString& title, const QString& d, const QString& p):Note(type, id, title), desc(d),path(p){}
 
     QString& getDesc() {load();
         return desc;}

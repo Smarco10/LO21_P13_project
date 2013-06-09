@@ -17,5 +17,7 @@ static QString WORKSPACE_FILENAME(".workspace");
 #define ico_video QIcon("icons/video.png")
 #define ico_document QIcon("icons/document.png")
 #define ico_change QIcon("icons/change.png")
+#define ico_bin_empty QIcon("icons/bin_empty.png")
+#define ico_bin_full QIcon("icons/bin_full.png")
 
 #endif // RESSOURCES_H

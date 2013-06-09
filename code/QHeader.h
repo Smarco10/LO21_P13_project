@@ -28,6 +28,9 @@
 #include <QTextCodec>
 #include <QDateTime>
 #include <QtXml>
+#include <QList>
+
+#define DEBUGP printf("\n%s: %d\n", __FILE__, __LINE__);
 
 class NotesException{
 public:

@@ -4,11 +4,11 @@
 #include "Binary.h"
 
 class Audio: public Binary{
-    Audio(const Audio& a):Binary(0, a.title){}
+    Audio(Audio& a);
     void operator=(const Audio& a);
     void load();
 public:
-    Audio(const QString& id, const QString& title, const QString& desc, const QString& path):Binary(id, title, desc, path){}
+    Audio(const QString& id, const QString& title, const QString& desc="", const QString& path=""):Binary("Audio", id, title, desc, path){}
 
     QString toHTML();
     QString toTEX();

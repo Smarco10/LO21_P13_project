@@ -6,10 +6,10 @@
 class Article: public Note{
     QString content;
     void operator=(const Article& a);
-    Article(const Article& a):Note(0, a.title), content(a.content){}
+    Article(Article& a);
     void load();
 public:
-    Article(const QString& id, const QString& title, const QString& ctt=""):Note(id, title), content(ctt){}
+    Article(const QString& id, const QString& title, const QString& ctt=""):Note("Article", id, title), content(ctt){printf("titleA = %s\n", title.toStdString().c_str());}
 
     QString getContent(){load();
         return content;}

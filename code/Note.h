@@ -3,9 +3,10 @@
 
 #include "QHeader.h"
 
-class Note
-{
+class Note{
+private:
     QString id;
+    QString type;
 
 protected:
     QString title;
@@ -14,9 +15,10 @@ protected:
     virtual void load()=0;
 
 public:
-    Note(const QString& i, const QString& tt):id(i),title(tt),loaded(false),modified(false){}
+    Note(const QString& ty, const QString& i, const QString& tt):id(i),type(ty),title(tt),loaded(false),modified(false){}
 
     QString& getId() {return id;}
+    QString& getType() {return type;}
 
     QString& getTitle() {return title;}
     void setTitle(const QString& tt){title = tt; modified = true;}
@@ -57,6 +59,8 @@ protected:
 public:
     NoteEditor(Note* n, QWidget* parent=0);
     virtual ~NoteEditor(){}
+
+    Note& getRessource() const {return *ressource;}
 
     QLabel *html;
     QLabel *tex;

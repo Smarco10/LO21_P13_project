@@ -1,6 +1,6 @@
 #include "Workspace.h"
 
-Workspace::Workspace(const QString& p):QWidget(),path(p){
+Workspace::Workspace(const QString& p):QWidget(),path(p),modified(false){
     //Modification du dossier de travail:
 
     //on supprime le dernier '/' si présent car ajouté automatiquement
@@ -25,10 +25,9 @@ Workspace::Workspace(const QString& p):QWidget(),path(p){
             return;
         }
 
-        modified = false;
         xml_doc.close();
     } else
-        dom->setContent(QString("<?xml version='1.0' encoding='UTF-8'?>\n<notes>\n</notes>"));
+        dom->setContent(QString("<?xml version='1.0' encoding='UTF-8'?>\n<notes/>"));
 }
 
 QString Workspace::listNotes(){

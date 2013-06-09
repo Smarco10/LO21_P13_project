@@ -49,23 +49,33 @@ Note& NotesManager::getNote(QString& id){
 
 Note& NotesManager::getNewNote(const QString& type, const QString& title){
     Note* n = NULL;
+    QString id = getId();
 
-    n = noteConstructor(type, getId(), title);
-
+    n = noteConstructor(type, id, (title.isEmpty()) ? QString(type + "_" + id) : title);
+    printf("titleNM = %s\n", n->getTitle().toStdString().c_str());
     if(n == NULL)
         throw NotesException("Can't create a note of type: " + type);
 
     addNote(n);
+
     return *n;
 }
 
 Note* NotesManager::noteConstructor(const QString& type, const QString& id, const QString& title){
     //Rajouter les types ici ...
 
+    printf("titleNC = %s\n", title.toStdString().c_str());
+
     if(type == "Article"){
         return new Article(id, title);
     } else if(type == "Document"){
         return new Document(id, title);
+    } else if(type == "Image"){
+        return new Image(id, title);
+    } else if(type == "Audio"){
+        return new Audio(id, title);
+    } else if(type == "Image"){
+        return new Video(id, title);
     }
 
     //type inconnu on laisse à NULL
@@ -79,7 +89,7 @@ QString NotesManager::getId(){
 
 QString NotesManager::typeNote(const QString& id){
     //récupérer le type de la note dans le fichier workspace en XML
-    return "" + id;
+    return workspace->getType(id);
 }
 
 Workspace* NotesManager::workspace = NULL;
@@ -126,7 +136,7 @@ void NotesManager::saveNote(Note& n){
         n.setModified(false);
 
         //met à jour la note dans le workspace (implémenter les tags
-        workspace->addNote(n.getId(), QString(typeid(n).name()), "");
+        workspace->addNote(n.getId(), n.getType(), "");
     }
 }
 
