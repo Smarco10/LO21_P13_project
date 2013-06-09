@@ -3,6 +3,7 @@
 
 #include "Note.h"
 
+
 class Article: public Note{
     QString content;
     void operator=(const Article& a);

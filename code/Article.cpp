@@ -1,5 +1,6 @@
 ﻿#include "Article.h"
-
+#include<QDomElement>
+#include<QDomDocument>
 void Article::load(){
     //récupère les information pouvant manquer comme le contenu
     QFile fichier(getId());
@@ -26,7 +27,9 @@ QTextStream& Article::save(QTextStream& f){
 }
 
 QString Article::toHTML(){
-    return "";
+
+
+
 }
 
 QString Article::toTEX(){
