@@ -32,7 +32,7 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
 
     //créer un onglet Résultats
     outputNotes = new QListEditor(searchTags);
-    tabs->addTab(outputNotes, "Résultat(s)");
+    tabs->addTab(outputNotes, "Résultat ( 0 )");
 
     //Créer un onglet Corbeille (lister les éléments suprimés en QAction (cliqued() => restaurer) + QAction "Vider la corbeille" + Qaction "tout restaurer"
     bin = new QWidget(searchTags);
@@ -42,7 +42,7 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
     binDel = new QPushButton(ico_bin_empty, "", bin);
     binDel->setToolTip("Vider la Corbeille");
     bin->layout()->addWidget(binDel);
-    tabs->addTab(bin, "Corbeille");
+    tabs->addTab(bin, ico_bin_empty, "Corbeille ( 0 )");
 
     searchTags->layout()->addWidget(inputTags);
     searchTags->layout()->addWidget(&filterTags_n);
@@ -137,6 +137,9 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
 }
 
 MainWindow::~MainWindow(){
+    //propose de vider la corbeille si elle n'est pas vide (condition déjà inclus dans la fct)
+    safeEmptyBin();
+
     NotesManager::libererInstance();
 }
 
@@ -152,6 +155,7 @@ void MainWindow::articleCreator(){
    Article *art = dynamic_cast<Article*>(&manager->getNewNote("Article", ""));
    QListEditorItem* act = new QListEditorItem(ico_article, art->getTitle(), new ArticleEditor(art, editor));
    outputNotes->addItem(act);
+   tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
    openNote(act);
 }
 
@@ -162,6 +166,7 @@ void MainWindow::imageCreator(){
     Image* img = dynamic_cast<Image*>(&manager->getNewNote("Image", ""));
     QListEditorItem* act = new QListEditorItem(ico_image, img->getTitle(), new ImageEditor(img, editor));
     outputNotes->addItem(act);
+    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
     openNote(act);
 }
 
@@ -171,7 +176,8 @@ void MainWindow::audioCreator(){
     //Créer une nouvelle note si fermé avec succès
     Audio *aud = dynamic_cast<Audio*>(&manager->getNewNote("Audio", ""));
     QListEditorItem* act = new QListEditorItem(ico_audio, aud->getTitle(), new AudioEditor(aud, editor));
-    outputNotes->addItem(act);;
+    outputNotes->addItem(act);
+    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
     openNote(act);
 }
 
@@ -182,6 +188,7 @@ void MainWindow::videoCreator(){
     Video* vid = dynamic_cast<Video*>(&manager->getNewNote("Video", ""));
     QListEditorItem* act = new QListEditorItem(ico_video, vid->getTitle(), new VideoEditor(vid, editor));
     outputNotes->addItem(act);
+    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
     openNote(act);
 }
 
@@ -192,6 +199,7 @@ void MainWindow::documentCreator(){
     Document* doc = dynamic_cast<Document*>(&manager->getNewNote("Document", ""));
     QListEditorItem* act = new QListEditorItem(ico_document, doc->getTitle(), new DocumentEditor(doc, editor));
     outputNotes->addItem(act);
+    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
     openNote(act);
 }
 
@@ -207,7 +215,7 @@ void MainWindow::openNote(QListEditorItem *o){
 
     outputNotes->setCurrentItem(o);
 
-    //passage des icon à visible
+    //MàJ des icons
     save->setEnabled(true);
     print->setEnabled(true);
     trash->setEnabled(true);
@@ -240,19 +248,38 @@ void MainWindow::deleteNote(){
 
     editorNote = NULL;
 
+    //MàJ des icons
     save->setEnabled(false);
     print->setEnabled(false);
     trash->setEnabled(false);
+
+    //MàJ des onglets
+    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
+
+    tabs->setTabIcon(tabs->indexOf(bin), ico_bin_full);
+    tabs->setTabText(tabs->indexOf(bin), "Corbeille ( " + QString::number(deleted->count()) + " )");
 }
 
 void MainWindow::recoverNote(QListEditorItem *item){
     //restaurer la note dans la liste outputNotes
     deleted->takeItem(deleted->currentRow());
     outputNotes->addItem(item);
+
+    //MàJ des onglets
+    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
+
+    if(deleted->count() > 0)
+        tabs->setTabIcon(tabs->indexOf(bin), ico_bin_full);
+    else
+        tabs->setTabIcon(tabs->indexOf(bin), ico_bin_empty);
+
+    tabs->setTabText(tabs->indexOf(bin), "Corbeille ( " + QString::number(deleted->count()) + " )");
 }
 
 void MainWindow::safeEmptyBin(){
     //demander si on est sur de supprimer toutes noutes définitivement?
+    if(deleted->count() == 0)
+        return;
 
     //création de la fenêtre
     QDialog *altWindow = new QDialog(this);
@@ -306,6 +333,9 @@ void MainWindow::emptyBin(){
         delete deleted->item(i)->getRessource();
     }
     deleted->clear();
+
+    tabs->setTabIcon(tabs->indexOf(bin), ico_bin_empty);
+    tabs->setTabText(tabs->indexOf(bin), "Corbeille ( 0 )");
 }
 
 void MainWindow::aboutApp(){
