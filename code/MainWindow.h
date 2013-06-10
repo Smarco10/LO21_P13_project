@@ -7,15 +7,6 @@
 //Faire un fichier de config où l'on stock les valeurs du fichier ressources.h
 //ainsi que le path par défaut qui est le dernier utilisé dans l'applis
 
-class QWidEmpty:public QWidget{
-    NoteEditor *ressource;
-public:
-    QWidEmpty(NoteEditor* res, QWidget* parent=NULL):QWidget(parent),ressource(res){}
-    ~QWidEmpty(){}
-
-    NoteEditor* getRessource() const {return ressource;}
-};
-
 class QListEditorItem:public QAction{
     NoteEditor *ressource;
 public:
@@ -122,6 +113,7 @@ private slots:
     void saveNote();
     void deleteNote();
     void recoverNote(QListEditorItem*);
+    void safeEmptyBin();
     void emptyBin();
 };
 

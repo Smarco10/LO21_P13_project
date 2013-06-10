@@ -133,7 +133,7 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
     QObject::connect(deleted, SIGNAL(itemDoubleClicked(QListWidgetItem*)), deleted, SLOT(itActDoubleClicked(QListWidgetItem*)));
     QObject::connect(deleted, SIGNAL(itActDoubleClickedS(QListEditorItem*)), this, SLOT(recoverNote(QListEditorItem*)));
 
-    QObject::connect(binDel, SIGNAL(clicked()), this, SLOT(emptyBin()));
+    QObject::connect(binDel, SIGNAL(clicked()), this, SLOT(safeEmptyBin()));
 }
 
 MainWindow::~MainWindow(){
@@ -249,6 +249,54 @@ void MainWindow::recoverNote(QListEditorItem *item){
     //restaurer la note dans la liste outputNotes
     deleted->takeItem(deleted->currentRow());
     outputNotes->addItem(item);
+}
+
+void MainWindow::safeEmptyBin(){
+    //demander si on est sur de supprimer toutes noutes définitivement?
+
+    //création de la fenêtre
+    QDialog *altWindow = new QDialog(this);
+    altWindow->setWindowTitle("Vider la corbeille");
+    altWindow->setWindowIcon(ico_bin_empty);
+    QHBoxLayout *altWindowLay = new QHBoxLayout;
+    altWindow->setLayout(altWindowLay);
+
+    //partie icon
+    QLabel *logo = new QLabel(altWindow);
+    logo->setPixmap(ico_bin_full.pixmap(ico_bin_full.availableSizes().at(0)));
+    altWindow->layout()->addWidget(logo);
+
+    //partie texte
+    QWidget *text = new QWidget(altWindow);
+    text->setLayout(new QVBoxLayout());
+    altWindow->layout()->addWidget(text);
+
+    QLabel *quest = new QLabel("Etes-vous sur de vouloir vider la corbeille?", altWindow);
+    text->layout()->addWidget(quest);
+
+    QLabel *info = new QLabel("Cette action est irréverssible <b>irreversible</b>.", altWindow);
+    text->layout()->addWidget(info);
+
+    //partie boutons
+    QWidget *controls = new QWidget(altWindow);
+    controls->setLayout(new QHBoxLayout());
+
+    QPushButton *yes = new QPushButton(controls->style()->standardIcon(QStyle::SP_DialogApplyButton), "");
+    yes->setToolTip("Vide la corbeille et supprime les fichier physiques");
+    controls->layout()->addWidget(yes);
+
+    QObject::connect(yes, SIGNAL(clicked()), this, SLOT(emptyBin()));
+    QObject::connect(yes, SIGNAL(clicked()), altWindow, SLOT(close()));
+
+    QPushButton *cancel = new QPushButton(controls->style()->standardIcon(QStyle::SP_DialogCancelButton), "");
+    cancel->setToolTip("Annule et retourne au programme");
+    controls->layout()->addWidget(cancel);
+
+    QObject::connect(cancel, SIGNAL(clicked()), altWindow, SLOT(close()));
+
+    text->layout()->addWidget(controls);
+
+    altWindow->exec();
 }
 
 void MainWindow::emptyBin(){
