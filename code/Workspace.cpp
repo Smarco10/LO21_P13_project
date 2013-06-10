@@ -133,6 +133,9 @@ void Workspace::deleteNote(const QString& path){
         QDomElement el = nd.toElement();
         if(el.tagName() == "note" && el.attribute("path") == path){
             dom_el.removeChild(el);
+            //supprime le fichier correspondant
+            QFile fichier(path);
+            fichier.remove();
             break;
         }
         nd = nd.nextSibling();

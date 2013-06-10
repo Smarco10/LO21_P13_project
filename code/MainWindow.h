@@ -7,16 +7,67 @@
 //Faire un fichier de config où l'on stock les valeurs du fichier ressources.h
 //ainsi que le path par défaut qui est le dernier utilisé dans l'applis
 
+class QWidEmpty:public QWidget{
+    NoteEditor *ressource;
+public:
+    QWidEmpty(NoteEditor* res, QWidget* parent=NULL):QWidget(parent),ressource(res){}
+    ~QWidEmpty(){}
+
+    NoteEditor* getRessource() const {return ressource;}
+};
+
+class QListEditorItem:public QAction{
+    NoteEditor *ressource;
+public:
+    QListEditorItem(const QString& tt, NoteEditor* res, QObject* parent=NULL):QAction(tt, parent),ressource(res){}
+    QListEditorItem(const QIcon& ico, NoteEditor* res, QObject* parent=NULL):QAction(ico, "", parent),ressource(res){}
+    QListEditorItem(const QIcon& ico, const QString& tt, NoteEditor* res, QObject* parent=NULL):QAction(ico, tt, parent),ressource(res){}
+    ~QListEditorItem(){}
+
+    NoteEditor* getRessource() const {return ressource;}
+};
+
+class QListEditor: public QListWidget{
+    Q_OBJECT
+private:
+    QList<QListEditorItem*> editors;
+    QVBoxLayout *lay;
+
+public:
+    QListEditor(QWidget* parent=NULL):QListWidget(parent){}
+    ~QListEditor(){}
+
+    void addItem(QListEditorItem* itAct){QListWidgetItem *item = new QListWidgetItem(itAct->icon(), itAct->text(), this);
+                                         this->QListWidget::addItem(item);
+                                         editors.push_back(itAct);}
+    QListEditorItem* takeItem(int pos){this->QListWidget::takeItem(pos);
+                                       QListEditorItem *itAct = editors.at(pos);
+                                       editors.removeAt(pos); return itAct;}
+    void setCurrentItem(QListEditorItem *item){int pos = editors.indexOf(item); this->QListWidget::setCurrentItem(this->QListWidget::item(pos));}
+    void clear() {this->QListWidget::clear(); editors.clear();}
+    QListEditorItem* item(int pos) {return editors.at(pos);}
+
+signals:
+    void itActClickedS(QListEditorItem*);
+    void itActDoubleClickedS(QListEditorItem*);
+
+public slots:
+    void itActClicked(QListWidgetItem *it){emit itActClickedS(this->item(this->row(it)));}
+    void itActDoubleClicked(QListWidgetItem *it){emit itActDoubleClickedS(this->item(this->row(it)));}
+};
+
 class MainWindow:public QMainWindow{
     Q_OBJECT
 private:
     QWidget *zone;
 
-    NoteEditor *editorNote;
+    QWidget *editor;
+    QListEditorItem *editorNote;
     QWidget *searchTags;
 
-    QVBoxLayout *tagsLay;
     QHBoxLayout *zoneLay;
+    QVBoxLayout *tagsLay;
+    QVBoxLayout *editorLay;
 
     QToolBar *tbarOpen;
     QToolBar *tbarMisc;
@@ -34,32 +85,23 @@ private:
     QAction *trash;
 
     QMenu *edit;
-
-    QSignalMapper *mapper;
-
-    //Corbeille
-    QMenu *bin;
-    QAction *binDel;
-    QAction *binRec;
-    QList<QAction*> deleted;
-
     QMenu *help;
     QAction *about;
 
     //Partie searchTags
     QLineEdit *inputTags;
     QLabel filterTags_n;
-    QListView *filterTags;
-    QLabel outputNotes_n;
-    QListView *outputNotes;
+    QListEditor *filterTags;
 
-    QList<QAction*> notes;
-
-    QList<NoteEditor*> qnotes;
+    QTabWidget *tabs;
+        //Onglet Résultats
+    QListEditor *outputNotes;
+        //Onglet Corbeille
+    QWidget *bin;
+    QListEditor *deleted;
+    QPushButton *binDel;
 
     NotesManager *manager;
-
-    QAction* getAction(NoteEditor*);
 
 public:
     MainWindow(QApplication*);
@@ -75,10 +117,12 @@ private slots:
     void videoCreator();
     void documentCreator();
 
-    void openNote(QObject*);
+    void openNote(QListEditorItem*);
     void printNote();
     void saveNote();
     void deleteNote();
+    void recoverNote(QListEditorItem*);
+    void emptyBin();
 };
 
 #endif // MAINWINDOW_H

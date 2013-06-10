@@ -5,6 +5,15 @@ void NotesManager::addNote(Note* n){
     n->setModified(true);
 }
 
+void NotesManager::removeNote(Note *n){
+    for(std::set<Note*>::iterator it=notes.begin(); it != notes.end(); it++)
+        if(*it == n){
+            notes.erase(it);
+            break;
+        }
+    n->setModified(true);
+}
+
 Note& NotesManager::getNote(QString& id){
     //regarde si la note est dans la liste
    std::set<Note*>::iterator it= notes.end()/*notes.find(id)*/;
@@ -138,6 +147,11 @@ void NotesManager::saveNote(Note& n){
         //met à jour la note dans le workspace (implémenter les tags
         workspace->addNote(n.getId(), n.getType(), "");
     }
+}
+
+void NotesManager::deleteNote(Note& n){
+    removeNote(&n);
+    workspace->deleteNote(n.getId());
 }
 
 void NotesManager::loadWSNotes(){

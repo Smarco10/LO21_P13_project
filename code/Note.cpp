@@ -9,8 +9,7 @@ QTextStream& operator<<(QTextStream& f, Note& n){
     return n.save(f);
 }
 
-
-NoteEditor::NoteEditor(Note* n, QWidget* parent){
+NoteEditor::NoteEditor(Note* n, QWidget* parent):QWidget(parent){
     ressource = n;
     this->setParent(parent);
 
@@ -18,22 +17,26 @@ NoteEditor::NoteEditor(Note* n, QWidget* parent){
     tex = new QLabel(n->toTEX());
     text = new QLabel(n->toTEXT());
 
-    tabs = new QTabWidget(parent);
-    tabs->addTab(this, "Editeur");
+    mainLay = new QVBoxLayout;
+    this->setLayout(mainLay);
+
+    tabs = new QTabWidget(this);
+    this->layout()->addWidget(tabs);
+
+//Intégrer à zone un scroll area
+    zone = new QWidget(this);
+    zoneLayout = new QVBoxLayout;
+    zone->setLayout(zoneLayout);
+    this->layout()->addWidget(zone);
+
+    title = new QLineEdit;
+    title->setText(n->getTitle());
+    zone->layout()->addWidget(title);
+
+    tabs->addTab(zone, "Editeur");
     tabs->addTab(html, "HTML");
     tabs->addTab(tex, "TEX");
     tabs->addTab(text, "Texte");
-
-    area = new QScrollArea(this);
-    zone = new QWidget(area);
-    area->setWidget(zone);
-    area->ensureWidgetVisible(zone);
-    zoneLayout = new QVBoxLayout();
-    zone->setLayout(zoneLayout);
-
-    title = new QLineEdit(this);
-    title->setText(n->getTitle());
-    zone->layout()->addWidget(title);
 }
 
 void NoteEditor::modified(QString s){
@@ -43,6 +46,7 @@ void NoteEditor::modified(QString s){
 void NoteEditor::modified(){
 
 }
+
 void Note::createHtmlTree(){
     /* If problem during the acess of the QBuffer*/
     if (!buffer->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))

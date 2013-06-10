@@ -1,6 +1,5 @@
 ﻿#include "Article.h"
-#include<QDomElement>
-#include<QDomDocument>
+
 void Article::load(){
     //récupère les information pouvant manquer comme le contenu
     QFile fichier(getId());
@@ -27,9 +26,7 @@ QTextStream& Article::save(QTextStream& f){
 }
 
 QString Article::toHTML(){
-
-
-
+    return "";
 }
 
 QString Article::toTEX(){
@@ -41,8 +38,7 @@ QString Article::toTEXT(){
 }
 
 ArticleEditor::ArticleEditor(Article* a, QWidget* parent):NoteEditor(a, parent){
-    content = new QTextEdit(this);
-
+    content = new QTextEdit;
     content->setText(a->getContent());
 
     zone->layout()->addWidget(content);

@@ -28,7 +28,12 @@
 #include <QTextCodec>
 #include <QDateTime>
 #include <QtXml>
+#include <QDomElement>
+#include <QDomDocument>
 #include <QList>
+#include <QListWidget>
+#include <QListWidgetItem>
+
 
 #define DEBUGP printf("\n%s: %d\n", __FILE__, __LINE__);
 

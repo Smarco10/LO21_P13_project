@@ -16,6 +16,7 @@ private:
     unsigned int getNbNotes(){ return notes.size();}
     //coder operateur < > pour le find;
     void addNote(Note* n);
+    void removeNote(Note* n);
 
     NotesManager(){}
     ~NotesManager();
@@ -42,6 +43,7 @@ public:
     Note& getNote(QString& id);
     Note& getNewNote(const QString& type, const QString& title);
     void saveNote(Note& n);
+    void deleteNote(Note& n);
 };
 
 #endif // NOTESMANAGER_H
