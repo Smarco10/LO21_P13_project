@@ -46,13 +46,9 @@ void NoteEditor::modified(QString s){
 void NoteEditor::modified(){
 
 }
-<<<<<<< HEAD
-void Note::createHtmlTree(QBuffer* buf ){
-=======
 
-void Note::createHtmlTree(){
->>>>>>> 9c6bb3b2bfe54891bfec9d4cead12caeb6b1f349
-    /* If problem during the acess of the QBuffer*/
+void Note::createHtmlTree(QBuffer* buf ){
+
 
     QXmlStreamWriter qw;
 

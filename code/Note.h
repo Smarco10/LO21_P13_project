@@ -2,12 +2,11 @@
 #define NOTE_H
 
 #include "QHeader.h"
-<<<<<<< HEAD
+
 #include<QtXml>
 #include<QXmlStreamWriter>
-=======
 
->>>>>>> 9c6bb3b2bfe54891bfec9d4cead12caeb6b1f349
+
 class Note{
 private:
     QString id;

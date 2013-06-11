@@ -1,11 +1,11 @@
 ﻿#include "Article.h"
-<<<<<<< HEAD
+
 #include<QDomElement>
 #include<QDomDocument>
 #include<algorithm>
-=======
 
->>>>>>> 9c6bb3b2bfe54891bfec9d4cead12caeb6b1f349
+
+
 void Article::load(){
     //récupère les information pouvant manquer comme le contenu
     QFile fichier(getId());
