@@ -1,6 +1,7 @@
 ﻿#include "Article.h"
 #include<QDomElement>
 #include<QDomDocument>
+#include<algorithm>
 void Article::load(){
     //récupère les information pouvant manquer comme le contenu
     QFile fichier(getId());
@@ -28,6 +29,20 @@ QTextStream& Article::save(QTextStream& f){
 
 QString Article::toHTML(){
 
+    QXmlStreamWriter* qw=new QXmlStreamWriter;
+
+
+   if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+    createHtmlTree(buffer);
+    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
+    qw->writeTextElement("h2",QString("ID:")+this->getId());
+    qw->writeTextElement("p",this->getContent());
+    //qw->writeTextElement("p",QString("Tag:")+this->getTags());
+    endHtmlTree(buffer);
+    buffer->close;
+    return QString(*file);
 
 
 }
