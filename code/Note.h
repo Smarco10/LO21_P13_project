@@ -3,6 +3,7 @@
 
 #include "QHeader.h"
 #include<QtXml>
+#include<QXmlStreamWriter>
 class Note{
 private:
     QString id;
@@ -15,8 +16,8 @@ protected:
     virtual void load()=0;
     QByteArray* file ;
     QBuffer* buffer;
-    void createHtmlTree(void);
-
+    void createHtmlTree(QBuffer *buf);
+    void endHtmlTree(QBuffer* buf);
 public:
     Note(const QString& ty, const QString& i, const QString& tt):id(i),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray; buffer=new QBuffer(file);}
 

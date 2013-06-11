@@ -43,31 +43,39 @@ void NoteEditor::modified(QString s){
 void NoteEditor::modified(){
 
 }
-void Note::createHtmlTree(){
+void Note::createHtmlTree(QBuffer* buf ){
     /* If problem during the acess of the QBuffer*/
-    if (!buffer->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))
-        throw NotesException("CreateHtmlTree Buffer opening problem");
 
-    QXmlStreamWriter* qw=new QXmlStreamWriter;
+    QXmlStreamWriter qw;
 
     //Creation of the HTML architecture
-    qw->setDevice(buffer);
-    qw->setAutoFormatting(true);
-    qw->setAutoFormattingIndent(-1);
-    qw->writeStartElement("!xDOCTYPE HTML");
-        qw->writeStartElement("xhtml");
-            qw->writeStartElement("head");
-                qw->writeEmptyElement("meta");
-                qw->writeAttribute("charset","utf-8");
-                qw->writeStartElement("title");
-                qw->writeCharacters("me gusta la banana");
-                qw->writeEndElement();
-            qw->writeEndElement();
-            qw->writeStartElement("body");
-            qw->writeEndElement();
-            qw->writeEndElement();
-    qw->writeEndElement();
-    buffer->close();
-    delete qw;
+    qw.setDevice(buf);
+    qw.setAutoFormatting(true);
+    qw.setAutoFormattingIndent(-1);
+    qw.writeDTD("<!xDOCTYPE xhtml>");
+        qw.writeStartElement("html");
+            qw.writeStartElement("head");
+                qw.writeEmptyElement("meta");
+                qw.writeAttribute("charset","utf-8");
+                qw.writeTextElement("title",this->getTitle());
+                qw.writeEndElement();
+            qw.writeStartElement("body");
+
+
+
+
+}
+void Note::endHtmlTree(QBuffer* buf){
+
+    if (!buf->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))
+        throw NotesException("EndHtmlTree Buffer opening problem");
+
+    QXmlStreamWriter qw;
+    qw.setDevice(buf);
+            qw.writeEndElement();
+            qw.writeEndElement();
+     qw.writeEndElement();
+
+
 
 }
