@@ -46,25 +46,25 @@ void Document::load(){
         throw NotesException("Can't open document file");
     }
 
-     QTextStream flux(&fichier);
-     //saute la première ligne
-     flux.readLine();
-     while(!flux.atEnd()){
-         //Pour chaques ligne, enregistre la note et l'ajoute au document
-          QString subfile = flux.readLine();
-          //vérifie que le fichier n'est pas déjà dans la liste
-          for(std::list<Note*>::iterator it = content.begin(); it != content.end(); it++)
-              if((*it)->getId() == subfile)
-                  //passe au fichier suivant
-                  continue;
+    QTextStream flux(&fichier);
+    //saute la première ligne
+    flux.readLine();
+    while(!flux.atEnd()){
+        //Pour chaques ligne, enregistre la note et l'ajoute au document
+        QString subfile = flux.readLine();
+        //vérifie que le fichier n'est pas déjà dans la liste
+        for(std::list<Note*>::iterator it = content.begin(); it != content.end(); it++)
+            if((*it)->getId() == subfile)
+                //passe au fichier suivant
+                continue;
 
-          //si fichier non présent dans la liste
-          //création d'une note en mémoire, catcher les exceptions
-          Note& note = NotesManager::instance->getNote(subfile);
+        //si fichier non présent dans la liste
+        //création d'une note en mémoire, catcher les exceptions
+        Note& note = NotesManager::instance->getNote(subfile);
 
-          //ajoute le fichier à la liste
-          addSubNote(&note);
-     }
+        //ajoute le fichier à la liste
+        addSubNote(&note);
+    }
 }
 
 QTextStream& Document::save(QTextStream& f){
@@ -77,7 +77,25 @@ QTextStream& Document::save(QTextStream& f){
 }
 
 QString Document::toHTML(){
-    return "";
+    QXmlStreamWriter* qw=new QXmlStreamWriter;
+
+
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+    createHtmlTree(buffer);
+    for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
+        qw->writeEmptyElement("br");
+        qw->writeTextElement("h1",QString("Titre:")+**it.getTitle());
+        qw->writeTextElement("h2",QString("ID:")+**it.getId());
+        qw->writeTextElement("p",*it.getContent());
+        //qw->writeTextElement("p",QString("Tag:")+*it.getTags());
+        qw->writeEmptyElement("br");
+    }
+    endHtmlTree(buffer);
+    buffer->close();
+    return QString(*file);
+
 }
 
 QString Document::toTEX(){
