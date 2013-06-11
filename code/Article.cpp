@@ -1,7 +1,11 @@
 ﻿#include "Article.h"
+<<<<<<< HEAD
 #include<QDomElement>
 #include<QDomDocument>
 #include<algorithm>
+=======
+
+>>>>>>> 9c6bb3b2bfe54891bfec9d4cead12caeb6b1f349
 void Article::load(){
     //récupère les information pouvant manquer comme le contenu
     QFile fichier(getId());
@@ -28,6 +32,7 @@ QTextStream& Article::save(QTextStream& f){
 }
 
 QString Article::toHTML(){
+<<<<<<< HEAD
 
     QXmlStreamWriter* qw=new QXmlStreamWriter;
 
@@ -45,6 +50,9 @@ QString Article::toHTML(){
     return QString(*file);
 
 
+=======
+    return "";
+>>>>>>> 9c6bb3b2bfe54891bfec9d4cead12caeb6b1f349
 }
 
 QString Article::toTEX(){
@@ -56,8 +64,7 @@ QString Article::toTEXT(){
 }
 
 ArticleEditor::ArticleEditor(Article* a, QWidget* parent):NoteEditor(a, parent){
-    content = new QTextEdit(this);
-
+    content = new QTextEdit;
     content->setText(a->getContent());
 
     zone->layout()->addWidget(content);

@@ -2,8 +2,12 @@
 #define NOTE_H
 
 #include "QHeader.h"
+<<<<<<< HEAD
 #include<QtXml>
 #include<QXmlStreamWriter>
+=======
+
+>>>>>>> 9c6bb3b2bfe54891bfec9d4cead12caeb6b1f349
 class Note{
 private:
     QString id;
@@ -14,7 +18,7 @@ protected:
     bool loaded;
     bool modified;
     virtual void load()=0;
-    QByteArray* file ;
+    QByteArray* file;
     QBuffer* buffer;
     void createHtmlTree(QBuffer *buf);
     void endHtmlTree(QBuffer* buf);
@@ -51,6 +55,7 @@ QTextStream& operator<<(QTextStream& f, Note& n);
 class NoteEditor: public QWidget{
 Q_OBJECT
 protected:
+    QVBoxLayout *mainLay;
     QTabWidget *tabs;
     QScrollArea *area;
     QWidget *zone;
