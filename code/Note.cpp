@@ -83,3 +83,33 @@ void Note::endHtmlTree(QBuffer* buf){
 
 
 }
+/*
+\documentclass[a4paper,11pt]{report} %type du document
+% Imports de bibliothèques
+\usepackage{graphicx} %utilisé pour inclure des images
+%gestion de la police
+\usepackage[french]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\begin{document}
+\chapter{titre de niveau du chapitre}
+\section{niveau 2}
+Il faut écrire un fichier source et ensuite le compiler pour obtenir un fichier
+PDF.
+\subsection{niveau 3}
+\subsubsection{niveau 4}
+\paragraph{paragraphe titré} contenu de mon paragraphe.
+%Ajout d’image
+\begin{center}
+\includegraphics{monImage.png}
+\end{center}
+\end{document}
+*/
+void Note::createTexHeader(QBuffer *buf){
+    buffer->write("\\documentclass[a4paper,11pt]{report} %type du document\n");
+    buffer->write("\\usepackage[french]{babel}");
+    buffer->write("\\usepackage[utf8]{inputenc}\n");
+    buffer->write("\\usepackage[T1]{fontenc}\n");
+
+
+}

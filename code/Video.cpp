@@ -54,7 +54,18 @@ QString Video::toHTML(){
 }
 
 QString Video::toTEX(){
-    return "";
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+         throw NotesException("Buffer unavailable for HTML export.");
+     }
+    createTexHeader(buffer);
+    buffer->write("\\begin{document}\n");
+    buffer->write(("\\chapter{"+this->getTitle()+"}\n").toAscii());
+    buffer->write(("{\Large ID:"+this->getId()+"}\n").toAscii());
+    buffer->write(("\\paragraph{PATH:"+this->getPath()+"}"+this->getDesc()+"\n").toAscii());
+    buffer->write("\\end{document}");
+    buffer->close();
+    return QString(*file);
+
 }
 
 QString Video::toTEXT(){

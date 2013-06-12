@@ -21,6 +21,8 @@ protected:
     QBuffer* buffer;
     void createHtmlTree(QBuffer *buf);
     void endHtmlTree(QBuffer* buf);
+    void createTexHeader(QBuffer *buf);
+    void endTexFooter(QBuffer* buf);
 public:
     Note(const QString& ty, const QString& i, const QString& tt):id(i),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray; buffer=new QBuffer(file);}
 

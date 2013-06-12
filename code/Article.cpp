@@ -54,8 +54,42 @@ QString Article::toHTML(){
     return "";
 }
 
+/*
+\documentclass[a4paper,11pt]{report} %type du document
+% Imports de bibliothèques
+\usepackage{graphicx} %utilisé pour inclure des images
+%gestion de la police
+\usepackage[french]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\begin{document}
+\chapter{titre de niveau du chapitre}
+\section{niveau 2}
+Il faut écrire un fichier source et ensuite le compiler pour obtenir un fichier
+PDF.
+\subsection{niveau 3}
+\subsubsection{niveau 4}
+\paragraph{paragraphe titré} contenu de mon paragraphe.
+%Ajout d’image
+\begin{center}
+\includegraphics{monImage.png}
+\end{center}
+\end{document}
+*/
 QString Article::toTEX(){
-    return "";
+
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+         throw NotesException("Buffer unavailable for HTML export.");
+     }
+    createTexHeader(buffer);
+    buffer->write("\\begin{document}\n");
+    buffer->write((QString("\\chapter{")+this->getTitle()+QString("}\n")).toAscii());
+    buffer->write((QString("{\Large ID:")+this->getId()+QString("}\n")).toAscii());
+    buffer->write((QString("\\paragraph{}")+this->getContent()).toAscii());
+    buffer->write("\\end{document}");
+    buffer->close();
+    return QString(*file);
+
 }
 
 QString Article::toTEXT(){
