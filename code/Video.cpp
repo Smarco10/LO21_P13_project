@@ -12,15 +12,15 @@ void Video::load(){
         throw NotesException("Can't open document file");
     }
 
-     QTextStream flux(&fichier);
-     //saute la première ligne
-     flux.readLine();
-     //récupère le chemin du fichier binaire associé
-     if(!flux.atEnd())
+    QTextStream flux(&fichier);
+    //saute la première ligne
+    flux.readLine();
+    //récupère le chemin du fichier binaire associé
+    if(!flux.atEnd())
         path = flux.readLine();
-     //récupère la description du fichier
-     while(!flux.atEnd())
-         desc += flux.readLine();
+    //récupère la description du fichier
+    while(!flux.atEnd())
+        desc += flux.readLine();
 }
 
 QTextStream& Video::save(QTextStream& f){
@@ -31,7 +31,26 @@ QTextStream& Video::save(QTextStream& f){
 }
 
 QString Video::toHTML(){
-    return "";
+    QXmlStreamWriter* qw=new QXmlStreamWriter;
+
+
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+    createHtmlTree(buffer);
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
+    qw->writeTextElement("h2",QString("ID:")+this->getId());
+    qw->writeTextElement("h3",QString("PATH:")+this->getPath());
+    qw->writeTextElement("p",this->getDesc());
+    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
+    qw->writeEmptyElement("br");
+
+
+    endHtmlTree(buffer);
+    buffer->close();
+    return QString(*file);
+
 }
 
 QString Video::toTEX(){

@@ -79,18 +79,22 @@ QTextStream& Document::save(QTextStream& f){
 
 QString Document::toHTML(){
     QXmlStreamWriter* qw=new QXmlStreamWriter;
-
-
+    QString x;
+    int i;
     if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
         throw NotesException("Buffer unavailable for HTML export.");
     }
     createHtmlTree(buffer);
     for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
         qw->writeEmptyElement("br");
-        qw->writeTextElement("h1",QString("Titre:")+**it.getTitle());
-        qw->writeTextElement("h2",QString("ID:")+**it.getId());
-        qw->writeTextElement("p",*it.getContent());
-        //qw->writeTextElement("p",QString("Tag:")+*it.getTags());
+        //qw->writeTextElement("h1",QString("Titre:")+(static_cast<Note*>(*it))->getTitle());
+        //qw->writeTextElement("h2",QString("ID:")+(static_cast<Note*>(*it))->getId());
+        //insérer ici la partie relative a chaque élément de content
+        x=static_cast<Note*>(*it)->toHTML();
+        x=x.left(x.indexOf("</body",0));
+        x=x.right(x.length()-(x.indexOf("body>",0)+5));
+        qw->writeCharacters(x);
+
         qw->writeEmptyElement("br");
     }
     endHtmlTree(buffer);

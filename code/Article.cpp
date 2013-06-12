@@ -32,7 +32,7 @@ QTextStream& Article::save(QTextStream& f){
 }
 
 QString Article::toHTML(){
-<<<<<<< HEAD
+
 
     QXmlStreamWriter* qw=new QXmlStreamWriter;
 
@@ -46,13 +46,12 @@ QString Article::toHTML(){
     qw->writeTextElement("p",this->getContent());
     //qw->writeTextElement("p",QString("Tag:")+this->getTags());
     endHtmlTree(buffer);
-    buffer->close;
+    buffer->close();
     return QString(*file);
 
 
-=======
+
     return "";
->>>>>>> 9c6bb3b2bfe54891bfec9d4cead12caeb6b1f349
 }
 
 QString Article::toTEX(){
