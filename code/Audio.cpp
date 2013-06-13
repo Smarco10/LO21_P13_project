@@ -43,11 +43,18 @@ QString Audio::toHTML(){
     qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
     qw->writeTextElement("h2",QString("ID:")+this->getId());
     qw->writeTextElement("h3",QString("PATH:")+this->getPath());
+    qw->writeStartElement("audio");
+    qw->writeAttribute("src",this->getPath());
+    qw->writeEndElement();
     qw->writeTextElement("p",this->getDesc());
     //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
     qw->writeEmptyElement("br");
-
-
+/*
+    <audio controls="controls">
+     <source src="concerto_mozart.ogg" type="audio/ogg" />
+     <source src="concerto_mozart.mp3" type="audio/mp3" />
+     Votre navigateur ne supporte pas la balise audio.
+    </audio>*/
 
     endHtmlTree(buffer);
     buffer->close();

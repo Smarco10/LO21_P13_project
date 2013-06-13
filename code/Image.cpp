@@ -42,6 +42,9 @@ QString Image::toHTML(){
     qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
     qw->writeTextElement("h2",QString("ID:")+this->getId());
     qw->writeTextElement("h3",QString("PATH:")+this->getPath());
+    qw->writeStartElement("img");
+            qw->writeAttribute("source",this->getPath());
+    qw->writeEndElement();
     qw->writeTextElement("p",this->getDesc());
     //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
     qw->writeEmptyElement("br");

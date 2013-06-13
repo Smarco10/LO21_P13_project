@@ -42,6 +42,9 @@ QString Video::toHTML(){
     qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
     qw->writeTextElement("h2",QString("ID:")+this->getId());
     qw->writeTextElement("h3",QString("PATH:")+this->getPath());
+    qw->writeStartElement("video",this->getPath());
+    qw->writeAttribute("src",this->getPath());
+    qw->writeAttribute("controls","controls");
     qw->writeTextElement("p",this->getDesc());
     //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
     qw->writeEmptyElement("br");
