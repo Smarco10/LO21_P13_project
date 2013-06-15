@@ -1,4 +1,4 @@
-#ifndef WORKSPACE_H
+﻿#ifndef WORKSPACE_H
 #define WORKSPACE_H
 
 #include "QHeader.h"
@@ -16,6 +16,7 @@ class Workspace: public QWidget{
     bool modified;
     void updateWorkspace();
     QString pathWS;
+
 
 public:
     Workspace(const QString& p = ".");
