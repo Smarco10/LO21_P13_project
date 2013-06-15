@@ -28,9 +28,12 @@ public:
 
     virtual QTextStream& save(QTextStream& f) = 0;
 
-    virtual QString toHTML() = 0;
+
     virtual QString toTEX() = 0;
     virtual QString toTEXT() = 0;
+    virtual void makehtmlbody(QXmlStreamWriter *qw);
+
+
 };
 
 class BinaryEditor: public NoteEditor{

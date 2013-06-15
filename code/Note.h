@@ -47,7 +47,8 @@ public:
     bool less(const Note* n)const{ return this->id < n->id;}
     virtual QTextStream& save(QTextStream&) = 0;
 
-    virtual QString toHTML() = 0;
+    QString toHTML();
+    virtual void makehtmlbody(QXmlStreamWriter* qw)=0;
     virtual QString toTEX() = 0;
     virtual QString toTEXT() = 0;
 };

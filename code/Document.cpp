@@ -82,40 +82,15 @@ QTextStream& Document::save(QTextStream& f){
     return f;
 }
 
-QString Document::toHTML(){
-    QXmlStreamWriter* qw=new QXmlStreamWriter;
-    QString x;
-    int i;
-    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
-        throw NotesException("Buffer unavailable for HTML export.");
-    }
-    qw->setDevice(buffer);
-    qw->setAutoFormatting(true);
-    qw->setAutoFormattingIndent(-1);
-    qw->writeDTD("<!DOCTYPE html>");
-    qw->writeStartElement("html");
-        qw->writeStartElement("head");
-            qw->writeEmptyElement("meta");
-            qw->writeAttribute("charset","utf-8");
-            qw->writeTextElement("title",this->getTitle());
-        qw->writeEndElement();
+void Document::makehtmlbody(QXmlStreamWriter* qw){
+
         qw->writeStartElement("body");
             for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
                 qw->writeEmptyElement("br");
-                //qw->writeTextElement("h1",QString("Titre:")+(static_cast<Note*>(*it))->getTitle());
-                //qw->writeTextElement("h2",QString("ID:")+(static_cast<Note*>(*it))->getId());
-                //insÃ©rer ici la partie relative a chaque Ã©lÃ©ment de content
-                x=dynamic_cast<Note*>(*it)->toHTML();
-                x=x.left(x.indexOf("</body",0));
-                x=x.right(x.length()-(x.indexOf("body>",0)+5));
-                qw->writeCharacters(x);
-
+                dynamic_cast<Note*>(*it)->makehtmlbody(qw);
                 qw->writeEmptyElement("br");
             }
         qw->writeEndElement();
-    qw->writeEndElement();
-    buffer->close();
-    return QString(*file);
 }
 
 QString Document::toTEX(){

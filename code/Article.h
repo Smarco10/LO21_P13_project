@@ -18,7 +18,8 @@ public:
         content = ctt;
         modified = true;}
 
-    QString toHTML();
+
+    void makehtmlbody(QXmlStreamWriter* qw);
     QString toTEX();
     QString toTEXT();
 

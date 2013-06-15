@@ -23,7 +23,7 @@ NoteEditor::NoteEditor(Note* n, QWidget* parent):QWidget(parent){
     tabs = new QTabWidget(this);
     this->layout()->addWidget(tabs);
 
-//Intégrer à zone un scroll area
+    //Intégrer à zone un scroll area
     zone = new QWidget(this);
     zoneLayout = new QVBoxLayout;
     zone->setLayout(zoneLayout);
@@ -66,4 +66,28 @@ void Note::createTexHeader(QBuffer *buf){
     buf->write("\\usepackage[utf8]{inputenc}\n");
 
     buf->write("\\usepackage[T1]{fontenc}\n");
+}
+QString Note::toHTML(){
+    QXmlStreamWriter* qw=new QXmlStreamWriter;
+
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+
+    qw->setDevice(buffer);
+    qw->setAutoFormatting(true);
+    qw->setAutoFormattingIndent(-1);
+    qw->writeDTD("<!DOCTYPE html>");
+    qw->writeStartElement("html");
+    qw->writeStartElement("head");
+    qw->writeEmptyElement("meta");
+    qw->writeAttribute("charset","utf-8");
+    qw->writeTextElement("title",this->getTitle());
+    qw->writeEndElement();
+    qw->writeStartElement("body");
+    this->makehtmlbody(qw);
+    qw->writeEndElement();
+    qw->writeEndElement();
+    buffer->close();
+    return QString(*file);
 }

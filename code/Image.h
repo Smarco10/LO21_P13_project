@@ -11,7 +11,8 @@ public:
     Image(const QString& id, const QString& title, const QString& desc="", const QString& path=""):Binary("Image", id, title, desc, path){}
     QTextStream& save(QTextStream& f);
 
-    QString toHTML();
+
+    void makehtmlbody(QXmlStreamWriter* qw);
     QString toTEX();
     QString toTEXT();
 };

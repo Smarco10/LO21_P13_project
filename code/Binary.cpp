@@ -29,3 +29,4 @@ void BinaryEditor::changeFile(){
     path->setText(((Binary*)ressource)->getPath());
     updateBin();
 }
+void Binary::makehtmlbody(QXmlStreamWriter *qw){}

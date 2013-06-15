@@ -21,7 +21,7 @@ void Article::load(){
     flux.readLine();
     //récupère tout le contenu
     while(!flux.atEnd())
-       content += flux.readLine();
+        content += flux.readLine();
 
     setLoaded(true);
 }
@@ -32,42 +32,24 @@ QTextStream& Article::save(QTextStream& f){
     return f;
 }
 
-QString Article::toHTML(){
-    QXmlStreamWriter* qw=new QXmlStreamWriter;
+void Article::makehtmlbody(QXmlStreamWriter* qw){
 
-   if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
-        throw NotesException("Buffer unavailable for HTML export.");
-    }
-
-   qw->setDevice(buffer);
-   qw->setAutoFormatting(true);
-   qw->setAutoFormattingIndent(-1);
-   qw->writeDTD("<!DOCTYPE html>");
-   qw->writeStartElement("html");
-       qw->writeStartElement("head");
-           qw->writeEmptyElement("meta");
-           qw->writeAttribute("charset","utf-8");
-           qw->writeTextElement("title",this->getTitle());
-       qw->writeEndElement();
-       qw->writeStartElement("body");
-            qw->writeTextElement("h1",this->getTitle());
-            qw->writeEmptyElement("br");
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("p",this->getContent());
-            qw->writeEmptyElement("br");
-            //qw->writeTextElement("p",QString("Tag:")+this->getTags());
-        qw->writeEndElement();
+    qw->writeStartElement("body");
+    qw->writeTextElement("h1",this->getTitle());
+    qw->writeEmptyElement("br");
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("p",this->getContent());
+    qw->writeEmptyElement("br");
+    //qw->writeTextElement("p",QString("Tag:")+this->getTags());
     qw->writeEndElement();
-    buffer->close();
-    return QString(*file);
 }
 
 
 QString Article::toTEX(){
 
     if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
-         throw NotesException("Buffer unavailable for HTML export.");
-     }
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
     createTexHeader(buffer);
     buffer->write("\\begin{document}\n");
     buffer->write((QString("\\chapter{")+this->getTitle()+QString("}\n")).toAscii());

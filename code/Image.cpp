@@ -35,25 +35,8 @@ QTextStream& Image::save(QTextStream& f){
     return f;
 }
 
-QString Image::toHTML(){
-    QXmlStreamWriter* qw=new QXmlStreamWriter;
+ void Image::makehtmlbody(QXmlStreamWriter* qw){
 
-
-    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
-        throw NotesException("Buffer unavailable for HTML export.");
-    }
-
-    //Creation of the HTML architecture
-    qw->setDevice(buffer);
-    qw->setAutoFormatting(true);
-    qw->setAutoFormattingIndent(-1);
-    qw->writeDTD("<!DOCTYPE html>");
-    qw->writeStartElement("html");
-        qw->writeStartElement("head");
-            qw->writeEmptyElement("meta");
-            qw->writeAttribute("charset","utf-8");
-            qw->writeTextElement("title",this->getTitle());
-        qw->writeEndElement();
         qw->writeStartElement("body");
             qw->writeEmptyElement("br");
             qw->writeTextElement("h1",this->getTitle());
@@ -70,9 +53,7 @@ QString Image::toHTML(){
             qw->writeEmptyElement("br");
             //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
         qw->writeEndElement();
-    qw->writeEndElement();
-    buffer->close();
-    return QString(*file);
+
 }
 
 QString Image::toTEX(){

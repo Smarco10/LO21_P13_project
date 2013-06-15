@@ -76,7 +76,8 @@ public:
     unsigned int getNbSubNotes() {return content.size();}
     QTextStream& save(QTextStream& f);
 
-    QString toHTML();
+
+    virtual void makehtmlbody(QXmlStreamWriter* qw);
     QString toTEX();
     QString toTEXT();
 };
