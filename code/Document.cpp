@@ -90,6 +90,7 @@ QString Document::toHTML(){
         throw NotesException("Buffer unavailable for HTML export.");
     }
     createHtmlTree(buffer);
+    qw->setDevice(buffer);
     for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
         qw->writeEmptyElement("br");
         //qw->writeTextElement("h1",QString("Titre:")+(static_cast<Note*>(*it))->getTitle());

@@ -79,13 +79,8 @@ public:
     QLabel *tex;
     QLabel *text;
 
-signals:
-    virtual void updateS(QString);
-
 public slots:
-    void modified();
-    void modified(QString);
-    virtual void update(QString s="") = 0;
+    void tabed(int);
 };
 
 #endif

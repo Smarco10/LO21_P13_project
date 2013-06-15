@@ -37,14 +37,19 @@ NoteEditor::NoteEditor(Note* n, QWidget* parent):QWidget(parent){
     tabs->addTab(html, "HTML");
     tabs->addTab(tex, "TEX");
     tabs->addTab(text, "Texte");
+
+    //ouverture d'une tabulation => génération du code
+    QObject::connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(tabed(int)));
+
 }
 
-void NoteEditor::modified(QString s){
-
-}
-
-void NoteEditor::modified(){
-
+void NoteEditor::tabed(int tab){
+    /*if(tab == tabs->indexOf(html))
+        html->setText(ressource->toHTML());
+    else */if(tab == tabs->indexOf(tex))
+        tex->setText(ressource->toTEX());
+    else if(tab == tabs->indexOf(text))
+        text->setText(ressource->toTEXT());
 }
 
 void Note::createHtmlTree(QBuffer* buf){
@@ -74,9 +79,6 @@ void Note::endHtmlTree(QBuffer* buf){
             qw.writeEndElement();
             qw.writeEndElement();
      qw.writeEndElement();
-
-
-
 }
 
 void Note::createTexHeader(QBuffer *buf){

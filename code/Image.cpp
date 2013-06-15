@@ -38,6 +38,7 @@ QString Image::toHTML(){
         throw NotesException("Buffer unavailable for HTML export.");
     }
     createHtmlTree(buffer);
+    qw->setDevice(buffer);
     qw->writeEmptyElement("br");
     qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
     qw->writeTextElement("h2",QString("ID:")+this->getId());

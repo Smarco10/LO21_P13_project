@@ -32,15 +32,13 @@ QTextStream& Article::save(QTextStream& f){
 }
 
 QString Article::toHTML(){
-
-
     QXmlStreamWriter* qw=new QXmlStreamWriter;
-
 
    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
         throw NotesException("Buffer unavailable for HTML export.");
     }
     createHtmlTree(buffer);
+    qw->setDevice(buffer);
     qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
     qw->writeTextElement("h2",QString("ID:")+this->getId());
     qw->writeTextElement("p",this->getContent());
@@ -48,10 +46,6 @@ QString Article::toHTML(){
     endHtmlTree(buffer);
     buffer->close();
     return QString(*file);
-
-
-
-    return "";
 }
 
 
@@ -67,6 +61,7 @@ QString Article::toTEX(){
     buffer->write((QString("\\paragraph{}")+this->getContent()).toAscii());
     buffer->write("\\end{document}");
     buffer->close();
+
     return QString(*file);
 }
 
