@@ -1,5 +1,4 @@
-
-#include "Document.h"
+﻿#include "Document.h"
 #include "NotesManager.h"
 
 void Document::addSubNote(Note *n){
@@ -32,12 +31,16 @@ Note* Document::getSubNote(unsigned int pos){
 }
 
 void Document::load(){
-    //récupère les information pouvant manquer comme la liste des notes
-    //Vérifie si on a besoin d'annalyser le fichier (liste pleine)
+    //Si la note est déjà chargée on ne le recharge pas
+    if(getLoaded())
+        return;
+
+    //rÃ©cupÃ¨re les information pouvant manquer comme la liste des notes
+    //VÃ©rifie si on a besoin d'annalyser le fichier (liste pleine)
     if(content.size() > 0)
         return;
 
-    QFile fichier(getId());
+    QFile fichier(getWS() + getId());
 
     //on sort si le fichier n'existe pas
     if(!fichier.exists())
@@ -47,25 +50,27 @@ void Document::load(){
         throw NotesException("Can't open document file");
     }
 
-    QTextStream flux(&fichier);
-    //saute la première ligne
-    flux.readLine();
-    while(!flux.atEnd()){
-        //Pour chaques ligne, enregistre la note et l'ajoute au document
-        QString subfile = flux.readLine();
-        //vérifie que le fichier n'est pas déjà dans la liste
-        for(std::list<Note*>::iterator it = content.begin(); it != content.end(); it++)
-            if((*it)->getId() == subfile)
-                //passe au fichier suivant
-                continue;
+     QTextStream flux(&fichier);
+     //saute la première ligne
+     flux.readLine();
+     while(!flux.atEnd()){
+         //Pour chaques ligne, enregistre la note et l'ajoute au document
+          QString subfile = flux.readLine();
+          //vérifie que le fichier n'est pas déjà dans la liste
+          for(std::list<Note*>::iterator it = content.begin(); it != content.end(); it++)
+              if((*it)->getId() == subfile)
+                  //passe au fichier suivant
+                  continue;
 
-        //si fichier non présent dans la liste
-        //création d'une note en mémoire, catcher les exceptions
-        Note& note = NotesManager::instance->getNote(subfile);
+          //si fichier non présent dans la liste
+          //création d'une note en mémoire, catcher les exceptions
+          Note& note = NotesManager::instance->getNote(subfile);
 
-        //ajoute le fichier à la liste
-        addSubNote(&note);
-    }
+          //ajoute le fichier à la liste
+          addSubNote(&note);
+     }
+
+     setLoaded(true);
 }
 
 QTextStream& Document::save(QTextStream& f){
@@ -89,7 +94,7 @@ QString Document::toHTML(){
         qw->writeEmptyElement("br");
         //qw->writeTextElement("h1",QString("Titre:")+(static_cast<Note*>(*it))->getTitle());
         //qw->writeTextElement("h2",QString("ID:")+(static_cast<Note*>(*it))->getId());
-        //insérer ici la partie relative a chaque élément de content
+        //insÃ©rer ici la partie relative a chaque Ã©lÃ©ment de content
         x=dynamic_cast<Note*>(*it)->toHTML();
         x=x.left(x.indexOf("</body",0));
         x=x.right(x.length()-(x.indexOf("body>",0)+5));
@@ -100,7 +105,6 @@ QString Document::toHTML(){
     endHtmlTree(buffer);
     buffer->close();
     return QString(*file);
-
 }
 
 QString Document::toTEX(){

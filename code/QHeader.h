@@ -34,6 +34,9 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 
+class NotesManager;
+class NoteEditor;
+
 
 #define DEBUGP printf("\n%s: %d\n", __FILE__, __LINE__);
 

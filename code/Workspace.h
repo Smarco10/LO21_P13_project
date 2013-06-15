@@ -13,27 +13,30 @@
 
 class Workspace: public QWidget{
     QDomDocument *dom;
-    QString path;
     bool modified;
     void updateWorkspace();
+    QString pathWS;
 
 public:
     Workspace(const QString& p = ".");
     ~Workspace(){if(modified) updateWorkspace();}
 
-    QString getPath() {return path;}
+    QString getPath() {return pathWS;}
     void setPath(const QString& p = ".");
 
     //read
-    QString listNotes();
-    QString listTags();
+    QList<QString> listNotes();
+    QList<QString> listNotesD();
+    QList<QString> listTags();
+    void noteToD(const QString& path);
+    void deletedToN(const QString& path);
     QString getType(const QString& path);
     QString getTags(const QString& path);
     bool isNote(const QString& path);
 
     //write
-    void addNote(const QString& path, const QString& type, const QString& tags);
-    void updateNote(const QString& path, const QString& type, const QString& tags);
+    void addNote(const QString& path, const QString& type, const QList<QString>& tags);
+    void updateNote(const QString& path, const QString& type, const QList<QString>& tags);
     void deleteNote(const QString& path);
 
     void check();

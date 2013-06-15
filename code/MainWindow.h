@@ -3,6 +3,8 @@
 
 #include "QHeader.h"
 #include "NotesManager.h"
+#include "Note.h"
+#include "Config.h"
 
 //Faire un fichier de config où l'on stock les valeurs du fichier ressources.h
 //ainsi que le path par défaut qui est le dernier utilisé dans l'applis
@@ -98,6 +100,9 @@ public:
     MainWindow(QApplication*);
     ~MainWindow();
 
+    void noteCreator(Note *);
+    QListEditorItem* newItem(Note*);
+
 private slots:
     void warning();
     void aboutApp();
@@ -107,6 +112,8 @@ private slots:
     void audioCreator();
     void videoCreator();
     void documentCreator();
+
+    void updateNotes();
 
     void openNote(QListEditorItem*);
     void printNote();

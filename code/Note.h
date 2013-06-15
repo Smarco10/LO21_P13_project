@@ -3,19 +3,17 @@
 
 #include "QHeader.h"
 
-#include<QtXml>
-#include<QXmlStreamWriter>
-
-
 class Note{
 private:
     QString id;
     QString type;
 
 protected:
+    QString pathWS;
     QString title;
     bool loaded;
     bool modified;
+    bool deleted;
     virtual void load()=0;
     QByteArray* file;
     QBuffer* buffer;
@@ -38,12 +36,17 @@ public:
     void setLoaded(const bool l){loaded = l;}
     bool getLoaded() const {return loaded;}
 
+    QString getWS() const {return pathWS;}
+    void setWS(const QString& p="") {pathWS = p;}
+
     virtual void addSubNote(Note* n);
     virtual void addSubNote(Note* n, unsigned int);
     virtual void removeSubNote(unsigned int);
     virtual Note* getSubNote(unsigned int pos=0);
 
-    bool operator<(const Note& n)const{ return this->id < n.id;}
+    bool operator==(const Note* n) const { return this->id == n->id;}
+    bool operator<(const Note* n)const{ return this->id < n->id;}
+    bool less(const Note* n)const{ return this->id < n->id;}
     virtual QTextStream& save(QTextStream&) = 0;
 
     virtual QString toHTML() = 0;

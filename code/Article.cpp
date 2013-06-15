@@ -7,8 +7,12 @@
 
 
 void Article::load(){
+    //Si la note est déjà chargée on ne le recharge pas
+    if(getLoaded())
+        return;
+
     //récupère les information pouvant manquer comme le contenu
-    QFile fichier(getId());
+    QFile fichier(getWS() + getId());
     //on sort si le fichier n'existe pas
     if(!fichier.exists())
         return;
@@ -23,6 +27,8 @@ void Article::load(){
      //récupère tout le contenu
      while(!flux.atEnd())
         content += flux.readLine();
+
+     setLoaded(true);
 }
 
 QTextStream& Article::save(QTextStream& f){
@@ -54,28 +60,6 @@ QString Article::toHTML(){
     return "";
 }
 
-/*
-\documentclass[a4paper,11pt]{report} %type du document
-% Imports de bibliothèques
-\usepackage{graphicx} %utilisé pour inclure des images
-%gestion de la police
-\usepackage[french]{babel}
-\usepackage[latin1]{inputenc}
-\usepackage[T1]{fontenc}
-\begin{document}
-\chapter{titre de niveau du chapitre}
-\section{niveau 2}
-Il faut écrire un fichier source et ensuite le compiler pour obtenir un fichier
-PDF.
-\subsection{niveau 3}
-\subsubsection{niveau 4}
-\paragraph{paragraphe titré} contenu de mon paragraphe.
-%Ajout d’image
-\begin{center}
-\includegraphics{monImage.png}
-\end{center}
-\end{document}
-*/
 QString Article::toTEX(){
 
     if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
@@ -89,7 +73,6 @@ QString Article::toTEX(){
     buffer->write("\\end{document}");
     buffer->close();
     return QString(*file);
-
 }
 
 QString Article::toTEXT(){

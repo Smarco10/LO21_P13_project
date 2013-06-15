@@ -2,7 +2,7 @@
 
 void Video::load(){
     //récupère les information pouvant manquer
-    QFile fichier(getId());
+    QFile fichier(getWS() + getId());
 
     //on sort si le fichier n'existe pas
     if(!fichier.exists())
@@ -31,29 +31,7 @@ QTextStream& Video::save(QTextStream& f){
 }
 
 QString Video::toHTML(){
-    QXmlStreamWriter* qw=new QXmlStreamWriter;
-
-
-    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
-        throw NotesException("Buffer unavailable for HTML export.");
-    }
-    createHtmlTree(buffer);
-    qw->writeEmptyElement("br");
-    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
-    qw->writeTextElement("h2",QString("ID:")+this->getId());
-    qw->writeTextElement("h3",QString("PATH:")+this->getPath());
-    qw->writeStartElement("video",this->getPath());
-    qw->writeAttribute("src",this->getPath());
-    qw->writeAttribute("controls","controls");
-    qw->writeTextElement("p",this->getDesc());
-    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
-    qw->writeEmptyElement("br");
-
-
-    endHtmlTree(buffer);
-    buffer->close();
     return QString(*file);
-
 }
 
 QString Video::toTEX(){
@@ -68,7 +46,6 @@ QString Video::toTEX(){
     buffer->write("\\end{document}");
     buffer->close();
     return QString(*file);
-
 }
 
 QString Video::toTEXT(){

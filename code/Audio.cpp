@@ -1,8 +1,12 @@
 ﻿#include "Audio.h"
 
 void Audio::load(){
+    //Si la note est déjà chargée on ne le recharge pas
+    if(getLoaded())
+        return;
+
     //récupère les information pouvant manquer
-    QFile fichier(getId());
+    QFile fichier(getWS() + getId());
 
     //on sort si le fichier n'existe pas
     if(!fichier.exists())
@@ -21,6 +25,8 @@ void Audio::load(){
      //récupère la description du fichier
      while(!flux.atEnd())
          desc += flux.readLine();
+
+     setLoaded(true);
 }
 
 QTextStream& Audio::save(QTextStream& f){

@@ -2,6 +2,7 @@
 #define NOTESMANAGER_H
 
 #include "QHeader.h"
+#include "Config.h"
 #include "Workspace.h"
 #include "Note.h"
 #include "Article.h"
@@ -13,8 +14,6 @@
 class NotesManager {
 private:
     std::set<Note*> notes;
-    unsigned int getNbNotes(){ return notes.size();}
-    //coder operateur < > pour le find;
     void addNote(Note* n);
     void removeNote(Note* n);
 
@@ -26,7 +25,6 @@ private:
 
     static Workspace *workspace;
     static void loadWSNotes();
-    static void changeWorkSpace(const QString& path = ".");
 
     friend class Document;
     static NotesManager* instance; // pointeur sur l'unique instance
@@ -35,15 +33,22 @@ private:
     static QString getId();
 
 public:
-    static NotesManager& getInstance();
+    static NotesManager* getInstance(QApplication *);
     static void libererInstance();
 
     const QString& getFilename(Note& n){ return n.getId();}
 
-    Note& getNote(QString& id);
+    Note* getNote(unsigned int i = 0);
+    Note& getNote(const QString& id);
     Note& getNewNote(const QString& type, const QString& title);
     void saveNote(Note& n);
     void deleteNote(Note& n);
+    unsigned int getNbNotes(){ return notes.size();}
+
+    QIcon getNoteIcon(Note* n);
+    NoteEditor* noteEdConstructor(Note* n, QWidget *parent=NULL);
+
+    void changeWorkspace();
 };
 
 #endif // NOTESMANAGER_H
