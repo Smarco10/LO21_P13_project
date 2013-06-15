@@ -17,8 +17,6 @@ protected:
     virtual void load()=0;
     QByteArray* file;
     QBuffer* buffer;
-    void createHtmlTree(QBuffer*);
-    void endHtmlTree(QBuffer*);
     void createTexHeader(QBuffer*);
 
 public:

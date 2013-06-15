@@ -57,35 +57,6 @@ void NoteEditor::tabed(int tab){
         text->setText(ressource->toTEXT());
 }
 
-void Note::createHtmlTree(QBuffer* buf){
-    QXmlStreamWriter qw;
-
-    //Creation of the HTML architecture
-    qw.setDevice(buf);
-    qw.setAutoFormatting(true);
-    qw.setAutoFormattingIndent(-1);
-    qw.writeDTD("<!DOCTYPE html>");
-        qw.writeStartElement("html");
-            qw.writeStartElement("head");
-                qw.writeEmptyElement("meta");
-                qw.writeAttribute("charset","utf-8");
-                qw.writeTextElement("title",this->getTitle());
-                qw.writeEndElement();
-            qw.writeStartElement("body");
-}
-
-void Note::endHtmlTree(QBuffer* buf){
-
-   /* if (!buf->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))
-        throw NotesException("EndHtmlTree Buffer opening problem");*/
-
-    QXmlStreamWriter qw;
-    qw.setDevice(buf);
-            qw.writeEndElement();
-            qw.writeEndElement();
-     qw.writeEndElement();
-}
-
 void Note::createTexHeader(QBuffer *buf){
 
     buf->write("\\documentclass[a4paper,11pt]{report} %type du document\n");

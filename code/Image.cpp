@@ -42,21 +42,35 @@ QString Image::toHTML(){
     if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
         throw NotesException("Buffer unavailable for HTML export.");
     }
-    createHtmlTree(buffer);
+
+    //Creation of the HTML architecture
     qw->setDevice(buffer);
-    qw->writeEmptyElement("br");
-    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
-    qw->writeTextElement("h2",QString("ID:")+this->getId());
-    qw->writeTextElement("h3",QString("PATH:")+this->getPath());
-    qw->writeStartElement("img");
-            qw->writeAttribute("source",this->getPath());
+    qw->setAutoFormatting(true);
+    qw->setAutoFormattingIndent(-1);
+    qw->writeDTD("<!DOCTYPE html>");
+    qw->writeStartElement("html");
+        qw->writeStartElement("head");
+            qw->writeEmptyElement("meta");
+            qw->writeAttribute("charset","utf-8");
+            qw->writeTextElement("title",this->getTitle());
+        qw->writeEndElement();
+        qw->writeStartElement("body");
+            qw->writeEmptyElement("br");
+            qw->writeTextElement("h1",this->getTitle());
+            qw->writeEmptyElement("br");
+            qw->writeEmptyElement("br");
+            qw->writeTextElement("h3",QString("PATH: ")+this->getPath());
+            qw->writeEmptyElement("br");
+            qw->writeEmptyElement("br");
+            qw->writeStartElement("img");
+                qw->writeAttribute("source",this->getPath());
+            qw->writeEndElement();
+            qw->writeEmptyElement("br");
+            qw->writeTextElement("p",this->getDesc());
+            qw->writeEmptyElement("br");
+            //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
+        qw->writeEndElement();
     qw->writeEndElement();
-    qw->writeTextElement("p",this->getDesc());
-    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
-    qw->writeEmptyElement("br");
-
-
-    endHtmlTree(buffer);
     buffer->close();
     return QString(*file);
 }
@@ -70,7 +84,7 @@ QString Image::toTEX(){
     buffer->write("\\begin{document}\n");
     buffer->write(("\\chapter{"+this->getTitle()+"}\n").toAscii());
     buffer->write(("{\Large ID:"+this->getId()+"}\n").toAscii());
-    buffer->write(("\\includegraphics{"+this->getPath()).toAscii());
+    buffer->write(("\\includegraphics{"+this->getPath()).toAscii() + "}\n");
     buffer->write(("\\paragraph{PATH:"+this->getPath()+"}"+this->getDesc()+"\n").toAscii());
     buffer->write("\\end{document}");
     buffer->close();
@@ -90,4 +104,8 @@ ImageEditor::ImageEditor(Image *i, QWidget *parent):BinaryEditor(i, parent){
 
 QString ImageEditor::selectFile(){
     return QFileDialog::getOpenFileName(NULL, "Selectionner une image", QDir::homePath(), "*.bmp *.gif *.jpg *.jpeg *.png *.pbm *.pgm *.ppm *.tiff  *.xbm *.xpm");
+}
+
+void ImageEditor::updateBin(){
+    image->setPixmap(QPixmap(((Binary*)ressource)->getPath()));
 }

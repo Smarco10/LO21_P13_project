@@ -40,24 +40,38 @@ QString Audio::toHTML(){
 
     QXmlStreamWriter* qw=new QXmlStreamWriter;
 
-
     if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
         throw NotesException("Buffer unavailable for HTML export.");
     }
-    createHtmlTree(buffer);
-    qw->setDevice(buffer);
-    qw->writeEmptyElement("br");
-    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
-    qw->writeTextElement("h2",QString("ID:")+this->getId());
-    qw->writeTextElement("h3",QString("PATH:")+this->getPath());
-    qw->writeStartElement("audio");
-    qw->writeAttribute("src",this->getPath());
-    qw->writeEndElement();
-    qw->writeTextElement("p",this->getDesc());
-    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
-    qw->writeEmptyElement("br");
 
-    endHtmlTree(buffer);
+    //Creation of the HTML architecture
+    qw->setDevice(buffer);
+    qw->setAutoFormatting(true);
+    qw->setAutoFormattingIndent(-1);
+    qw->writeDTD("<!DOCTYPE html>");
+    qw->writeStartElement("html");
+        qw->writeStartElement("head");
+            qw->writeEmptyElement("meta");
+            qw->writeAttribute("charset","utf-8");
+            qw->writeTextElement("title",this->getTitle());
+        qw->writeEndElement();
+        qw->writeStartElement("body");
+            qw->writeEmptyElement("br");
+            qw->writeTextElement("h1",this->getTitle());
+            qw->writeEmptyElement("br");
+            qw->writeEmptyElement("br");
+            qw->writeTextElement("h3",QString("PATH: ")+this->getPath());
+            qw->writeEmptyElement("br");
+            qw->writeEmptyElement("br");
+            qw->writeStartElement("audio");
+                qw->writeAttribute("src",this->getPath());
+                qw->writeAttribute("controls", "true");
+            qw->writeEndElement();
+            qw->writeTextElement("p",this->getDesc());
+            qw->writeEmptyElement("br");
+            //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
+        qw->writeEndElement();
+    qw->writeEndElement();
     buffer->close();
     return QString(*file);
 }
@@ -105,4 +119,9 @@ AudioEditor::AudioEditor(Audio *a, QWidget *parent):BinaryEditor(a, parent){
 
 QString AudioEditor::selectFile(){
     return QFileDialog::getOpenFileName(this, "Selectionner un fichier audio", QDir::homePath(), "*.wav");
+}
+
+void AudioEditor::updateBin(){
+    if(sound) delete sound;
+    sound = new QSound(((Binary*)ressource)->getPath());
 }

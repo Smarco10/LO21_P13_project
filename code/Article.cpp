@@ -38,13 +38,26 @@ QString Article::toHTML(){
    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
         throw NotesException("Buffer unavailable for HTML export.");
     }
-    createHtmlTree(buffer);
-    qw->setDevice(buffer);
-    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
-    qw->writeTextElement("h2",QString("ID:")+this->getId());
-    qw->writeTextElement("p",this->getContent());
-    //qw->writeTextElement("p",QString("Tag:")+this->getTags());
-    endHtmlTree(buffer);
+
+   qw->setDevice(buffer);
+   qw->setAutoFormatting(true);
+   qw->setAutoFormattingIndent(-1);
+   qw->writeDTD("<!DOCTYPE html>");
+   qw->writeStartElement("html");
+       qw->writeStartElement("head");
+           qw->writeEmptyElement("meta");
+           qw->writeAttribute("charset","utf-8");
+           qw->writeTextElement("title",this->getTitle());
+       qw->writeEndElement();
+       qw->writeStartElement("body");
+            qw->writeTextElement("h1",this->getTitle());
+            qw->writeEmptyElement("br");
+            qw->writeEmptyElement("br");
+            qw->writeTextElement("p",this->getContent());
+            qw->writeEmptyElement("br");
+            //qw->writeTextElement("p",QString("Tag:")+this->getTags());
+        qw->writeEndElement();
+    qw->writeEndElement();
     buffer->close();
     return QString(*file);
 }

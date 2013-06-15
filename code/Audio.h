@@ -30,6 +30,7 @@ public:
     ~AudioEditor(){}
 
     QString selectFile();
+    void updateBin();
 };
 
 #endif // AUDIO_H

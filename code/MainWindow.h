@@ -77,7 +77,11 @@ private:
     QAction *quit;
     QAction *trash;
 
-    QMenu *edit;
+    QMenu *exports;
+    QAction *expHTML;
+    QAction *expTeX;
+    QAction *expText;
+
     QMenu *help;
     QAction *about;
 
@@ -122,6 +126,10 @@ private slots:
     void recoverNote(QListEditorItem*);
     void safeEmptyBin();
     void emptyBin();
+
+    void exportHTML();
+    void exportTeX();
+    void exportText();
 };
 
 #endif // MAINWINDOW_H

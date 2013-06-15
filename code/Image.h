@@ -25,6 +25,7 @@ public:
     ~ImageEditor(){}
 
     QString selectFile();
+    void updateBin();
 };
 
 #endif // IMAGE_H

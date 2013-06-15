@@ -31,6 +31,7 @@ public:
     ~VideoEditor(){}
 
     QString selectFile();
+    void updateBin();
 };
 
 #endif // VIDEO_H
