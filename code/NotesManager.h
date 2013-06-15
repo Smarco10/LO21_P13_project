@@ -33,7 +33,7 @@ private:
     static QString getId();
 
 public:
-    static NotesManager* getInstance(QApplication *);
+    static NotesManager* getInstance();
     static void libererInstance();
 
     const QString& getFilename(Note& n){ return n.getId();}

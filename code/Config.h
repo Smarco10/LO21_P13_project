@@ -51,19 +51,15 @@ private:
     QLabel *notes;
 
 public:
-    ConfigManager(QApplication*, QWidget *parent=NULL);
+    ConfigManager(QWidget *parent=NULL);
     ~ConfigManager(){delete conf;}
 
     QString getPath() const {return pathWS;}
     void updateGUI();
 
-signals:
-    void quitS();
-
 public slots:
     void safeDel();
     void delWS();
-    void quit(int);
     void newWS();
     void cloneWS();
     void loadWS();

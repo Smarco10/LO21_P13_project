@@ -140,7 +140,7 @@ void Workspace::noteToD(const QString& path){
     modified = true;
 }
 
-void deletedToN(const QString& path){
+void Workspace::deletedToN(const QString& path){
     QDomElement dom_el = dom->documentElement();
 
     // Vérifie si la note existe
