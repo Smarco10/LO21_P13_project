@@ -14,7 +14,7 @@ void NotesManager::removeNote(Note *n){
     n->setModified(true);
 }
 
-Note& NotesManager::getNote(QString& id){
+Note& NotesManager::getNote(const QString& id){
     //regarde si la note est dans la liste
    std::set<Note*>::iterator it= notes.end()/*notes.find(id)*/;
 
@@ -26,7 +26,7 @@ Note& NotesManager::getNote(QString& id){
        QString title;
        Note* n = NULL;
 
-       QFile fichier(id);
+       QFile fichier(workspace->getPath() + id);
        if(fichier.exists()){
            if(!fichier.open(QIODevice::ReadOnly | QIODevice::Text)){
                 //si fichier n'a pu être ouvert, on créer une nouvelle Note
@@ -61,6 +61,7 @@ Note& NotesManager::getNewNote(const QString& type, const QString& title){
     QString id = getId();
 
     n = noteConstructor(type, id, (title.isEmpty()) ? QString(type + "_" + id) : title);
+    n->setWS(workspace->getPath());
     printf("titleNM = %s\n", n->getTitle().toStdString().c_str());
     if(n == NULL)
         throw NotesException("Can't create a note of type: " + type);
@@ -103,11 +104,17 @@ QString NotesManager::typeNote(const QString& id){
 
 Workspace* NotesManager::workspace = NULL;
 NotesManager* NotesManager::instance = NULL; // pointeur sur l'unique instance
-NotesManager& NotesManager::getInstance(){
-    if(!workspace) workspace = new Workspace;
-    loadWSNotes();
+NotesManager* NotesManager::getInstance(QApplication *app){
+    //chargement de la config et ouverture d'un note manager
+    ConfigManager cm(app);
+    //QMessageBox::information(NULL, "info", cm.getPath(), QMessageBox::Ok);
+    if(cm.getPath().isEmpty())
+        return NULL;
+
+    if(!workspace) workspace = new Workspace(cm.getPath());
     if(!instance) instance=new NotesManager;
-    return *instance;
+    loadWSNotes();
+    return instance;
 }
 
 void NotesManager::libererInstance(){
@@ -133,7 +140,7 @@ void NotesManager::reset(){
 void NotesManager::saveNote(Note& n){
     if (n.isModified()) {
         // Création d'un objet QFile
-        QFile file(n.getId());
+        QFile file(workspace->getPath() + n.getId());
 
         // On ouvre notre fichier en écriture seule et on vérifie l'ouverture
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -144,8 +151,10 @@ void NotesManager::saveNote(Note& n){
         file.close();
         n.setModified(false);
 
-        //met à jour la note dans le workspace (implémenter les tags
-        workspace->addNote(n.getId(), n.getType(), "");
+        QList<QString> tags;
+
+        //met à jour la note dans le workspace (implémenter les tags)
+        workspace->addNote(n.getId(), n.getType(), tags);
     }
 }
 
@@ -156,22 +165,26 @@ void NotesManager::deleteNote(Note& n){
 
 void NotesManager::loadWSNotes(){
     //charger tt les éléments du workspace
-    QString lst_notes = " " + workspace->listNotes();
+    QList<QString> lst_notes = workspace->listNotes();
 
     if(lst_notes.isEmpty())
         return;
 
     //toutes les notes sont séparées par des '\n'
-    int offset = 1;
-    while(offset + 1 < lst_notes.size()){
-        //récupère la note
-        QString note = lst_notes.mid(offset, lst_notes.indexOf(QChar('\n'), offset));
-        //enlève le caractère '\n' résiduel de l'opération précédente
-        if(note.at(note.size() - 1) == QChar('\n')) note.remove(note.size() - 1, 1);
+    for(int i = 0; i < lst_notes.size(); i++)
         //ajout de la note
-        instance->getNote(note);
-        offset = lst_notes.indexOf(QChar('\n'), offset) + 1;
-    }
+        instance->getNote(lst_notes.at(i));
+
+    //notes supprimée, restaurées dans la corbeille
+    lst_notes = workspace->listNotesD();
+
+    if(lst_notes.isEmpty())
+        return;
+
+    //toutes les notes sont séparées par des '\n'
+    for(int i = 0; i < lst_notes.size(); i++)
+        //ajout de la note
+        instance->getNote(lst_notes.at(i));
 }
 
 void NotesManager::changeWorkSpace(const QString& path){
@@ -180,9 +193,6 @@ void NotesManager::changeWorkSpace(const QString& path){
 
     //Création du nouveau workspace
     workspace = new Workspace(path);
-
-    //vérifier l'intégrité du fichier workspace
-    workspace->check();
 
     //charger toutes les notes du workspace si tout vas bien.
     loadWSNotes();

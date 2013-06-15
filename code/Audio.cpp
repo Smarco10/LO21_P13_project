@@ -2,7 +2,7 @@
 
 void Audio::load(){
     //récupère les information pouvant manquer
-    QFile fichier(getId());
+    QFile fichier(getWS() + getId());
 
     //on sort si le fichier n'existe pas
     if(!fichier.exists())

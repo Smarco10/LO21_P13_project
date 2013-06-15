@@ -3,6 +3,7 @@
 
 #include "QHeader.h"
 #include "NotesManager.h"
+#include "Config.h"
 
 //Faire un fichier de config où l'on stock les valeurs du fichier ressources.h
 //ainsi que le path par défaut qui est le dernier utilisé dans l'applis

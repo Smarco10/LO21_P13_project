@@ -2,7 +2,7 @@
 
 void Article::load(){
     //récupère les information pouvant manquer comme le contenu
-    QFile fichier(getId());
+    QFile fichier(getWS() + getId());
     //on sort si le fichier n'existe pas
     if(!fichier.exists())
         return;

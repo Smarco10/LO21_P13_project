@@ -9,6 +9,7 @@ private:
     QString type;
 
 protected:
+    QString pathWS;
     QString title;
     bool loaded;
     bool modified;
@@ -31,6 +32,9 @@ public:
 
     void setLoaded(const bool l){loaded = l;}
     bool getLoaded() const {return loaded;}
+
+    QString getWS() const {return pathWS;}
+    void setWS(const QString& p="") {pathWS = p;}
 
     virtual void addSubNote(Note* n);
     virtual void addSubNote(Note* n, unsigned int);

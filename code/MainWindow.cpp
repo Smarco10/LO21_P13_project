@@ -1,8 +1,6 @@
 ﻿#include "MainWindow.h"
 
 MainWindow::MainWindow(QApplication* app):QMainWindow(){
-    manager = &NotesManager::getInstance();
-
     setWindowTitle(APP_TITLE);
     setWindowIcon(QIcon(APP_LOGO));
 
@@ -134,6 +132,10 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
     QObject::connect(deleted, SIGNAL(itActDoubleClickedS(QListEditorItem*)), this, SLOT(recoverNote(QListEditorItem*)));
 
     QObject::connect(binDel, SIGNAL(clicked()), this, SLOT(safeEmptyBin()));
+
+    manager = NotesManager::getInstance(app);
+    if(manager == NULL)
+        return;
 }
 
 MainWindow::~MainWindow(){
@@ -301,7 +303,7 @@ void MainWindow::safeEmptyBin(){
     QLabel *quest = new QLabel("Etes-vous sur de vouloir vider la corbeille?", altWindow);
     text->layout()->addWidget(quest);
 
-    QLabel *info = new QLabel("Cette action est irréverssible <b>irreversible</b>.", altWindow);
+    QLabel *info = new QLabel("Cette action est <b>irreversible</b>.", altWindow);
     text->layout()->addWidget(info);
 
     //partie boutons
