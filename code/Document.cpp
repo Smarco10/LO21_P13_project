@@ -35,8 +35,8 @@ void Document::load(){
     if(getLoaded())
         return;
 
-    //rÃ©cupÃ¨re les information pouvant manquer comme la liste des notes
-    //VÃ©rifie si on a besoin d'annalyser le fichier (liste pleine)
+    //récupère les information pouvant manquer comme la liste des notes
+    //Vérifie si on a besoin d'annalyser le fichier (liste pleine)
     if(content.size() > 0)
         return;
 

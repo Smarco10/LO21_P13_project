@@ -133,7 +133,7 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
 
     QObject::connect(binDel, SIGNAL(clicked()), this, SLOT(safeEmptyBin()));
 
-    manager = NotesManager::getInstance(app);
+    manager = NotesManager::getInstance();
     if(manager == NULL)
         return;
 

@@ -155,10 +155,10 @@ QString NotesManager::typeNote(const QString& id){
 
 Workspace* NotesManager::workspace = NULL;
 NotesManager* NotesManager::instance = NULL; // pointeur sur l'unique instance
-NotesManager* NotesManager::getInstance(QApplication *app){
+NotesManager* NotesManager::getInstance(){
     if(!instance) instance=new NotesManager;
 
-    changeWorkspace();
+    instance->changeWorkspace();
     return instance;
 }
 
@@ -239,9 +239,9 @@ void NotesManager::changeWorkspace(){
     instance->reset();
 
     //chargement de la config
-    ConfigManager cm(app);
+    ConfigManager cm;
     if(cm.getPath().isEmpty())
-        return NULL;
+        return;
 
     //on ouvre le workspace
     workspace = new Workspace(cm.getPath());

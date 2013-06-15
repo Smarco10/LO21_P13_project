@@ -47,16 +47,14 @@ void NoteEditor::modified(){
 
 }
 
-void Note::createHtmlTree(QBuffer* buf ){
-
-
+void Note::createHtmlTree(QBuffer* buf){
     QXmlStreamWriter qw;
 
     //Creation of the HTML architecture
     qw.setDevice(buf);
     qw.setAutoFormatting(true);
     qw.setAutoFormattingIndent(-1);
-    qw.writeDTD("<!xDOCTYPE xhtml>");
+    qw.writeDTD("<!DOCTYPE html>");
         qw.writeStartElement("html");
             qw.writeStartElement("head");
                 qw.writeEmptyElement("meta");
@@ -64,11 +62,8 @@ void Note::createHtmlTree(QBuffer* buf ){
                 qw.writeTextElement("title",this->getTitle());
                 qw.writeEndElement();
             qw.writeStartElement("body");
-
-
-
-
 }
+
 void Note::endHtmlTree(QBuffer* buf){
 
     if (!buf->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))
@@ -83,33 +78,14 @@ void Note::endHtmlTree(QBuffer* buf){
 
 
 }
-/*
-\documentclass[a4paper,11pt]{report} %type du document
-% Imports de bibliothèques
-\usepackage{graphicx} %utilisé pour inclure des images
-%gestion de la police
-\usepackage[french]{babel}
-\usepackage[latin1]{inputenc}
-\usepackage[T1]{fontenc}
-\begin{document}
-\chapter{titre de niveau du chapitre}
-\section{niveau 2}
-Il faut écrire un fichier source et ensuite le compiler pour obtenir un fichier
-PDF.
-\subsection{niveau 3}
-\subsubsection{niveau 4}
-\paragraph{paragraphe titré} contenu de mon paragraphe.
-%Ajout d’image
-\begin{center}
-\includegraphics{monImage.png}
-\end{center}
-\end{document}
-*/
+
 void Note::createTexHeader(QBuffer *buf){
-    buffer->write("\\documentclass[a4paper,11pt]{report} %type du document\n");
-    buffer->write("\\usepackage[french]{babel}");
-    buffer->write("\\usepackage[utf8]{inputenc}\n");
-    buffer->write("\\usepackage[T1]{fontenc}\n");
 
+    buf->write("\\documentclass[a4paper,11pt]{report} %type du document\n");
 
+    buf->write("\\usepackage[french]{babel}");
+
+    buf->write("\\usepackage[utf8]{inputenc}\n");
+
+    buf->write("\\usepackage[T1]{fontenc}\n");
 }

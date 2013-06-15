@@ -1,11 +1,5 @@
 ﻿#include "Article.h"
 
-#include<QDomElement>
-#include<QDomDocument>
-#include<algorithm>
-
-
-
 void Article::load(){
     //Si la note est déjà chargée on ne le recharge pas
     if(getLoaded())
@@ -59,6 +53,7 @@ QString Article::toHTML(){
 
     return "";
 }
+
 
 QString Article::toTEX(){
 

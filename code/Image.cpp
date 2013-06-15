@@ -71,6 +71,7 @@ QString Image::toTEX(){
     return QString(*file);
 }
 
+
 QString Image::toTEXT(){
     return "";
 }

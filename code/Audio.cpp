@@ -59,7 +59,6 @@ QString Audio::toHTML(){
     endHtmlTree(buffer);
     buffer->close();
     return QString(*file);
-
 }
 
 QString Audio::toTEX(){

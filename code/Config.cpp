@@ -175,7 +175,7 @@ QList<QString> Config::listWS(){
     return lst;
 }
 
-ConfigManager::ConfigManager(QApplication *app, QWidget *parent):QDialog(parent){
+ConfigManager::ConfigManager(QWidget *parent):QDialog(parent){
     setParent(parent);
     setWindowTitle("Espaces de travail");
 
@@ -231,9 +231,6 @@ ConfigManager::ConfigManager(QApplication *app, QWidget *parent):QDialog(parent)
     QObject::connect(del, SIGNAL(clicked()), this, SLOT(safeDel()));
     QObject::connect(create, SIGNAL(clicked()), this, SLOT(newWS()));
 
-   // QObject::connect(this, SIGNAL(finished(int)), this, SLOT(quit(int)));
-    //QObject::connect(this, SIGNAL(quitS()), app, SLOT(quit()));
-
     exec();
 }
 
@@ -278,10 +275,6 @@ void ConfigManager::delWS(){
     QListWidgetItem *item = workspaces->takeItem(workspaces->currentRow());
     delete item;
     updateGUI();
-}
-
-void ConfigManager::quit(int a){
-    emit quitS();
 }
 
 void ConfigManager::newWS(){
