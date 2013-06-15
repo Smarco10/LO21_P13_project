@@ -14,7 +14,6 @@
 class NotesManager {
 private:
     std::set<Note*> notes;
-    unsigned int getNbNotes(){ return notes.size();}
     void addNote(Note* n);
     void removeNote(Note* n);
 
@@ -39,12 +38,17 @@ public:
 
     const QString& getFilename(Note& n){ return n.getId();}
 
+    Note* getNote(unsigned int i = 0);
     Note& getNote(const QString& id);
     Note& getNewNote(const QString& type, const QString& title);
     void saveNote(Note& n);
     void deleteNote(Note& n);
+    unsigned int getNbNotes(){ return notes.size();}
 
-    void changeWorkSpace(const QString& path = ".");
+    QIcon getNoteIcon(Note* n);
+    NoteEditor* noteEdConstructor(Note* n, QWidget *parent=NULL);
+
+    void changeWorkspace();
 };
 
 #endif // NOTESMANAGER_H

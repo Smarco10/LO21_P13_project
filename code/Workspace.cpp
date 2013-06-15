@@ -21,7 +21,7 @@ Workspace::Workspace(const QString& p):QWidget(), pathWS(p),modified(false){
 
         xml_doc.close();
 
-        this->check();
+        check();
     } else
         dom->setContent(QString("<?xml version='1.0' encoding='UTF-8'?>\n<notes/>"));
 }
@@ -56,6 +56,11 @@ QList<QString> Workspace::listTags(){
     for(int i = 0; i < nd.count(); i++)
         tags.push_back(nd.at(i).toElement().attribute("tags"));
 
+    nd = dom_el.elementsByTagName("noteDeleted");
+
+    for(int i = 0; i < nd.count(); i++)
+        tags.push_back(nd.at(i).toElement().attribute("tags"));
+
     return tags;
 }
 
@@ -67,12 +72,24 @@ QString Workspace::getType(const QString& path){
         if(nd.at(i).toElement().attribute("path") == path)
             return nd.at(i).toElement().attribute("type");
 
+    nd = dom_el.elementsByTagName("noteDeleted");
+
+    for(int i = 0; i < nd.count(); i++)
+        if(nd.at(i).toElement().attribute("path") == path)
+            return nd.at(i).toElement().attribute("type");
+
     return "";
 }
 
 bool Workspace::isNote(const QString& path){
     QDomElement dom_el = dom->documentElement();
     QDomNodeList nd = dom_el.elementsByTagName("note");
+
+    for(int i = 0; i < nd.count(); i++)
+        if(nd.at(i).toElement().attribute("path") == path)
+            return true;
+
+    nd = dom_el.elementsByTagName("noteDeleted");
 
     for(int i = 0; i < nd.count(); i++)
         if(nd.at(i).toElement().attribute("path") == path)
@@ -119,6 +136,22 @@ void Workspace::noteToD(const QString& path){
     for(int i = 0; i < nd.count(); i++)
         if(nd.at(i).toElement().attribute("path") == path)
             nd.at(i).toElement().setTagName("noteDeleted");
+
+    modified = true;
+}
+
+void deletedToN(const QString& path){
+    QDomElement dom_el = dom->documentElement();
+
+    // Vérifie si la note existe
+    if(!isNote(path))
+        return;
+
+    QDomNodeList nd = dom_el.elementsByTagName("noteDeleted");
+
+    for(int i = 0; i < nd.count(); i++)
+        if(nd.at(i).toElement().attribute("path") == path)
+            nd.at(i).toElement().setTagName("note");
 
     modified = true;
 }
@@ -174,11 +207,22 @@ void Workspace::check(){
 
     for(int i = 0; i < nd.count(); i++){
         QFile note(getPath() + nd.at(i).toElement().attribute("path"));
-        if(!note.exists())
+        if(!note.exists()){
             dom_el.removeChild(nd.at(i).toElement());
+            modified = true;
+        }
     }
 
-    modified = true;
+    //check les notes supprimées:
+    nd = dom_el.elementsByTagName("noteDeleted");
+
+    for(int i = 0; i < nd.count(); i++){
+        QFile note(getPath() + nd.at(i).toElement().attribute("path"));
+        if(!note.exists()){
+            dom_el.removeChild(nd.at(i).toElement());
+            modified = true;
+        }
+    }
 }
 
 void Workspace::updateWorkspace(){

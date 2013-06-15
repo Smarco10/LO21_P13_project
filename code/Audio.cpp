@@ -1,6 +1,10 @@
 ﻿#include "Audio.h"
 
 void Audio::load(){
+    //Si la note est déjà chargée on ne le recharge pas
+    if(getLoaded())
+        return;
+
     //récupère les information pouvant manquer
     QFile fichier(getWS() + getId());
 
@@ -21,6 +25,8 @@ void Audio::load(){
      //récupère la description du fichier
      while(!flux.atEnd())
          desc += flux.readLine();
+
+     setLoaded(true);
 }
 
 QTextStream& Audio::save(QTextStream& f){
@@ -31,11 +37,49 @@ QTextStream& Audio::save(QTextStream& f){
 }
 
 QString Audio::toHTML(){
-    return "";
+
+    QXmlStreamWriter* qw=new QXmlStreamWriter;
+
+
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+    createHtmlTree(buffer);
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
+    qw->writeTextElement("h2",QString("ID:")+this->getId());
+    qw->writeTextElement("h3",QString("PATH:")+this->getPath());
+    qw->writeStartElement("audio");
+    qw->writeAttribute("src",this->getPath());
+    qw->writeEndElement();
+    qw->writeTextElement("p",this->getDesc());
+    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
+    qw->writeEmptyElement("br");
+/*
+    <audio controls="controls">
+     <source src="concerto_mozart.ogg" type="audio/ogg" />
+     <source src="concerto_mozart.mp3" type="audio/mp3" />
+     Votre navigateur ne supporte pas la balise audio.
+    </audio>*/
+
+    endHtmlTree(buffer);
+    buffer->close();
+    return QString(*file);
+
 }
 
 QString Audio::toTEX(){
-    return "";
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+         throw NotesException("Buffer unavailable for HTML export.");
+     }
+    createTexHeader(buffer);
+    buffer->write("\\begin{document}\n");
+    buffer->write(("\\chapter{"+this->getTitle()+"}\n").toAscii());
+    buffer->write(("{\Large ID:"+this->getId()+"}\n").toAscii());
+    buffer->write(("\\paragraph{PATH:"+this->getPath()+"}"+this->getDesc()+"\n").toAscii());
+    buffer->write("\\end{document}");
+    buffer->close();
+    return QString(*file);
 }
 
 QString Audio::toTEXT(){

@@ -20,5 +20,7 @@ static QString CONFIG_FILENAME(".BanaNoteConfig");
 #define ico_change QIcon("icons/change.png")
 #define ico_bin_empty QIcon("icons/bin_empty.png")
 #define ico_bin_full QIcon("icons/bin_full.png")
+//rajouter un '?' au milieu de l'icon
+#define ico_unknown QIcon("icons/unknown.png")
 
 #endif // RESSOURCES_H

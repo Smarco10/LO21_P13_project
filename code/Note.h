@@ -13,11 +13,14 @@ protected:
     QString title;
     bool loaded;
     bool modified;
+    bool deleted;
     virtual void load()=0;
     QByteArray* file;
     QBuffer* buffer;
-    void createHtmlTree(void);
-
+    void createHtmlTree(QBuffer *buf);
+    void endHtmlTree(QBuffer* buf);
+    void createTexHeader(QBuffer *buf);
+    void endTexFooter(QBuffer* buf);
 public:
     Note(const QString& ty, const QString& i, const QString& tt):id(i),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray; buffer=new QBuffer(file);}
 
@@ -41,7 +44,9 @@ public:
     virtual void removeSubNote(unsigned int);
     virtual Note* getSubNote(unsigned int pos=0);
 
-    bool operator<(const Note& n)const{ return this->id < n.id;}
+    bool operator==(const Note* n) const { return this->id == n->id;}
+    bool operator<(const Note* n)const{ return this->id < n->id;}
+    bool less(const Note* n)const{ return this->id < n->id;}
     virtual QTextStream& save(QTextStream&) = 0;
 
     virtual QString toHTML() = 0;

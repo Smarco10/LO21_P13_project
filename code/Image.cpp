@@ -31,11 +31,44 @@ QTextStream& Image::save(QTextStream& f){
 }
 
 QString Image::toHTML(){
-    return "";
+    QXmlStreamWriter* qw=new QXmlStreamWriter;
+
+
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+    createHtmlTree(buffer);
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
+    qw->writeTextElement("h2",QString("ID:")+this->getId());
+    qw->writeTextElement("h3",QString("PATH:")+this->getPath());
+    qw->writeStartElement("img");
+            qw->writeAttribute("source",this->getPath());
+    qw->writeEndElement();
+    qw->writeTextElement("p",this->getDesc());
+    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
+    qw->writeEmptyElement("br");
+
+
+    endHtmlTree(buffer);
+    buffer->close();
+    return QString(*file);
 }
 
 QString Image::toTEX(){
-    return "";
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+         throw NotesException("Buffer unavailable for HTML export.");
+     }
+    createTexHeader(buffer);
+    buffer->write("\\usepackage{graphicx}");
+    buffer->write("\\begin{document}\n");
+    buffer->write(("\\chapter{"+this->getTitle()+"}\n").toAscii());
+    buffer->write(("{\Large ID:"+this->getId()+"}\n").toAscii());
+    buffer->write(("\\includegraphics{"+this->getPath()).toAscii());
+    buffer->write(("\\paragraph{PATH:"+this->getPath()+"}"+this->getDesc()+"\n").toAscii());
+    buffer->write("\\end{document}");
+    buffer->close();
+    return QString(*file);
 }
 
 QString Image::toTEXT(){

@@ -29,6 +29,7 @@ public:
     QList<QString> listNotesD();
     QList<QString> listTags();
     void noteToD(const QString& path);
+    void deletedToN(const QString& path);
     QString getType(const QString& path);
     QString getTags(const QString& path);
     bool isNote(const QString& path);

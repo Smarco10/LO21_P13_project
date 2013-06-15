@@ -136,6 +136,9 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
     manager = NotesManager::getInstance(app);
     if(manager == NULL)
         return;
+
+    //met à jour avec les notes préchargé dans le manager
+    updateNotes();
 }
 
 MainWindow::~MainWindow(){
@@ -152,13 +155,9 @@ void MainWindow::warning(){
 void MainWindow::articleCreator(){
     //vérifier q'un workspace est ouvert sinon en ouvrir/créer un
     //si note en cours d'édition la fermer (demander de sauver + fermer)
-
     //Créer une nouvelle note si fermé avec succès
-   Article *art = dynamic_cast<Article*>(&manager->getNewNote("Article", ""));
-   QListEditorItem* act = new QListEditorItem(ico_article, art->getTitle(), new ArticleEditor(art, editor));
-   outputNotes->addItem(act);
-   tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
-   openNote(act);
+    Article *art = dynamic_cast<Article*>(&manager->getNewNote("Article", ""));
+    noteCreator(art);
 }
 
 void MainWindow::imageCreator(){
@@ -166,10 +165,7 @@ void MainWindow::imageCreator(){
     //si note en cours d'édition la fermer (demander de sauver + fermer)
     //Créer une nouvelle note si fermé avec succès
     Image* img = dynamic_cast<Image*>(&manager->getNewNote("Image", ""));
-    QListEditorItem* act = new QListEditorItem(ico_image, img->getTitle(), new ImageEditor(img, editor));
-    outputNotes->addItem(act);
-    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
-    openNote(act);
+    noteCreator(img);
 }
 
 void MainWindow::audioCreator(){
@@ -177,10 +173,7 @@ void MainWindow::audioCreator(){
     //si note en cours d'édition la fermer (demander de sauver + fermer)
     //Créer une nouvelle note si fermé avec succès
     Audio *aud = dynamic_cast<Audio*>(&manager->getNewNote("Audio", ""));
-    QListEditorItem* act = new QListEditorItem(ico_audio, aud->getTitle(), new AudioEditor(aud, editor));
-    outputNotes->addItem(act);
-    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
-    openNote(act);
+    noteCreator(aud);
 }
 
 void MainWindow::videoCreator(){
@@ -188,10 +181,7 @@ void MainWindow::videoCreator(){
     //si note en cours d'édition la fermer (demander de sauver + fermer)
     //Créer une nouvelle note si fermé avec succès
     Video* vid = dynamic_cast<Video*>(&manager->getNewNote("Video", ""));
-    QListEditorItem* act = new QListEditorItem(ico_video, vid->getTitle(), new VideoEditor(vid, editor));
-    outputNotes->addItem(act);
-    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
-    openNote(act);
+    noteCreator(vid);
 }
 
 void MainWindow::documentCreator(){
@@ -199,10 +189,27 @@ void MainWindow::documentCreator(){
     //si note en cours d'édition la fermer (demander de sauver + fermer)
     //Créer une nouvelle note si fermé avec succès
     Document* doc = dynamic_cast<Document*>(&manager->getNewNote("Document", ""));
-    QListEditorItem* act = new QListEditorItem(ico_document, doc->getTitle(), new DocumentEditor(doc, editor));
+    noteCreator(doc);
+}
+
+void MainWindow::noteCreator(Note* n){
+    //Vérifie si l'object existe dans le manager sinon le créé
+    QListEditorItem* act = newItem(n);
     outputNotes->addItem(act);
     tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
     openNote(act);
+}
+
+QListEditorItem* MainWindow::newItem(Note* n){
+    if(n == NULL)
+        return NULL;
+    return new QListEditorItem(manager->getNoteIcon(n), n->getTitle(), manager->noteEdConstructor(n, editor));
+}
+
+void MainWindow::updateNotes(){
+    //Récupère toutes les notes du manager et les ajoutes à l'interface
+    for(unsigned int i = 0; i < manager->getNbNotes(); i++)
+        noteCreator(manager->getNote(i));
 }
 
 void MainWindow::openNote(QListEditorItem *o){

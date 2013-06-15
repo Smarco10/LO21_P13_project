@@ -31,8 +31,12 @@ Note* Document::getSubNote(unsigned int pos){
 }
 
 void Document::load(){
-    //récupère les information pouvant manquer comme la liste des notes
-    //Vérifie si on a besoin d'annalyser le fichier (liste pleine)
+    //Si la note est déjà chargée on ne le recharge pas
+    if(getLoaded())
+        return;
+
+    //rÃ©cupÃ¨re les information pouvant manquer comme la liste des notes
+    //VÃ©rifie si on a besoin d'annalyser le fichier (liste pleine)
     if(content.size() > 0)
         return;
 
@@ -65,6 +69,8 @@ void Document::load(){
           //ajoute le fichier à la liste
           addSubNote(&note);
      }
+
+     setLoaded(true);
 }
 
 QTextStream& Document::save(QTextStream& f){
@@ -77,11 +83,48 @@ QTextStream& Document::save(QTextStream& f){
 }
 
 QString Document::toHTML(){
-    return "";
+    QXmlStreamWriter* qw=new QXmlStreamWriter;
+    QString x;
+    int i;
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+    createHtmlTree(buffer);
+    for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
+        qw->writeEmptyElement("br");
+        //qw->writeTextElement("h1",QString("Titre:")+(static_cast<Note*>(*it))->getTitle());
+        //qw->writeTextElement("h2",QString("ID:")+(static_cast<Note*>(*it))->getId());
+        //insÃ©rer ici la partie relative a chaque Ã©lÃ©ment de content
+        x=dynamic_cast<Note*>(*it)->toHTML();
+        x=x.left(x.indexOf("</body",0));
+        x=x.right(x.length()-(x.indexOf("body>",0)+5));
+        qw->writeCharacters(x);
+
+        qw->writeEmptyElement("br");
+    }
+    endHtmlTree(buffer);
+    buffer->close();
+    return QString(*file);
 }
 
 QString Document::toTEX(){
-    return "";
+    QString x;
+    int i;
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+    createTexHeader(buffer);
+    for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
+        x=dynamic_cast<Note*>(*it)->toHTML();
+        x=x.left(x.indexOf("\\end{document}",0));
+        x=x.right(x.length()-(x.indexOf("\\begin{document}",0)+16));
+        x.push_front("\n");
+        x.push_front("\n");
+        buffer->write(x.toAscii());
+    }
+    buffer->write("\\end{document}\n");
+    buffer->close();
+    return QString(*file);
 }
 
 QString Document::toTEXT(){

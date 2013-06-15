@@ -14,11 +14,21 @@ void NotesManager::removeNote(Note *n){
     n->setModified(true);
 }
 
+Note* NotesManager::getNote(unsigned int i){
+    //récupère la ième note du set
+    unsigned int cmp = 0;
+    for(std::set<Note*>::iterator it = notes.begin(); it != notes.end(); it++)
+        if(cmp++ == i)
+            return *it;
+
+    return NULL;
+}
+
 Note& NotesManager::getNote(const QString& id){
     //regarde si la note est dans la liste
-   std::set<Note*>::iterator it= notes.end()/*notes.find(id)*/;
+   std::set<Note*>::iterator it = notes.end()/*notes.find(id)*/;
 
-   if(it==notes.end())
+   if(it == notes.end())
    {
        //si note non existante dans la liste on la charge et si elle n'existe pas on la crée
        //Récupère le type dans le fichier workspace
@@ -26,6 +36,7 @@ Note& NotesManager::getNote(const QString& id){
        QString title;
        Note* n = NULL;
 
+       //On récupère le titre de la note
        QFile fichier(workspace->getPath() + id);
        if(fichier.exists()){
            if(!fichier.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -37,18 +48,17 @@ Note& NotesManager::getNote(const QString& id){
            title = flux.readLine();
 
            fichier.close();
-
-           //on récupère le type de la note
-           type = typeNote(id);
        } else {
            //Erreur
            throw NotesException("File doesn't exist");
        }
 
+       //On construit la note
        n = noteConstructor(type, id, title);
        if(n == NULL)
            NotesException("Can't create a note of type: " + type);
 
+       //on ajoute la note
        addNote(n);
        return *n;
     }
@@ -74,7 +84,7 @@ Note& NotesManager::getNewNote(const QString& type, const QString& title){
 Note* NotesManager::noteConstructor(const QString& type, const QString& id, const QString& title){
     //Rajouter les types ici ...
 
-    printf("titleNC = %s\n", title.toStdString().c_str());
+    //printf("titleNC = %s\n", title.toStdString().c_str());
 
     if(type == "Article"){
         return new Article(id, title);
@@ -84,12 +94,53 @@ Note* NotesManager::noteConstructor(const QString& type, const QString& id, cons
         return new Image(id, title);
     } else if(type == "Audio"){
         return new Audio(id, title);
-    } else if(type == "Image"){
+    } else if(type == "Video"){
         return new Video(id, title);
     }
 
     //type inconnu on laisse à NULL
     return NULL;
+}
+
+NoteEditor* NotesManager::noteEdConstructor(Note* n, QWidget *parent){
+    //Rajouter les types ici ...
+
+    if(n == NULL)
+        return NULL;
+
+    if(n->getType() == "Article"){
+        return new ArticleEditor((Article*)n, parent);
+    } else if(n->getType() == "Document"){
+        return new DocumentEditor((Document*)n, parent);
+    } else if(n->getType() == "Image"){
+        return new ImageEditor((Image*)n, parent);
+    } else if(n->getType() == "Audio"){
+        return new AudioEditor((Audio*)n, parent);
+    } else if(n->getType() == "Video"){
+        return new VideoEditor((Video*)n, parent);
+    }
+
+    //type inconnu on laisse à NULL
+    return NULL;
+}
+
+QIcon NotesManager::getNoteIcon(Note* n){
+    //Rajouter les types ici ...
+
+    if(n->getType() == "Article"){
+        return ico_article;
+    } else if(n->getType() == "Document"){
+        return ico_document;
+    } else if(n->getType() == "Image"){
+        return ico_image;
+    } else if(n->getType() == "Audio"){
+        return ico_audio;
+    } else if(n->getType() == "Video"){
+        return ico_video;
+    }
+
+    //type inconnu
+    return ico_unknown;
 }
 
 QString NotesManager::getId(){
@@ -105,15 +156,9 @@ QString NotesManager::typeNote(const QString& id){
 Workspace* NotesManager::workspace = NULL;
 NotesManager* NotesManager::instance = NULL; // pointeur sur l'unique instance
 NotesManager* NotesManager::getInstance(QApplication *app){
-    //chargement de la config et ouverture d'un note manager
-    ConfigManager cm(app);
-    //QMessageBox::information(NULL, "info", cm.getPath(), QMessageBox::Ok);
-    if(cm.getPath().isEmpty())
-        return NULL;
-
-    if(!workspace) workspace = new Workspace(cm.getPath());
     if(!instance) instance=new NotesManager;
-    loadWSNotes();
+
+    changeWorkspace();
     return instance;
 }
 
@@ -134,7 +179,9 @@ void NotesManager::reset(){
     }
 
     notes.clear();
-    delete workspace;
+
+    if(workspace)
+        delete workspace;
 }
 
 void NotesManager::saveNote(Note& n){
@@ -170,7 +217,7 @@ void NotesManager::loadWSNotes(){
     if(lst_notes.isEmpty())
         return;
 
-    //toutes les notes sont séparées par des '\n'
+    //Ajout des notes
     for(int i = 0; i < lst_notes.size(); i++)
         //ajout de la note
         instance->getNote(lst_notes.at(i));
@@ -181,19 +228,22 @@ void NotesManager::loadWSNotes(){
     if(lst_notes.isEmpty())
         return;
 
-    //toutes les notes sont séparées par des '\n'
+    //ajout des notes supprimées
     for(int i = 0; i < lst_notes.size(); i++)
         //ajout de la note
         instance->getNote(lst_notes.at(i));
 }
 
-void NotesManager::changeWorkSpace(const QString& path){
+void NotesManager::changeWorkspace(){
     //vider la liste de notes en sauvant toutes les notes et le workspace <=> suppression
     instance->reset();
 
-    //Création du nouveau workspace
-    workspace = new Workspace(path);
+    //chargement de la config
+    ConfigManager cm(app);
+    if(cm.getPath().isEmpty())
+        return NULL;
 
-    //charger toutes les notes du workspace si tout vas bien.
+    //on ouvre le workspace
+    workspace = new Workspace(cm.getPath());
     loadWSNotes();
 }

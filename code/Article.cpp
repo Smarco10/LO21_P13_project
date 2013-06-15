@@ -1,6 +1,16 @@
 ﻿#include "Article.h"
 
+#include<QDomElement>
+#include<QDomDocument>
+#include<algorithm>
+
+
+
 void Article::load(){
+    //Si la note est déjà chargée on ne le recharge pas
+    if(getLoaded())
+        return;
+
     //récupère les information pouvant manquer comme le contenu
     QFile fichier(getWS() + getId());
     //on sort si le fichier n'existe pas
@@ -17,6 +27,8 @@ void Article::load(){
      //récupère tout le contenu
      while(!flux.atEnd())
         content += flux.readLine();
+
+     setLoaded(true);
 }
 
 QTextStream& Article::save(QTextStream& f){
@@ -26,11 +38,41 @@ QTextStream& Article::save(QTextStream& f){
 }
 
 QString Article::toHTML(){
+
+
+    QXmlStreamWriter* qw=new QXmlStreamWriter;
+
+
+   if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+        throw NotesException("Buffer unavailable for HTML export.");
+    }
+    createHtmlTree(buffer);
+    qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
+    qw->writeTextElement("h2",QString("ID:")+this->getId());
+    qw->writeTextElement("p",this->getContent());
+    //qw->writeTextElement("p",QString("Tag:")+this->getTags());
+    endHtmlTree(buffer);
+    buffer->close();
+    return QString(*file);
+
+
+
     return "";
 }
 
 QString Article::toTEX(){
-    return "";
+
+    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+         throw NotesException("Buffer unavailable for HTML export.");
+     }
+    createTexHeader(buffer);
+    buffer->write("\\begin{document}\n");
+    buffer->write((QString("\\chapter{")+this->getTitle()+QString("}\n")).toAscii());
+    buffer->write((QString("{\Large ID:")+this->getId()+QString("}\n")).toAscii());
+    buffer->write((QString("\\paragraph{}")+this->getContent()).toAscii());
+    buffer->write("\\end{document}");
+    buffer->close();
+    return QString(*file);
 }
 
 QString Article::toTEXT(){
