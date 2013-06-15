@@ -1,6 +1,9 @@
 ﻿#include "Video.h"
 
 void Video::load(){
+    if(getLoaded())
+        return;
+
     //récupère les information pouvant manquer
     QFile fichier(getWS() + getId());
 
@@ -21,6 +24,8 @@ void Video::load(){
      //récupère la description du fichier
      while(!flux.atEnd())
          desc += flux.readLine();
+
+    setLoaded(true);
 }
 
 QTextStream& Video::save(QTextStream& f){
@@ -37,7 +42,6 @@ QString Video::toTEX(){
     createTexHeader(buffer);
     buffer->write("\\begin{document}\n");
     buffer->write(("\\chapter{"+this->getTitle()+"}\n").toAscii());
-    buffer->write(("{\Large ID:"+this->getId()+"}\n").toAscii());
     buffer->write(("\\paragraph{PATH:"+this->getPath()+"}"+this->getDesc()+"\n").toAscii());
     buffer->write("\\end{document}");
     buffer->close();
@@ -83,7 +87,7 @@ QString Video::toHTML(){
 }
 
 QString Video::toTEXT(){
-    return "";
+    return getTitle() + "\n\nChemin du fichier: " + getPath() + "\n\nDesciption du fichier: " + getDesc();
 }
 
 VideoEditor::VideoEditor(Video *v, QWidget *parent):BinaryEditor(v, parent){

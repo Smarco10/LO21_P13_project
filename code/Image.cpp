@@ -83,7 +83,6 @@ QString Image::toTEX(){
     buffer->write("\\usepackage{graphicx}");
     buffer->write("\\begin{document}\n");
     buffer->write(("\\chapter{"+this->getTitle()+"}\n").toAscii());
-    buffer->write(("{\Large ID:"+this->getId()+"}\n").toAscii());
     buffer->write(("\\includegraphics{"+this->getPath()).toAscii() + "}\n");
     buffer->write(("\\paragraph{PATH:"+this->getPath()+"}"+this->getDesc()+"\n").toAscii());
     buffer->write("\\end{document}");
@@ -93,7 +92,7 @@ QString Image::toTEX(){
 
 
 QString Image::toTEXT(){
-    return getTitle() + "\n\n" + getPath() + "\n\n" + getDesc();
+    return getTitle() + "\n\nChemin du fichier: " + getPath() + "\n\nDesciption du fichier: " + getDesc();
 }
 
 ImageEditor::ImageEditor(Image *i, QWidget *parent):BinaryEditor(i, parent){   

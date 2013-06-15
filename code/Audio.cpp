@@ -83,7 +83,6 @@ QString Audio::toTEX(){
     createTexHeader(buffer);
     buffer->write("\\begin{document}\n");
     buffer->write(("\\chapter{"+this->getTitle()+"}\n").toAscii());
-    buffer->write(("{\Large ID:"+this->getId()+"}\n").toAscii());
     buffer->write(("\\paragraph{PATH:"+this->getPath()+"}"+this->getDesc()+"\n").toAscii());
     buffer->write("\\end{document}");
     buffer->close();
@@ -91,7 +90,7 @@ QString Audio::toTEX(){
 }
 
 QString Audio::toTEXT(){
-    return getTitle() + "\n\n" + getPath() + "\n\n" + getDesc();
+    return getTitle() + "\n\nChemin du fichier: " + getPath() + "\n\nDesciption du fichier: " + getDesc();
 }
 
 AudioEditor::AudioEditor(Audio *a, QWidget *parent):BinaryEditor(a, parent){
