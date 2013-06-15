@@ -92,14 +92,11 @@ Note* NotesManager::noteConstructor(const QString& type, const QString& id, cons
     } else if(type == "Document"){
         return new Document(id, title);
     } else if(type == "Image"){
-        return new Image(id, title, QFileDialog::getOpenFileName(NULL, "Selectionner une image", QDir::homePath(), "*.bmp *.gif *.jpg *.jpeg *.png *.pbm *.pgm *.ppm *.tiff  *.xbm *.xpm"));
+        return new Image(id, title);
     } else if(type == "Audio"){
-        return new Audio(id, title, QFileDialog::getOpenFileName(NULL, "Selectionner un fichier audio", QDir::homePath(), "*.wav"));
+        return new Audio(id, title);
     } else if(type == "Video"){
-        QString ext = "";
-        for(int i = 0; i < QMovie::supportedFormats().size(); i++)
-            ext += "*." + QMovie::supportedFormats().at(i) + (i + 1 < QMovie::supportedFormats().size() ? " " : "");
-        return new Video(id, title, QFileDialog::getOpenFileName(NULL, "Selectionner une video", QDir::homePath(), ext));
+        return new Video(id, title);
     }
 
     //type inconnu on laisse à NULL

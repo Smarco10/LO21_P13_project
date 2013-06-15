@@ -46,6 +46,7 @@ public:
     BinaryEditor(Binary* b, QWidget* parent=0);
     virtual ~BinaryEditor(){}
     virtual QString selectFile() = 0;
+    virtual void updateBin() = 0;
 
 public slots:
     void changeFile();

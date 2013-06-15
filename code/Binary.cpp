@@ -26,4 +26,6 @@ void BinaryEditor::descMod(){
 
 void BinaryEditor::changeFile(){
     ((Binary*)ressource)->setPath(selectFile());
+    path->setText(((Binary*)ressource)->getPath());
+    updateBin();
 }

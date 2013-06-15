@@ -104,7 +104,13 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
     tbarOpen->addAction(document);
 
     //Menu Edition
-    edit = menuBar()->addMenu("&Edition");
+    exports = menuBar()->addMenu("&Export");
+    expHTML = new QAction("Export en HTML", this);
+    exports->addAction(expHTML);
+    expTeX = new QAction("Export en TeX", this);
+    exports->addAction(expTeX);
+    expText = new QAction("Export en Texte", this);
+    exports->addAction(expText);
 
     //Menu Aide
     help = menuBar()->addMenu("&Aide");
@@ -122,6 +128,10 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
     QObject::connect(print, SIGNAL(triggered()), this, SLOT(printNote()));
     QObject::connect(trash, SIGNAL(triggered()), this, SLOT(deleteNote()));
     QObject::connect(quit, SIGNAL(triggered()), app, SLOT(quit()));
+
+    QObject::connect(expHTML, SIGNAL(triggered()), this, SLOT(exportHTML()));
+    QObject::connect(expTeX, SIGNAL(triggered()), this, SLOT(exportTeX()));
+    QObject::connect(expText, SIGNAL(triggered()), this, SLOT(exportText()));
 
     QObject::connect(about, SIGNAL(triggered()), this, SLOT(aboutApp()));
 
@@ -345,6 +355,54 @@ void MainWindow::emptyBin(){
 
     tabs->setTabIcon(tabs->indexOf(bin), ico_bin_empty);
     tabs->setTabText(tabs->indexOf(bin), "Corbeille ( 0 )");
+}
+
+void MainWindow::exportHTML(){
+    //sélection du fichier à enregistrer
+    QFile fichier(QFileDialog::getSaveFileName(this, "Sauvegarde au format HTML", QDir::homePath(), ".html"));
+
+    //ouverture du fichier
+    if(!fichier.open(QIODevice::WriteOnly)){
+        fichier.close();
+        return;
+    }
+
+    //écrit les données dans le fichier
+    QTextStream stream(&fichier);
+    stream << editorNote->getRessource()->getRessource().toHTML();
+    fichier.close();
+}
+
+void MainWindow::exportTeX(){
+    //sélection du fichier à enregistrer
+    QFile fichier(QFileDialog::getSaveFileName(this, "Sauvegarde au format TeX", QDir::homePath(), ".tex"));
+
+    //ouverture du fichier
+    if(!fichier.open(QIODevice::WriteOnly)){
+        fichier.close();
+        return;
+    }
+
+    //écrit les données dans le fichier
+    QTextStream stream(&fichier);
+    stream << editorNote->getRessource()->getRessource().toTEX();
+    fichier.close();
+}
+
+void MainWindow::exportText(){
+    //sélection du fichier à enregistrer
+    QFile fichier(QFileDialog::getSaveFileName(this, "Sauvegarde au format texte", QDir::homePath(), ".txt"));
+
+    //ouverture du fichier
+    if(!fichier.open(QIODevice::WriteOnly)){
+        fichier.close();
+        return;
+    }
+
+    //écrit les données dans le fichier
+    QTextStream stream(&fichier);
+    stream << editorNote->getRessource()->getRessource().toTEXT();
+    fichier.close();
 }
 
 void MainWindow::aboutApp(){
