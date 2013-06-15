@@ -66,8 +66,8 @@ void Note::createHtmlTree(QBuffer* buf){
 
 void Note::endHtmlTree(QBuffer* buf){
 
-    if (!buf->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))
-        throw NotesException("EndHtmlTree Buffer opening problem");
+   // if (!buf->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))
+     //   throw NotesException("EndHtmlTree Buffer opening problem");
 
     QXmlStreamWriter qw;
     qw.setDevice(buf);

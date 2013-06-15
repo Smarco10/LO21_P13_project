@@ -41,6 +41,7 @@ QString Article::toHTML(){
         throw NotesException("Buffer unavailable for HTML export.");
     }
     createHtmlTree(buffer);
+    qw->setDevice(buffer);
     qw->writeTextElement("h1",QString("Titre:")+this->getTitle());
     qw->writeTextElement("h2",QString("ID:")+this->getId());
     qw->writeTextElement("p",this->getContent());
@@ -49,24 +50,21 @@ QString Article::toHTML(){
     buffer->close();
     return QString(*file);
 
-
-
-    return "";
 }
 
 
 QString Article::toTEX(){
 
-    if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
+    if (!this->buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
          throw NotesException("Buffer unavailable for HTML export.");
      }
-    createTexHeader(buffer);
-    buffer->write("\\begin{document}\n");
-    buffer->write((QString("\\chapter{")+this->getTitle()+QString("}\n")).toAscii());
-    buffer->write((QString("{\Large ID:")+this->getId()+QString("}\n")).toAscii());
-    buffer->write((QString("\\paragraph{}")+this->getContent()).toAscii());
-    buffer->write("\\end{document}");
-    buffer->close();
+    createTexHeader(this->buffer);
+    this->buffer->write("\\begin{document}\n");
+    this->buffer->write((QString("\\chapter{")+this->getTitle()+QString("}\n")).toAscii());
+    this->buffer->write((QString("{\Large ID:")+this->getId()+QString("}\n")).toAscii());
+    this->buffer->write((QString("\\paragraph{}")+this->getContent()).toAscii());
+    this->buffer->write("\\end{document}");
+    this->buffer->close();
     return QString(*file);
 }
 
