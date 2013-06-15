@@ -77,7 +77,7 @@ QString Audio::toTEX(){
 }
 
 QString Audio::toTEXT(){
-    return "";
+    return getTitle() + "\n\n" + getPath() + "\n\n" + getDesc();
 }
 
 AudioEditor::AudioEditor(Audio *a, QWidget *parent):BinaryEditor(a, parent){
@@ -103,7 +103,6 @@ AudioEditor::AudioEditor(Audio *a, QWidget *parent):BinaryEditor(a, parent){
     QObject::connect(stop_bt, SIGNAL(clicked()), sound, SLOT(stop()));
 }
 
-void AudioEditor::update(QString s){
-
+QString AudioEditor::selectFile(){
+    return QFileDialog::getOpenFileName(this, "Selectionner un fichier audio", QDir::homePath(), "*.wav");
 }
-

@@ -105,6 +105,9 @@ VideoEditor::VideoEditor(Video *v, QWidget *parent):BinaryEditor(v, parent){
     QObject::connect(stop_bt, SIGNAL(clicked()), movie, SLOT(stop()));
 }
 
-void VideoEditor::update(QString s){
-
+QString VideoEditor::selectFile(){
+    QString ext = "";
+    for(int i = 0; i < QMovie::supportedFormats().size(); i++)
+        ext += "*." + QMovie::supportedFormats().at(i) + (i + 1 < QMovie::supportedFormats().size() ? " " : "");
+    return QFileDialog::getOpenFileName(NULL, "Selectionner une video", QDir::homePath(), ext);
 }

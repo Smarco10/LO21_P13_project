@@ -29,11 +29,7 @@ public:
     AudioEditor(Audio* a, QWidget* parent=0);
     ~AudioEditor(){}
 
-signals:
-    void updateS(QString);
-
-public slots:
-    void update(QString s="");
+    QString selectFile();
 };
 
 #endif // AUDIO_H

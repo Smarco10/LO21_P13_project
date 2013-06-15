@@ -16,9 +16,14 @@ BinaryEditor::BinaryEditor(Binary *b, QWidget *parent):NoteEditor(b, parent){
     zone->layout()->addWidget(pathZone);
 
     //connecte le bouton à un slot de changement de fichier
+    QObject::connect(desc, SIGNAL(textChanged()), this, SLOT(descMod()));
     QObject::connect(chPath, SIGNAL(clicked()), this, SLOT(changeFile()));
 }
 
+void BinaryEditor::descMod(){
+    ((Binary*)ressource)->setDesc(desc->toPlainText());
+}
+
 void BinaryEditor::changeFile(){
-    ((Binary*)ressource)->setPath(QFileDialog::getOpenFileName(this));
+    ((Binary*)ressource)->setPath(selectFile());
 }

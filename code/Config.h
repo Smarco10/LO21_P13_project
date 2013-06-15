@@ -16,6 +16,7 @@ public:
     bool isWS(const QString&);
     unsigned int nbWS();
     QString lastWS();
+    void updateLastWS(const QString&);
 
     void check();
     bool newWS(const QString&);

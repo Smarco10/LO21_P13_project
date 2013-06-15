@@ -22,7 +22,7 @@ protected:
     void createTexHeader(QBuffer*);
 
 public:
-    Note(const QString& ty, const QString& i, const QString& tt):id(i),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray; buffer=new QBuffer(file);}
+    Note(const QString& ty, const QString& i, const QString& tt):id(i),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray(""); buffer=new QBuffer(file);}
 
     QString& getId() {return id;}
     QString& getType() {return type;}
@@ -81,6 +81,7 @@ public:
 
 public slots:
     void tabed(int);
+    void titleMod(QString);
 };
 
 #endif

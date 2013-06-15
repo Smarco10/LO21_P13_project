@@ -30,11 +30,7 @@ public:
     VideoEditor(Video* v, QWidget* parent=0);
     ~VideoEditor(){}
 
-signals:
-    void updateS(QString);
-
-public slots:
-    void update(QString s="");
+    QString selectFile();
 };
 
 #endif // VIDEO_H

@@ -45,13 +45,11 @@ protected:
 public:
     BinaryEditor(Binary* b, QWidget* parent=0);
     virtual ~BinaryEditor(){}
-
-signals:
-    virtual void updateS(QString) = 0;
+    virtual QString selectFile() = 0;
 
 public slots:
-    virtual void update(QString s="") = 0;
     void changeFile();
+    void descMod();
 };
 
 #endif // BINARY_H

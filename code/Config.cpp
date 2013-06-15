@@ -64,6 +64,13 @@ QString Config::lastWS(){
     return nd.at(0).toElement().attribute("path");
 }
 
+void Config::updateLastWS(const QString& path){
+    //Mise à jour du lastWS
+    QDomElement dom_el = dom->documentElement();
+    QDomNodeList nd = dom_el.elementsByTagName("lastWorkspace");
+    nd.at(0).toElement().setAttribute("path", path);
+}
+
 bool Config::newWS(const QString& wsPath){
     QDomElement dom_el = dom->documentElement();
     QString workspacePath = wsPath;
@@ -80,9 +87,7 @@ bool Config::newWS(const QString& wsPath){
         if(!ws.mkdir(workspacePath))
             return false;
 
-    //Mise à jour du lastWS
-    QDomNodeList nd = dom_el.elementsByTagName("lastWorkspace");
-    nd.at(0).toElement().setAttribute("path", workspacePath);
+    updateLastWS(workspacePath);
 
     //création du WS
     QDomElement newWorkspace = dom->createElement("workspace");
@@ -125,6 +130,15 @@ bool Config::cloneWS(const QString& wsPathSrc, const QString& wsPathDest){
 void Config::deleteWS(const QString& workspacePath){
     QDomElement dom_el = dom->documentElement();
     QDomNodeList nd = dom_el.elementsByTagName("workspace");
+
+    //Vérifie que le dernier workspace ouvert est celui qui vas être supprimé
+    if(lastWS() == workspacePath)
+        if(nbWS() > 1)
+            //on affecte le premier élément
+            updateLastWS(nd.at(0).toElement().attribute("path"));
+        else
+            //on affecte à NULL
+            updateLastWS("");
 
     for(int i = 0; i < nd.count(); i++){
         if(nd.at(i).toElement().attribute("path") == workspacePath){
@@ -226,6 +240,7 @@ ConfigManager::ConfigManager(QWidget *parent):QDialog(parent){
     updateGUI();
 
     QObject::connect(workspaces, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(showNotes(QListWidgetItem*)));
+    QObject::connect(workspaces, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(showNotes(QListWidgetItem*)));
     QObject::connect(open, SIGNAL(clicked()), this, SLOT(loadWS()));
     QObject::connect(clone, SIGNAL(clicked()), this, SLOT(cloneWS()));
     QObject::connect(del, SIGNAL(clicked()), this, SLOT(safeDel()));
@@ -300,6 +315,7 @@ void ConfigManager::cloneWS(){
 void ConfigManager::loadWS(){
     //modifie l'espace de travail
     pathWS = workspaces->currentItem()->text();
+    conf->updateLastWS(pathWS);
     this->close();
 }
 
@@ -324,15 +340,17 @@ void ConfigManager::showNotes(QListWidgetItem* item){
 
 void ConfigManager::updateGUI(){
     if(conf->nbWS() > 0){
-        open->show();
-        clone->show();
-        del->show();
+        open->setEnabled(true);
+        clone->setEnabled(true);
+        del->setEnabled(true);
     } else {
-        open->hide();
-        clone->hide();
-        del->hide();
+        open->setEnabled(false);
+        clone->setEnabled(false);
+        del->setEnabled(false);
         notes->setText("");
     }
+
+    workspaces->clear();
 
     //ajout des workspaces à la liste
     QList<QString> listeWS = conf->listWS();

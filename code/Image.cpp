@@ -1,6 +1,9 @@
 ﻿#include "Image.h"
 
 void Image::load(){
+    if(getLoaded())
+        return;
+
     //récupère les information pouvant manquer
     QFile fichier(getWS() + getId());
 
@@ -21,6 +24,8 @@ void Image::load(){
      //récupère la description du fichier
      while(!flux.atEnd())
          desc += flux.readLine();
+
+     setLoaded(true);
 }
 
 QTextStream& Image::save(QTextStream& f){
@@ -74,15 +79,15 @@ QString Image::toTEX(){
 
 
 QString Image::toTEXT(){
-    return "";
+    return getTitle() + "\n\n" + getPath() + "\n\n" + getDesc();
 }
 
-ImageEditor::ImageEditor(Image *i, QWidget *parent):BinaryEditor(i, parent){
+ImageEditor::ImageEditor(Image *i, QWidget *parent):BinaryEditor(i, parent){   
     image = new QLabel(parent);
     image->setPixmap(QPixmap(i->getPath()));
     zone->layout()->addWidget(image);
 }
 
-void ImageEditor::update(QString s){
-
+QString ImageEditor::selectFile(){
+    return QFileDialog::getOpenFileName(NULL, "Selectionner une image", QDir::homePath(), "*.bmp *.gif *.jpg *.jpeg *.png *.pbm *.pgm *.ppm *.tiff  *.xbm *.xpm");
 }

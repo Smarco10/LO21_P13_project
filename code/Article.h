@@ -39,6 +39,7 @@ signals:
 
 public slots:
     void update(QString s="");
+    void contentMod();
 };
 
 #endif // ARTICLE_H

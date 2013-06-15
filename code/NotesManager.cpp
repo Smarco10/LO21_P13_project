@@ -55,6 +55,7 @@ Note& NotesManager::getNote(const QString& id){
 
        //On construit la note
        n = noteConstructor(type, id, title);
+       n->setWS(workspace->getPath());
        if(n == NULL)
            NotesException("Can't create a note of type: " + type);
 
@@ -91,11 +92,14 @@ Note* NotesManager::noteConstructor(const QString& type, const QString& id, cons
     } else if(type == "Document"){
         return new Document(id, title);
     } else if(type == "Image"){
-        return new Image(id, title);
+        return new Image(id, title, QFileDialog::getOpenFileName(NULL, "Selectionner une image", QDir::homePath(), "*.bmp *.gif *.jpg *.jpeg *.png *.pbm *.pgm *.ppm *.tiff  *.xbm *.xpm"));
     } else if(type == "Audio"){
-        return new Audio(id, title);
+        return new Audio(id, title, QFileDialog::getOpenFileName(NULL, "Selectionner un fichier audio", QDir::homePath(), "*.wav"));
     } else if(type == "Video"){
-        return new Video(id, title);
+        QString ext = "";
+        for(int i = 0; i < QMovie::supportedFormats().size(); i++)
+            ext += "*." + QMovie::supportedFormats().at(i) + (i + 1 < QMovie::supportedFormats().size() ? " " : "");
+        return new Video(id, title, QFileDialog::getOpenFileName(NULL, "Selectionner une video", QDir::homePath(), ext));
     }
 
     //type inconnu on laisse à NULL

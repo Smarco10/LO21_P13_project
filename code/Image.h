@@ -24,11 +24,7 @@ public:
     ImageEditor(Image* i, QWidget* parent=0);
     ~ImageEditor(){}
 
-signals:
-    void updateS(QString);
-
-public slots:
-    void update(QString s="");
+    QString selectFile();
 };
 
 #endif // IMAGE_H

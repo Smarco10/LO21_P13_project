@@ -2,6 +2,7 @@
 
 void Article::load(){
     //Si la note est déjà chargée on ne le recharge pas
+
     if(getLoaded())
         return;
 
@@ -15,14 +16,14 @@ void Article::load(){
         throw NotesException("Can't open document file");
     }
 
-     QTextStream flux(&fichier);
-     //saute la première ligne
-     flux.readLine();
-     //récupère tout le contenu
-     while(!flux.atEnd())
-        content += flux.readLine();
+    QTextStream flux(&fichier);
+    //saute la première ligne
+    flux.readLine();
+    //récupère tout le contenu
+    while(!flux.atEnd())
+       content += flux.readLine();
 
-     setLoaded(true);
+    setLoaded(true);
 }
 
 QTextStream& Article::save(QTextStream& f){
@@ -66,7 +67,7 @@ QString Article::toTEX(){
 }
 
 QString Article::toTEXT(){
-    return "";
+    return this->getTitle() + "\n\n" + this->getContent();
 }
 
 ArticleEditor::ArticleEditor(Article* a, QWidget* parent):NoteEditor(a, parent){
@@ -74,6 +75,12 @@ ArticleEditor::ArticleEditor(Article* a, QWidget* parent):NoteEditor(a, parent){
     content->setText(a->getContent());
 
     zone->layout()->addWidget(content);
+
+    QObject::connect(content, SIGNAL(textChanged()), this, SLOT(contentMod()));
+}
+
+void ArticleEditor::contentMod(){
+    ((Article*)ressource)->setContent(content->toPlainText());
 }
 
 void ArticleEditor::update(QString s){

@@ -38,15 +38,20 @@ NoteEditor::NoteEditor(Note* n, QWidget* parent):QWidget(parent){
     tabs->addTab(tex, "TEX");
     tabs->addTab(text, "Texte");
 
+    QObject::connect(title, SIGNAL(textChanged(QString)), this, SLOT(titleMod(QString)));
+
     //ouverture d'une tabulation => génération du code
     QObject::connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(tabed(int)));
+}
 
+void NoteEditor::titleMod(QString tt){
+    ressource->setTitle(tt);
 }
 
 void NoteEditor::tabed(int tab){
-    /*if(tab == tabs->indexOf(html))
+    if(tab == tabs->indexOf(html))
         html->setText(ressource->toHTML());
-    else */if(tab == tabs->indexOf(tex))
+    else if(tab == tabs->indexOf(tex))
         tex->setText(ressource->toTEX());
     else if(tab == tabs->indexOf(text))
         text->setText(ressource->toTEXT());
@@ -71,8 +76,8 @@ void Note::createHtmlTree(QBuffer* buf){
 
 void Note::endHtmlTree(QBuffer* buf){
 
-    if (!buf->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))
-        throw NotesException("EndHtmlTree Buffer opening problem");
+   /* if (!buf->open(QIODevice::WriteOnly| QIODevice::Text| QIODevice::Truncate))
+        throw NotesException("EndHtmlTree Buffer opening problem");*/
 
     QXmlStreamWriter qw;
     qw.setDevice(buf);
