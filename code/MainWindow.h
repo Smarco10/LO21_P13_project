@@ -76,6 +76,7 @@ private:
     QAction *save;
     QAction *quit;
     QAction *trash;
+    QAction *changeWS;
 
     QMenu *exports;
     QAction *expHTML;
@@ -126,6 +127,7 @@ private slots:
     void recoverNote(QListEditorItem*);
     void safeEmptyBin();
     void emptyBin();
+    void changeWorkspace();
 
     void exportHTML();
     void exportTeX();

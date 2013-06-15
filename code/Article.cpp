@@ -71,7 +71,6 @@ QString Article::toTEX(){
     createTexHeader(buffer);
     buffer->write("\\begin{document}\n");
     buffer->write((QString("\\chapter{")+this->getTitle()+QString("}\n")).toAscii());
-    buffer->write((QString("{\Large ID:")+this->getId()+QString("}\n")).toAscii());
     buffer->write((QString("\\paragraph{}")+this->getContent()).toAscii());
     buffer->write("\\end{document}");
     buffer->close();
@@ -80,7 +79,7 @@ QString Article::toTEX(){
 }
 
 QString Article::toTEXT(){
-    return this->getTitle() + "\n\n" + this->getContent();
+    return this->getTitle() + "\n\nContenu de l'article: " + this->getContent();
 }
 
 ArticleEditor::ArticleEditor(Article* a, QWidget* parent):NoteEditor(a, parent){

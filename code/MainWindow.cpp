@@ -73,11 +73,14 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
     file->addAction(print);
     tbarMisc->addAction(print);
 
-    //changer l'icon en full si la corbeille est non vide
     trash = new QAction(ico_bin_empty, "Supprimer", this);
     trash->setDisabled(true);
     file->addAction(trash);
     tbarMisc->addAction(trash);
+
+    changeWS = new QAction(ico_workspaces, "Changer de Workspace", this);
+    file->addAction(changeWS);
+    tbarMisc->addAction(changeWS);
 
     quit = new QAction(ico_quit, "Quitter", this);
     file->addAction(quit);
@@ -127,6 +130,7 @@ MainWindow::MainWindow(QApplication* app):QMainWindow(){
     QObject::connect(save, SIGNAL(triggered()), this, SLOT(saveNote()));
     QObject::connect(print, SIGNAL(triggered()), this, SLOT(printNote()));
     QObject::connect(trash, SIGNAL(triggered()), this, SLOT(deleteNote()));
+    QObject::connect(changeWS, SIGNAL(triggered()), this, SLOT(changeWorkspace()));
     QObject::connect(quit, SIGNAL(triggered()), app, SLOT(quit()));
 
     QObject::connect(expHTML, SIGNAL(triggered()), this, SLOT(exportHTML()));
@@ -355,6 +359,16 @@ void MainWindow::emptyBin(){
 
     tabs->setTabIcon(tabs->indexOf(bin), ico_bin_empty);
     tabs->setTabText(tabs->indexOf(bin), "Corbeille ( 0 )");
+}
+
+void MainWindow::changeWorkspace(){
+    //propose de vider la corbeille si elle n'est pas vide (condition déjà inclus dans la fct)
+    safeEmptyBin();
+    manager->changeWorkspace();
+    outputNotes->clear();
+    deleted->clear();
+    filterTags->clear();
+    updateNotes();
 }
 
 void MainWindow::exportHTML(){
