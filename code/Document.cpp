@@ -87,7 +87,14 @@ void Document::makehtmlbody(QXmlStreamWriter* qw){
         qw->writeStartElement("body");
             for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
                 qw->writeEmptyElement("br");
+                //qw->writeTextElement("h1",QString("Titre:")+(static_cast<Note*>(*it))->getTitle());
+                //qw->writeTextElement("h2",QString("ID:")+(static_cast<Note*>(*it))->getId());
+                //insÃ©rer ici la partie relative a chaque Ã©lÃ©ment de content
                 dynamic_cast<Note*>(*it)->makehtmlbody(qw);
+                x=x.left(x.indexOf("</body",0));
+                x=x.right(x.length()-(x.indexOf("body>",0)+5));
+                qw->writeCharacters(x);
+
                 qw->writeEmptyElement("br");
             }
         qw->writeEndElement();

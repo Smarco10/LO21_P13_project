@@ -78,7 +78,7 @@ VideoEditor::VideoEditor(Video *v, QWidget *parent):BinaryEditor(v, parent){
     control = new QWidget(parent);
     controlLay = new QHBoxLayout;
 
-    movie = new QMovie(path);
+    movie = new QMovie(v->getPath());
     frame = new QLabel(parent);
     frame->setMovie(movie);
 
@@ -116,6 +116,5 @@ QString VideoEditor::selectFile(){
 }
 
 void VideoEditor::updateBin(){
-    if(movie) delete movie;
-    movie = new QMovie(((Binary*)ressource)->getPath());
+    movie->setFileName(((Binary*)ressource)->getPath());
 }

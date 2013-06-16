@@ -168,40 +168,30 @@ void MainWindow::warning(){
 
 void MainWindow::articleCreator(){
     //vérifier q'un workspace est ouvert sinon en ouvrir/créer un
-    //si note en cours d'édition la fermer (demander de sauver + fermer)
-    //Créer une nouvelle note si fermé avec succès
     Article *art = dynamic_cast<Article*>(&manager->getNewNote("Article", ""));
     noteCreator(art);
 }
 
 void MainWindow::imageCreator(){
     //vérifier q'un workspace est ouvert sinon en ouvrir/créer un
-    //si note en cours d'édition la fermer (demander de sauver + fermer)
-    //Créer une nouvelle note si fermé avec succès
     Image* img = dynamic_cast<Image*>(&manager->getNewNote("Image", ""));
     noteCreator(img);
 }
 
 void MainWindow::audioCreator(){
     //vérifier q'un workspace est ouvert sinon en ouvrir/créer un
-    //si note en cours d'édition la fermer (demander de sauver + fermer)
-    //Créer une nouvelle note si fermé avec succès
     Audio *aud = dynamic_cast<Audio*>(&manager->getNewNote("Audio", ""));
     noteCreator(aud);
 }
 
 void MainWindow::videoCreator(){
     //vérifier q'un workspace est ouvert sinon en ouvrir/créer un
-    //si note en cours d'édition la fermer (demander de sauver + fermer)
-    //Créer une nouvelle note si fermé avec succès
     Video* vid = dynamic_cast<Video*>(&manager->getNewNote("Video", ""));
     noteCreator(vid);
 }
 
 void MainWindow::documentCreator(){
     //vérifier q'un workspace est ouvert sinon en ouvrir/créer un
-    //si note en cours d'édition la fermer (demander de sauver + fermer)
-    //Créer une nouvelle note si fermé avec succès
     Document* doc = dynamic_cast<Document*>(&manager->getNewNote("Document", ""));
     noteCreator(doc);
 }
@@ -209,8 +199,13 @@ void MainWindow::documentCreator(){
 void MainWindow::noteCreator(Note* n){
     //Vérifie si l'object existe dans le manager sinon le créé
     QListEditorItem* act = newItem(n);
-    outputNotes->addItem(act);
-    tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
+    if(manager->isDeleted(*n)){
+        deleted->addItem(act);
+        tabs->setTabText(tabs->indexOf(bin), "Corbeille ( " + QString::number(deleted->count()) + " )");
+    }else{
+        outputNotes->addItem(act);
+        tabs->setTabText(tabs->indexOf(outputNotes), "Résultat" + QString(((outputNotes->count() > 1) ? "s ( " : " ( ")) + QString::number(outputNotes->count()) + " )");
+    }
     openNote(act);
 }
 
@@ -268,6 +263,7 @@ void MainWindow::deleteNote(){
 
     //ajoute la note à la liste des supprimées
     deleted->addItem(item);
+    manager->setDeleted(item->getRessource()->getRessource());
 
     editorNote = NULL;
 
@@ -286,6 +282,7 @@ void MainWindow::deleteNote(){
 void MainWindow::recoverNote(QListEditorItem *item){
     //restaurer la note dans la liste outputNotes
     deleted->takeItem(deleted->currentRow());
+    manager->setUndeleted(item->getRessource()->getRessource());
     outputNotes->addItem(item);
 
     //MàJ des onglets

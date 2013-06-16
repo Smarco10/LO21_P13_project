@@ -10,7 +10,6 @@ class Audio: public Binary{
 public:
     Audio(const QString& id, const QString& title, const QString& desc="", const QString& path=""):Binary("Audio", id, title, desc, path){}
 
-
     void makehtmlbody(QXmlStreamWriter* qw);
     QString toTEX();
     QString toTEXT();

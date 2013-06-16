@@ -23,11 +23,15 @@ NoteEditor::NoteEditor(Note* n, QWidget* parent):QWidget(parent){
     tabs = new QTabWidget(this);
     this->layout()->addWidget(tabs);
 
-    //Intégrer à zone un scroll area
+//Intégrer à zone un scroll area
+    /*area = new QScrollArea(this);
+    this->layout()->addWidget(area);*/
+
     zone = new QWidget(this);
     zoneLayout = new QVBoxLayout;
     zone->setLayout(zoneLayout);
     this->layout()->addWidget(zone);
+    //area->setWidget(zone);
 
     title = new QLineEdit;
     title->setText(n->getTitle());
@@ -35,7 +39,7 @@ NoteEditor::NoteEditor(Note* n, QWidget* parent):QWidget(parent){
 
     tabs->addTab(zone, "Editeur");
     tabs->addTab(html, "HTML");
-    tabs->addTab(tex, "TEX");
+    tabs->addTab(tex, "TeX");
     tabs->addTab(text, "Texte");
 
     QObject::connect(title, SIGNAL(textChanged(QString)), this, SLOT(titleMod(QString)));

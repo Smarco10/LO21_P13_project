@@ -211,6 +211,18 @@ void NotesManager::deleteNote(Note& n){
     workspace->deleteNote(n.getId());
 }
 
+void NotesManager::setDeleted(Note& n){
+    workspace->noteToD(n.getId());
+}
+
+void NotesManager::setUndeleted(Note& n){
+    workspace->deletedToN(n.getId());
+}
+
+bool NotesManager::isDeleted(Note& n){
+    return workspace->listNotesD().indexOf(n.getId()) != -1;
+}
+
 void NotesManager::loadWSNotes(){
     //charger tt les éléments du workspace
     QList<QString> lst_notes = workspace->listNotes();

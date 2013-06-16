@@ -43,6 +43,9 @@ public:
     Note& getNewNote(const QString& type, const QString& title);
     void saveNote(Note& n);
     void deleteNote(Note& n);
+    void setDeleted(Note& n);
+    void setUndeleted(Note& n);
+    bool isDeleted(Note& n);
     unsigned int getNbNotes(){ return notes.size();}
 
     QIcon getNoteIcon(Note* n);

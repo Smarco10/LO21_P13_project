@@ -101,6 +101,5 @@ QString AudioEditor::selectFile(){
 }
 
 void AudioEditor::updateBin(){
-    if(sound) delete sound;
-    sound = new QSound(((Binary*)ressource)->getPath());
+    //comment ouvrir un nouveau fichier son?
 }
