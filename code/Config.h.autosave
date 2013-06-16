@@ -6,8 +6,7 @@
 ///\class Config
 ///Gère le fichier de configuration du programme avec:
 ///les différents Workspaces
-///les opérations sur ceux-ci
-
+///les opérations
 ///un Path( chemin d'accès)
 ///un type d'éditeur i.e. un graphisme spécifique
 ///
