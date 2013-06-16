@@ -3,6 +3,7 @@
 
 #include "Note.h"
 <<<<<<< HEAD
+<<<<<<< HEAD
 ///\class Document
 ///Correspond à la spécification de Note pour contenir:
 ///des sous-notes (Audio, Article, Image, Video)
@@ -64,12 +65,17 @@ public:
 };
 //*/
 =======
+=======
+>>>>>>> 8a74b62bb9bd0d789cfccd218f20e69fafa24839
 #include "NotesManager.h"
 #include "MainWindow.h"
 
 class QListEditor;
 class QListEditorItem;
+<<<<<<< HEAD
 >>>>>>> c6b565c36fe857b07d27aadd946a665ed8f577da
+=======
+>>>>>>> 8a74b62bb9bd0d789cfccd218f20e69fafa24839
 
 class DocButton:public QPushButton{
     Q_OBJECT
