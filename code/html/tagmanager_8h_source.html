@@ -100,8 +100,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00027"></a>00027 
 <a name="l00028"></a><a class="code" href="classTagManager.html">00028</a> <span class="keyword">class </span><a class="code" href="classTagManager.html">TagManager</a>
 <a name="l00029"></a>00029 { <span class="comment">//listTag</span>
-<a name="l00030"></a>00030   QList&lt;Tag&gt; noteTags;
-<a name="l00031"></a>00031   QSet&lt;QString&gt; dictionary;
+<a name="l00030"></a>00030     QList&lt;Tag&gt; noteTags;
+<a name="l00031"></a>00031     QSet&lt;QString&gt; dictionary;
 <a name="l00032"></a>00032     <span class="keyword">static</span> <a class="code" href="classTagManager.html">TagManager</a>* instance;
 <a name="l00033"></a>00033 
 <a name="l00034"></a>00034     <a class="code" href="classTagManager.html">TagManager</a>(){}
@@ -110,31 +110,28 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00037"></a>00037     QList&lt;Tag&gt;::iterator&amp;  findTag(<a class="code" href="classTag.html">Tag</a>&amp; t);
 <a name="l00038"></a>00038 
 <a name="l00039"></a>00039 <span class="keyword">public</span>:
-<a name="l00040"></a>00040     <span class="comment">//Singleton</span>
-<a name="l00041"></a>00041 
-<a name="l00042"></a>00042     <span class="comment">//</span>
-<a name="l00043"></a>00043     <span class="keyword">static</span> <a class="code" href="classTagManager.html">TagManager</a>* getInstance();
-<a name="l00044"></a>00044     <span class="keywordtype">void</span> libererInstance();
-<a name="l00045"></a>00045 
-<a name="l00046"></a>00046     QList&lt;Note*&gt; noteListFromTagRestriction(QList&lt;QString&gt;);
-<a name="l00047"></a>00047     <span class="keywordtype">void</span> updatedictionary(QList&lt;QString&gt; tags);
-<a name="l00048"></a>00048     QSet&lt;QString&gt;&amp; getDictionary(QSet&lt;QString&gt;&amp; s); <span class="comment">// pour affichage</span>
-<a name="l00049"></a>00049     <span class="keywordtype">void</span> addNoteAndTags(<a class="code" href="classNote.html">Note</a>&amp; ,QSet&lt;QString&gt; s);
-<a name="l00050"></a>00050     <span class="keywordtype">void</span> addTagsToNote(QString &amp;nid,QSet&lt;QString&gt; s=QSet&lt;QString&gt;());
-<a name="l00051"></a>00051     QList&lt;QString&gt; &amp;getTagslistForNote(QString&amp; nid){
-<a name="l00052"></a>00052         <a class="code" href="classTag.html">Tag</a>* temp=<span class="keyword">new</span> <a class="code" href="classTag.html">Tag</a>(nid);
-<a name="l00053"></a>00053         QList&lt;QString&gt; tgs=<span class="keyword">static_cast&lt;</span><a class="code" href="classTag.html">Tag</a><span class="keyword">&gt;</span>(*findTag(*temp)).getTagsList().toList();
-<a name="l00054"></a>00054         <span class="keywordflow">return</span> tgs;
-<a name="l00055"></a>00055     }
-<a name="l00056"></a>00056 
+<a name="l00040"></a>00040     <span class="keyword">static</span> <a class="code" href="classTagManager.html">TagManager</a>* getInstance();
+<a name="l00041"></a>00041     <span class="keywordtype">void</span> libererInstance();
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043     QList&lt;Note*&gt; noteListFromTagRestriction(QList&lt;QString&gt;);
+<a name="l00044"></a>00044     <span class="keywordtype">void</span> updatedictionary(QList&lt;QString&gt; tags);
+<a name="l00045"></a>00045     QSet&lt;QString&gt;&amp; getDictionary(QSet&lt;QString&gt;&amp; s); <span class="comment">// pour affichage</span>
+<a name="l00046"></a>00046     <span class="keywordtype">void</span> addNoteAndTags(<a class="code" href="classNote.html">Note</a>&amp; ,QSet&lt;QString&gt; s);
+<a name="l00047"></a>00047     <span class="keywordtype">void</span> addTagsToNote(QString &amp;nid,QSet&lt;QString&gt; s=QSet&lt;QString&gt;());
+<a name="l00048"></a>00048     QList&lt;QString&gt; &amp;getTagslistForNote(QString&amp; nid){
+<a name="l00049"></a>00049         <a class="code" href="classTag.html">Tag</a>* temp=<span class="keyword">new</span> <a class="code" href="classTag.html">Tag</a>(nid);
+<a name="l00050"></a>00050         QList&lt;QString&gt; tgs=<span class="keyword">static_cast&lt;</span><a class="code" href="classTag.html">Tag</a><span class="keyword">&gt;</span>(*findTag(*temp)).getTagsList().toList();
+<a name="l00051"></a>00051         <span class="keywordflow">return</span> tgs;
+<a name="l00052"></a>00052     }
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055 
+<a name="l00056"></a>00056 };
 <a name="l00057"></a>00057 
 <a name="l00058"></a>00058 
-<a name="l00059"></a>00059 };
+<a name="l00059"></a>00059 
 <a name="l00060"></a>00060 
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063 
-<a name="l00064"></a>00064 <span class="preprocessor">#endif // TAGMANAGER_H</span>
+<a name="l00061"></a>00061 <span class="preprocessor">#endif // TAGMANAGER_H</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -153,7 +150,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 16 2013 21:28:44 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 16 2013 21:37:08 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

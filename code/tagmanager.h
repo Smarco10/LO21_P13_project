@@ -7,7 +7,7 @@
 ///l'ajout/suppresion deTags
 ///la récupération des tags de l'extérieur
 ///la gestion du dictionnaire de tous les Tags
-///
+///Instance Unique
 class Workspace;
 
 #include"Note.h"
@@ -27,8 +27,8 @@ public:
 
 class TagManager
 { //listTag
-  QList<Tag> noteTags;
-  QSet<QString> dictionary;
+    QList<Tag> noteTags;
+    QSet<QString> dictionary;
     static TagManager* instance;
 
     TagManager(){}
@@ -37,9 +37,6 @@ class TagManager
     QList<Tag>::iterator&  findTag(Tag& t);
 
 public:
-    //Singleton
-
-    //
     static TagManager* getInstance();
     void libererInstance();
 

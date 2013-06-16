@@ -2,7 +2,7 @@
 #define NOTE_H
 
 #include "QHeader.h"
-<<<<<<< HEAD
+
 ///\class Note (abstraite)
 ///Correspond au schéma de base pour une Note contenant:
 ///Un titre
@@ -12,11 +12,11 @@
 ///et le prototype de toutes les fonctions obligatoirement nécessaire à une Note
 ///un type d'éditeur i.e. un graphisme spécifique
 ///
-=======
+
 
 class NoteEditor;
 
->>>>>>> c6b565c36fe857b07d27aadd946a665ed8f577da
+
 class Note{
 private:
     QString id;

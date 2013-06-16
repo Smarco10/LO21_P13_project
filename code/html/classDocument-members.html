@@ -87,6 +87,7 @@ This is the complete list of members for <a class="el" href="classDocument.html"
   <tr bgcolor="#f0f0f0"><td><b>createTexHeader</b>(QBuffer *) (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>deleted</b> (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>Document</b>(const QString &amp;id, const QString &amp;title, const std::list&lt; Note * &gt; content=std::list&lt; Note * &gt;()) (defined in <a class="el" href="classDocument.html">Document</a>)</td><td><a class="el" href="classDocument.html">Document</a></td><td><code> [inline]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>editor</b> (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>file</b> (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>getEditor</b>(QWidget *parent=NULL) (defined in <a class="el" href="classDocument.html">Document</a>)</td><td><a class="el" href="classDocument.html">Document</a></td><td><code> [virtual]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>getId</b>() (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [inline]</code></td></tr>
@@ -97,6 +98,8 @@ This is the complete list of members for <a class="el" href="classDocument.html"
   <tr bgcolor="#f0f0f0"><td><b>getType</b>() (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [inline]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>getWS</b>() const  (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [inline]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>isModified</b>() const  (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [inline]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>isNote</b>(const Note *) (defined in <a class="el" href="classDocument.html">Document</a>)</td><td><a class="el" href="classDocument.html">Document</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>isNote</b>(const QString &amp;) (defined in <a class="el" href="classDocument.html">Document</a>)</td><td><a class="el" href="classDocument.html">Document</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>less</b>(const Note *n) const  (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [inline]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>loaded</b> (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>makehtmlbody</b>(QXmlStreamWriter *qw) (defined in <a class="el" href="classDocument.html">Document</a>)</td><td><a class="el" href="classDocument.html">Document</a></td><td><code> [virtual]</code></td></tr>
@@ -106,6 +109,7 @@ This is the complete list of members for <a class="el" href="classDocument.html"
   <tr bgcolor="#f0f0f0"><td><b>operator==</b>(const Note *n) const  (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [inline]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>pathWS</b> (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [protected]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>removeSubNote</b>(unsigned int) (defined in <a class="el" href="classDocument.html">Document</a>)</td><td><a class="el" href="classDocument.html">Document</a></td><td><code> [virtual]</code></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>removeSubNote</b>(const Note *) (defined in <a class="el" href="classDocument.html">Document</a>)</td><td><a class="el" href="classDocument.html">Document</a></td><td></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>save</b>(QTextStream &amp;f) (defined in <a class="el" href="classDocument.html">Document</a>)</td><td><a class="el" href="classDocument.html">Document</a></td><td><code> [virtual]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>setLoaded</b>(const bool l) (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [inline]</code></td></tr>
   <tr bgcolor="#f0f0f0"><td><b>setModified</b>(const bool m) (defined in <a class="el" href="classNote.html">Note</a>)</td><td><a class="el" href="classNote.html">Note</a></td><td><code> [inline]</code></td></tr>
@@ -133,7 +137,7 @@ This is the complete list of members for <a class="el" href="classDocument.html"
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 16 2013 21:28:46 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jun 16 2013 21:37:10 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
