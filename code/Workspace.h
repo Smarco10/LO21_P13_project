@@ -1,7 +1,11 @@
-#ifndef WORKSPACE_H
+﻿#ifndef WORKSPACE_H
 #define WORKSPACE_H
 
 #include "QHeader.h"
+#include"tagmanager.h"
+///classe Workspace
+///Gère la création physique des notes, les dossiers de travail
+///gère la sauvegarde des notes leurs suppression/restauration
 
 /* Exemple de fichier ".workspace"
 <?xml version='1.0' encoding='UTF-8'?>
@@ -30,8 +34,8 @@ public:
     QList<QString> listTags();
     void noteToD(const QString& path);
     void deletedToN(const QString& path);
-    QString getType(const QString& path);
-    QString getTags(const QString& path);
+   QString getType(const QString& path);
+    QString getTags(const QString& path){/*TagManager::getInstance()->getDictionary();*/}
     bool isNote(const QString& path);
 
     //write

@@ -2,7 +2,11 @@
 #define DOCUMENT_H
 
 #include "Note.h"
-
+///\class Document
+///Correspond à la spécification de Note pour contenir:
+///des sous-notes
+///un type d'éditeur i.e. un graphisme spécifique
+///et des exports HTML,Tex,TEXT correspondants
 /*
 class Document {
     friend class NotesManager;

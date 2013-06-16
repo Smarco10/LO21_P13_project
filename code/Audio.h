@@ -2,6 +2,10 @@
 #define AUDIO_H
 
 #include "Binary.h"
+///classe Audio
+///Correspond à la spécification de Binary pour contenir:
+///un fichier audio (.wav)
+///et des exports HTML,Tex,TEXT correspondants
 
 class Audio: public Binary{
     Audio(Audio& a);

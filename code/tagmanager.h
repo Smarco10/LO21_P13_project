@@ -1,8 +1,11 @@
 ﻿#ifndef TAGMANAGER_H
 #define TAGMANAGER_H
+#include"QHeader.h"
+
+class Workspace;
 
 #include"Note.h"
-#include "NotesManager.h"
+
 class Tag{
 
     QString noteId;
@@ -36,13 +39,15 @@ public:
 
     QList<Note*> noteListFromTagRestriction(QList<QString>);
     void updatedictionary(QList<QString> tags);
-    QSet<QString>& getdictionary(QSet<QString>& s); // pour affichage
+    QSet<QString>& getDictionary(QSet<QString>& s); // pour affichage
     void addNoteAndTags(Note& ,QSet<QString> s);
     void addTagsToNote(QString &nid,QSet<QString> s=QSet<QString>());
+    QList<QString> &getTagslistForNote(QString& nid){
+        Tag* temp=new Tag(nid);
+        QList<QString> tgs=static_cast<Tag>(*findTag(*temp)).getTagsList().toList();
+        return tgs;
+    }
 
-
-    //
-    //
 
 
 };

@@ -5,6 +5,10 @@
 #include "NotesManager.h"
 #include "Note.h"
 #include "Config.h"
+///classe MainWindow
+///Gère la création de l'interface Graphique, les liens entre les différents
+///menus ou widgets et les fonctions relatives.
+///
 
 //Faire un fichier de config où l'on stock les valeurs du fichier ressources.h
 //ainsi que le path par défaut qui est le dernier utilisé dans l'applis

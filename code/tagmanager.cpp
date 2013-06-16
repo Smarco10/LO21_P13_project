@@ -66,7 +66,7 @@ void TagManager::updatedictionary(QList<QString> tags){
 
 }
 
-QSet<QString>& TagManager::getdictionary(QSet<QString>& s){return dictionary;}
+QSet<QString>& TagManager::getDictionary(QSet<QString>& s){return dictionary;}
 
 bool Tag::operator ==(Tag& t){
     return this->getNoteid()==t.getNoteid();
@@ -84,3 +84,24 @@ void Tag::addTags(QSet<QString> tags){
     this->tags.operator +=(tags);
 
 }
+QString& TagManager::getTags(QString &nid){
+    Tag* temp=new Tag(nid);
+    QList<Tag>::Iterator it=this->findTag(*temp);
+    Tag t=*it;
+    QString s;
+    for(QSet<QString>::iterator itS=t.getTagsList().begin();itS!=t.getTagsList().end();++itS){
+        s+=*itS;
+        s+=";";
+    }
+    return s;
+
+}
+void TagManager::filltags(QString nid, QString s){
+
+    Tag* temp=new Tag(nid);
+    QList<Tag>::Iterator it=this->findTag(*temp);
+
+
+
+}
+
