@@ -35,25 +35,25 @@ QTextStream& Image::save(QTextStream& f){
     return f;
 }
 
+NoteEditor* Image::getEditor(QWidget* parent){
+    return new ImageEditor(this, parent);
+}
+
  void Image::makehtmlbody(QXmlStreamWriter* qw){
-
-        qw->writeStartElement("body");
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("h1",this->getTitle());
-            qw->writeEmptyElement("br");
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("h3",QString("PATH: ")+this->getPath());
-            qw->writeEmptyElement("br");
-            qw->writeEmptyElement("br");
-            qw->writeStartElement("img");
-                qw->writeAttribute("source",this->getPath());
-            qw->writeEndElement();
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("p",this->getDesc());
-            qw->writeEmptyElement("br");
-            //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
-        qw->writeEndElement();
-
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h1",this->getTitle());
+    qw->writeEmptyElement("br");
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h3",QString("PATH: ")+this->getPath());
+    qw->writeEmptyElement("br");
+    qw->writeEmptyElement("br");
+    qw->writeStartElement("img");
+        qw->writeAttribute("src",this->getPath());
+    qw->writeEndElement();
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("p",this->getDesc());
+    qw->writeEmptyElement("br");
+    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
 }
 
 QString Image::toTEX(){

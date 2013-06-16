@@ -49,7 +49,6 @@ public:
     unsigned int getNbNotes(){ return notes.size();}
 
     QIcon getNoteIcon(Note* n);
-    NoteEditor* noteEdConstructor(Note* n, QWidget *parent=NULL);
 
     void changeWorkspace();
 };

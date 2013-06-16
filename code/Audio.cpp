@@ -36,24 +36,25 @@ QTextStream& Audio::save(QTextStream& f){
     return f;
 }
 
-void Audio::makehtmlbody(QXmlStreamWriter* qw){
+NoteEditor* Audio::getEditor(QWidget* parent){
+    return new AudioEditor(this, parent);
+}
 
-        qw->writeStartElement("body");
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("h1",this->getTitle());
-            qw->writeEmptyElement("br");
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("h3",QString("PATH: ")+this->getPath());
-            qw->writeEmptyElement("br");
-            qw->writeEmptyElement("br");
-            qw->writeStartElement("audio");
-                qw->writeAttribute("src",this->getPath());
-                qw->writeAttribute("controls", "true");
-            qw->writeEndElement();
-            qw->writeTextElement("p",this->getDesc());
-            qw->writeEmptyElement("br");
-            //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
-        qw->writeEndElement();
+void Audio::makehtmlbody(QXmlStreamWriter* qw){
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h1",this->getTitle());
+    qw->writeEmptyElement("br");
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h3",QString("PATH: ")+this->getPath());
+    qw->writeEmptyElement("br");
+    qw->writeEmptyElement("br");
+    qw->writeStartElement("audio");
+        qw->writeAttribute("src",this->getPath());
+        qw->writeAttribute("controls", "true");
+    qw->writeEndElement();
+    qw->writeTextElement("p",this->getDesc());
+    qw->writeEmptyElement("br");
+    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
 }
 
 QString Audio::toTEX(){

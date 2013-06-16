@@ -15,6 +15,7 @@ public:
     QString toTEXT();
 
     QTextStream& save(QTextStream& f);
+    NoteEditor* getEditor(QWidget* parent = NULL);
 };
 
 class AudioEditor: public BinaryEditor{

@@ -212,7 +212,7 @@ void MainWindow::noteCreator(Note* n){
 QListEditorItem* MainWindow::newItem(Note* n){
     if(n == NULL)
         return NULL;
-    return new QListEditorItem(manager->getNoteIcon(n), n->getTitle(), manager->noteEdConstructor(n, editor));
+    return new QListEditorItem(manager->getNoteIcon(n), n->getTitle(), n->getEditor(editor));
 }
 
 void MainWindow::updateNotes(){

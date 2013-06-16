@@ -10,6 +10,7 @@ class Video: public Binary{
 public:
     Video(const QString& id, const QString& title, const QString& desc="", const QString& path=""):Binary("Video", id, title, desc, path){}
     QTextStream& save(QTextStream& f);
+    NoteEditor* getEditor(QWidget* parent = NULL);
 
     void makehtmlbody(QXmlStreamWriter* qw);
     QString toTEX();

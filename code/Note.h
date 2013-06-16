@@ -48,9 +48,11 @@ public:
     virtual QTextStream& save(QTextStream&) = 0;
 
     QString toHTML();
-    virtual void makehtmlbody(QXmlStreamWriter* qw)=0;
+    virtual void makehtmlbody(QXmlStreamWriter* qw) = 0;
     virtual QString toTEX() = 0;
     virtual QString toTEXT() = 0;
+
+    virtual NoteEditor* getEditor(QWidget* parent = NULL) = 0;
 };
 
 QTextStream& operator<<(QTextStream& f, Note& n);

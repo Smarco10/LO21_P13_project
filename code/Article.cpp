@@ -32,21 +32,21 @@ QTextStream& Article::save(QTextStream& f){
     return f;
 }
 
-void Article::makehtmlbody(QXmlStreamWriter* qw){
+NoteEditor* Article::getEditor(QWidget* parent){
+    return new ArticleEditor(this, parent);
+}
 
-    qw->writeStartElement("body");
+void Article::makehtmlbody(QXmlStreamWriter* qw){
     qw->writeTextElement("h1",this->getTitle());
     qw->writeEmptyElement("br");
     qw->writeEmptyElement("br");
     qw->writeTextElement("p",this->getContent());
     qw->writeEmptyElement("br");
     //qw->writeTextElement("p",QString("Tag:")+this->getTags());
-    qw->writeEndElement();
 }
 
 
 QString Article::toTEX(){
-
     if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
         throw NotesException("Buffer unavailable for HTML export.");
     }

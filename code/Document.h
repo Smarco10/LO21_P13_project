@@ -59,6 +59,20 @@ public:
 };
 //*/
 
+class DocButton:public QPushButton{
+    Q_OBJECT
+private:
+    QWidget *widget;
+public:
+    DocButton(QWidget* wid, const QIcon& ico, const QString& txt, QWidget *p = NULL):QPushButton(ico, txt, p), widget(wid){}
+    DocButton(QWidget* wid, const QString& txt, QWidget *p = NULL):QPushButton(txt, p), widget(wid){}
+
+signals:
+    void sendWid(QWidget*);
+public slots:
+    void getWid();
+};
+
 class Document: public Note{
 private:
     std::list<Note*> content;
@@ -75,7 +89,7 @@ public:
 
     unsigned int getNbSubNotes() {return content.size();}
     QTextStream& save(QTextStream& f);
-
+    NoteEditor* getEditor(QWidget *parent = NULL);
 
     virtual void makehtmlbody(QXmlStreamWriter* qw);
     QString toTEX();
@@ -91,11 +105,11 @@ public:
     DocumentEditor(Document* d, QWidget* parent=0);
     ~DocumentEditor(){}
 
-signals:
-    void updateS(QString);
+    void insertNote(QWidget*);
 
 public slots:
-    void update(QString s="");
+    void detachNote(QWidget*);
+    void selectNote();
 };
 
 #endif // DOCUMENT_H

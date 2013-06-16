@@ -103,28 +103,6 @@ Note* NotesManager::noteConstructor(const QString& type, const QString& id, cons
     return NULL;
 }
 
-NoteEditor* NotesManager::noteEdConstructor(Note* n, QWidget *parent){
-    //Rajouter les types ici ...
-
-    if(n == NULL)
-        return NULL;
-
-    if(n->getType() == "Article"){
-        return new ArticleEditor((Article*)n, parent);
-    } else if(n->getType() == "Document"){
-        return new DocumentEditor((Document*)n, parent);
-    } else if(n->getType() == "Image"){
-        return new ImageEditor((Image*)n, parent);
-    } else if(n->getType() == "Audio"){
-        return new AudioEditor((Audio*)n, parent);
-    } else if(n->getType() == "Video"){
-        return new VideoEditor((Video*)n, parent);
-    }
-
-    //type inconnu on laisse à NULL
-    return NULL;
-}
-
 QIcon NotesManager::getNoteIcon(Note* n){
     //Rajouter les types ici ...
 
@@ -157,9 +135,11 @@ QString NotesManager::typeNote(const QString& id){
 Workspace* NotesManager::workspace = NULL;
 NotesManager* NotesManager::instance = NULL; // pointeur sur l'unique instance
 NotesManager* NotesManager::getInstance(){
-    if(!instance) instance=new NotesManager;
+    if(!instance){
+        instance=new NotesManager;
+        instance->changeWorkspace();
+    }
 
-    instance->changeWorkspace();
     return instance;
 }
 

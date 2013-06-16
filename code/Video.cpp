@@ -35,6 +35,10 @@ QTextStream& Video::save(QTextStream& f){
     return f;
 }
 
+NoteEditor* Video::getEditor(QWidget* parent){
+    return new VideoEditor(this, parent);
+}
+
 QString Video::toTEX(){
     if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
          throw NotesException("Buffer unavailable for HTML export.");
@@ -50,24 +54,26 @@ QString Video::toTEX(){
 
  void Video::makehtmlbody(QXmlStreamWriter* qw){
 
-        qw->writeStartElement("body");
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("h1",this->getTitle());
-            qw->writeEmptyElement("br");
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("h3",QString("PATH: ")+this->getPath());
-            qw->writeEmptyElement("br");
-            qw->writeEmptyElement("br");
-            qw->writeStartElement("video");
-                qw->writeAttribute("src",this->getPath());
-                qw->writeAttribute("controls", "true");
-            qw->writeEndElement();
-            qw->writeEmptyElement("br");
-            qw->writeTextElement("p",this->getDesc());
-            qw->writeEmptyElement("br");
-            //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
-        qw->writeEndElement();
-
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h1",this->getTitle());
+    qw->writeEmptyElement("br");
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("h3",QString("PATH: ")+this->getPath());
+    qw->writeEmptyElement("br");
+    qw->writeEmptyElement("br");
+    if(getPath().endsWith(".gif")){
+        qw->writeStartElement("img");
+            qw->writeAttribute("src",this->getPath());
+    } else {
+        qw->writeStartElement("video");
+            qw->writeAttribute("src",this->getPath());
+            qw->writeAttribute("controls", "true");
+    }
+    qw->writeEndElement();
+    qw->writeEmptyElement("br");
+    qw->writeTextElement("p",this->getDesc());
+    qw->writeEmptyElement("br");
+    //qw->writeTextElement("p",QString("Tag:")+(*it).getTags());
 }
 
 QString Video::toTEXT(){

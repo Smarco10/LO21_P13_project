@@ -82,22 +82,18 @@ QTextStream& Document::save(QTextStream& f){
     return f;
 }
 
+NoteEditor* Document::getEditor(QWidget* parent){
+    return new DocumentEditor(this, parent);
+}
+
 void Document::makehtmlbody(QXmlStreamWriter* qw){
-
-        qw->writeStartElement("body");
-            for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
-                qw->writeEmptyElement("br");
-                //qw->writeTextElement("h1",QString("Titre:")+(static_cast<Note*>(*it))->getTitle());
-                //qw->writeTextElement("h2",QString("ID:")+(static_cast<Note*>(*it))->getId());
-                //insÃ©rer ici la partie relative a chaque Ã©lÃ©ment de content
-                dynamic_cast<Note*>(*it)->makehtmlbody(qw);
-                x=x.left(x.indexOf("</body",0));
-                x=x.right(x.length()-(x.indexOf("body>",0)+5));
-                qw->writeCharacters(x);
-
-                qw->writeEmptyElement("br");
-            }
-        qw->writeEndElement();
+    for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
+        qw->writeEmptyElement("br");
+        //insÃ©rer ici la partie relative a chaque Ã©lÃ©ment de content
+        dynamic_cast<Note*>(*it)->makehtmlbody(qw);
+        qw->writeEmptyElement("br");
+        qw->writeEmptyElement("hr");
+    }
 }
 
 QString Document::toTEX(){
@@ -121,17 +117,107 @@ QString Document::toTEX(){
 }
 
 QString Document::toTEXT(){
-    return "";
+    QString out = "";
+    for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
+        out += "\n" + ((Note*)(*it))->toTEXT();
+        out += "\n##################################################";
+    }
+
+    return out;
 }
 
 DocumentEditor::DocumentEditor(Document* d, QWidget* parent):NoteEditor(d, parent){
-    title = new QLineEdit(this);
-    title->setText(d->getTitle());
-    zone->layout()->addWidget(title);
+    setParent(parent);
+    QPushButton *insert = new QPushButton("Inserer une note ici", this);
+    zone->layout()->addWidget(insert);
+    QObject::connect(insert, SIGNAL(clicked()), insert, SLOT(selectNote()));
 
-    //Charger toutes les widgets des notes dans la liste content
+    //Charger toutes les widgets des notes dans la liste content    
+    for(unsigned int i = 0; i < d->getNbSubNotes(); i++){
+        //pour chaques sous-notes insère l'Editeur associé
+        insertNote(d->getSubNote(i)->getEditor(this));
+    }
 }
 
-void DocumentEditor::update(QString s){
+void DocumentEditor::detachNote(QWidget *wid){
+    zone->layout()->removeWidget(wid);
+    wid->hide();
+}
 
+void DocumentEditor::selectNote(){
+    //demande à l'utilisateur de sélectionner une note parmi celles listées ou d'en créer une
+    NotesManager *manager = NotesManager::getInstance();
+
+    //fenêtre de sélection
+    QDialog ask;
+    ask.setWindowTitle("Selectionner une note à ajouter");
+    ask.setLayout(new QVBoxLayout);
+
+    //partie texte
+    ask.layout()->addWidget(new QLabel("Veuillez choisir une note à ajouter:", this));
+
+    //partie listes
+    QWidget *listes = new QWidget(this);
+    listes->setLayout(new QHBoxLayout);
+    ask.layout()->addWidget(listes);
+
+    QListWidget *notes = new QListWidget(listes);
+    listes->layout()->addWidget(notes);
+
+    //lister les notes existantes - celle déjà dans le document
+
+    //partie boutons
+    QWidget *buttons = new QWidget(this);
+    buttons->setLayout(new QHBoxLayout);
+
+    QPushButton *article = new QPushButton(ico_article, "");
+    article->setToolTip("Créer un nouvel article");
+    buttons->layout()->addWidget(article);
+
+    QPushButton *document = new QPushButton(ico_document, "");
+    document->setToolTip("Créer un nouveau document");
+    buttons->layout()->addWidget(document);
+
+    QPushButton *image = new QPushButton(ico_image, "");
+    image->setToolTip("Créer une nouvelle note image");
+    buttons->layout()->addWidget(image);
+
+    QPushButton *audio = new QPushButton(ico_audio, "");
+    audio->setToolTip("Créer une nouvelle note audio");
+    buttons->layout()->addWidget(audio);
+
+    QPushButton *video = new QPushButton(ico_video, "");
+    video->setToolTip("Créer une nouvelle note vidéo");
+    buttons->layout()->addWidget(video);
+
+    ask.layout()->addWidget(buttons);
+
+    /*QObject::connect(workspaces, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(showNotes(QListWidgetItem*)));
+    QObject::connect(workspaces, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(showNotes(QListWidgetItem*)));
+    QObject::connect(open, SIGNAL(clicked()), this, SLOT(loadWS()));
+    QObject::connect(clone, SIGNAL(clicked()), this, SLOT(cloneWS()));
+    QObject::connect(del, SIGNAL(clicked()), this, SLOT(safeDel()));
+    QObject::connect(create, SIGNAL(clicked()), this, SLOT(newWS()));*/
+
+    ask.exec();
+}
+
+void DocumentEditor::insertNote(QWidget *wid){
+    //insérer une note à la suite
+    QWidget *subNote = new QWidget(zone);
+    subNote->move(this->pos() + QPoint(10, 0));
+    subNote->setLayout(new QVBoxLayout);
+
+    DocButton *detach = new DocButton(subNote, "Detacher la note ci-dessous", subNote);
+    subNote->layout()->addWidget(detach);
+
+    QObject::connect(detach, SIGNAL(clicked()), detach, SLOT(getWid()));
+    QObject::connect(detach, SIGNAL(sendWid(QWidget*)), this, SLOT(detachNote(QWidget*)));
+
+    subNote->layout()->addWidget(wid);
+    zone->layout()->addWidget(subNote);
+}
+
+void DocButton::getWid(){
+    emit sendWid(widget);
 }
