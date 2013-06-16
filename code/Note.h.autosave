@@ -2,6 +2,7 @@
 #define NOTE_H
 
 #include "QHeader.h"
+
 ///\class Note (abstraite)
 ///Correspond au schéma de base pour une Note contenant:
 ///Un titre
@@ -11,12 +12,18 @@
 ///et le prototype de toutes les fonctions obligatoirement nécessaire à une Note
 ///un type d'éditeur i.e. un graphisme spécifique
 ///
+
+
+class NoteEditor;
+
+
 class Note{
 private:
     QString id;
     QString type;
 
 protected:
+    NoteEditor *editor;
     QString pathWS;
     QString title;
     bool loaded;
@@ -28,7 +35,7 @@ protected:
     void createTexHeader(QBuffer*);
 
 public:
-    Note(const QString& ty, const QString& i, const QString& tt):id(i),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray(""); buffer=new QBuffer(file);}
+    Note(const QString& ty, const QString& i, const QString& tt):id(i),editor(NULL),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray(""); buffer=new QBuffer(file);}
 
     QString& getId() {return id;}
     QString& getType() {return type;}

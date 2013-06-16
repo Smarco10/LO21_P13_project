@@ -158,11 +158,11 @@ void Workspace::deletedToN(const QString& path){
 
 void Workspace::updateNote(const QString& path, const QString& type, const QList<QString>& tags){
     QDomElement dom_el = dom->documentElement();
-    QDomNode nd = dom_el.firstChild();
+    QDomNodeList nd = dom_el.elementsByTagName("note");
 
-    while(!nd.isNull()){
-        QDomElement el = nd.toElement();
-        if(el.tagName() == "note" && el.attribute("path") == path){
+    for(int i = 0; i < nd.count(); i++){
+        QDomElement el = nd.at(i).toElement();
+        if(el.attribute("path") == path){
             QDomElement newEl = el;
             newEl.setAttribute("type", type);
             //convertis la liste en chaine
@@ -171,31 +171,25 @@ void Workspace::updateNote(const QString& path, const QString& type, const QList
                 tagsS += tags.at(i) + ";";
             newEl.setAttribute("tags", tagsS);
             dom_el.replaceChild(newEl, el);
+            modified = true;
             break;
         }
-        nd = nd.nextSibling();
     }
-
-    modified = true;
 }
 
 void Workspace::deleteNote(const QString& path){
     QDomElement dom_el = dom->documentElement();
-    QDomNode nd = dom_el.firstChild();
+    QDomNodeList nd = dom_el.elementsByTagName("noteDeleted");
 
-    while(!nd.isNull()){
-        QDomElement el = nd.toElement();
-        if(el.tagName() == "note" && el.attribute("path") == path){
-            dom_el.removeChild(el);
+    for(int i = 0; i < nd.count(); i++)
+        if(nd.at(i).toElement().attribute("path") == path){
+            dom_el.removeChild(nd.at(i));
             //supprime le fichier correspondant
             QFile fichier(getPath() + path);
             fichier.remove();
+            modified = true;
             break;
         }
-        nd = nd.nextSibling();
-    }
-
-    modified = true;
 }
 
 void Workspace::check(){

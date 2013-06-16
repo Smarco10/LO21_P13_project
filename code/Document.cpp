@@ -1,14 +1,17 @@
 ﻿#include "Document.h"
-#include "NotesManager.h"
 
 void Document::addSubNote(Note *n){
-    load();
+    if(isNote(n))
+        return;
+
     content.push_back(n);
     modified = true;
 }
 
 void Document::addSubNote(Note *n, unsigned int pos){
-    load();
+    if(isNote(n))
+        return;
+
     std::list<Note*>::iterator it = content.begin();
     for(unsigned int i = 0; i < pos; i++) it++;
     content.insert(it, n);
@@ -16,11 +19,20 @@ void Document::addSubNote(Note *n, unsigned int pos){
 }
 
 void Document::removeSubNote(unsigned int pos){
-    load();
+    load();    
     std::list<Note*>::iterator it = content.begin();
     for(unsigned int i = 0; i < pos; i++) it++;
     content.erase(it);
     modified = true;
+}
+
+void Document::removeSubNote(const Note* n){
+    load();
+    for(std::list<Note*>::iterator it = content.begin(); it != content.end() ; it++)
+        if(*it == n){
+            content.erase(it);
+            modified = true;
+        }
 }
 
 Note* Document::getSubNote(unsigned int pos){
@@ -28,6 +40,20 @@ Note* Document::getSubNote(unsigned int pos){
     std::list<Note*>::iterator it = content.begin();
     for(unsigned int i = 0; i < pos; i++) it++;
     return *it;
+}
+
+bool Document::isNote(const Note* n){
+    for(std::list<Note*>::iterator it = content.begin(); it != content.end() ; it++)
+        if(*it == n)
+            return true;
+    return false;
+}
+
+bool Document::isNote(const QString& id){
+    for(std::list<Note*>::iterator it = content.begin(); it != content.end() ; it++)
+        if(((Note*)*it)->getId() == id)
+            return true;
+    return false;
 }
 
 void Document::load(){
@@ -57,15 +83,13 @@ void Document::load(){
          //Pour chaques ligne, enregistre la note et l'ajoute au document
           QString subfile = flux.readLine();
           //vérifie que le fichier n'est pas déjà dans la liste
-          for(std::list<Note*>::iterator it = content.begin(); it != content.end(); it++)
-              if((*it)->getId() == subfile)
-                  //passe au fichier suivant
-                  continue;
+          if(isNote(subfile))
+              //passe au fichier suivant
+              continue;
 
           //si fichier non présent dans la liste
           //création d'une note en mémoire, catcher les exceptions
-          Note& note = NotesManager::instance->getNote(subfile);
-
+          Note& note = NotesManager::getInstance()->getNote(subfile);
           //ajoute le fichier à la liste
           addSubNote(&note);
      }
@@ -83,28 +107,30 @@ QTextStream& Document::save(QTextStream& f){
 }
 
 NoteEditor* Document::getEditor(QWidget* parent){
+    load();
     return new DocumentEditor(this, parent);
 }
 
 void Document::makehtmlbody(QXmlStreamWriter* qw){
+    qw->writeTextElement("h1", getTitle());
+    qw->writeEmptyElement("br");
     for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
+        qw->writeEmptyElement("hr");
         qw->writeEmptyElement("br");
         //insÃ©rer ici la partie relative a chaque Ã©lÃ©ment de content
         dynamic_cast<Note*>(*it)->makehtmlbody(qw);
         qw->writeEmptyElement("br");
-        qw->writeEmptyElement("hr");
     }
 }
 
 QString Document::toTEX(){
     QString x;
-    int i;
     if (!buffer->open(QIODevice::WriteOnly |QIODevice::Truncate)) {
         throw NotesException("Buffer unavailable for HTML export.");
     }
     createTexHeader(buffer);
     for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
-        x=dynamic_cast<Note*>(*it)->toHTML();
+        x=dynamic_cast<Note*>(*it)->toTEX();
         x=x.left(x.indexOf("\\end{document}",0));
         x=x.right(x.length()-(x.indexOf("\\begin{document}",0)+16));
         x.push_front("\n");
@@ -117,10 +143,10 @@ QString Document::toTEX(){
 }
 
 QString Document::toTEXT(){
-    QString out = "";
+    QString out = getTitle() + "\n";
     for(std::list <Note*>::const_iterator it=content.begin();it!=content.end();++it){
-        out += "\n" + ((Note*)(*it))->toTEXT();
-        out += "\n##################################################";
+        out += "\n##################################################\n";
+        out += "\n" + ((Note*)(*it))->toTEXT() + "\n";
     }
 
     return out;
@@ -128,9 +154,9 @@ QString Document::toTEXT(){
 
 DocumentEditor::DocumentEditor(Document* d, QWidget* parent):NoteEditor(d, parent){
     setParent(parent);
-    QPushButton *insert = new QPushButton("Inserer une note ici", this);
+    QPushButton *insert = new QPushButton("Ajouter une note", this);
     zone->layout()->addWidget(insert);
-    QObject::connect(insert, SIGNAL(clicked()), insert, SLOT(selectNote()));
+    QObject::connect(insert, SIGNAL(clicked()), this, SLOT(selectNote()));
 
     //Charger toutes les widgets des notes dans la liste content    
     for(unsigned int i = 0; i < d->getNbSubNotes(); i++){
@@ -141,6 +167,7 @@ DocumentEditor::DocumentEditor(Document* d, QWidget* parent):NoteEditor(d, paren
 
 void DocumentEditor::detachNote(QWidget *wid){
     zone->layout()->removeWidget(wid);
+    ((Document*)ressource)->removeSubNote(&((NoteEditor*)wid)->getRessource());
     wid->hide();
 }
 
@@ -149,62 +176,38 @@ void DocumentEditor::selectNote(){
     NotesManager *manager = NotesManager::getInstance();
 
     //fenêtre de sélection
-    QDialog ask;
-    ask.setWindowTitle("Selectionner une note à ajouter");
-    ask.setLayout(new QVBoxLayout);
+    ask = new QDialog;
+    ask->setWindowTitle("Selectionner une note à ajouter");
+    ask->setLayout(new QVBoxLayout);
 
     //partie texte
-    ask.layout()->addWidget(new QLabel("Veuillez choisir une note à ajouter:", this));
+    ask->layout()->addWidget(new QLabel("Veuillez choisir une note à ajouter:", ask));
 
     //partie listes
-    QWidget *listes = new QWidget(this);
+    QWidget *listes = new QWidget(ask);
     listes->setLayout(new QHBoxLayout);
-    ask.layout()->addWidget(listes);
+    ask->layout()->addWidget(listes);
 
-    QListWidget *notes = new QListWidget(listes);
+    notes = new QListEditor(listes);
     listes->layout()->addWidget(notes);
 
     //lister les notes existantes - celle déjà dans le document
+    for(unsigned int i = 0; i < manager->getNbNotes(); i++){
+        Note *n = manager->getNote(i);
+        //si la note ne fait pas partie de celle du document et que ce n'est pas lui même
+        if(!((Document*)ressource)->isNote(n) && n != ressource)
+            notes->addItem(new QListEditorItem(manager->getNoteIcon(n), n->getTitle(), n->getEditor(), notes));
+    }
 
-    //partie boutons
-    QWidget *buttons = new QWidget(this);
-    buttons->setLayout(new QHBoxLayout);
+    QObject::connect(notes, SIGNAL(itemDoubleClicked(QListWidgetItem*)), notes, SLOT(itActDoubleClicked(QListWidgetItem*)));
+    QObject::connect(notes, SIGNAL(itActDoubleClickedS(QListEditorItem*)), this, SLOT(openNote(QListEditorItem*)));
 
-    QPushButton *article = new QPushButton(ico_article, "");
-    article->setToolTip("Créer un nouvel article");
-    buttons->layout()->addWidget(article);
-
-    QPushButton *document = new QPushButton(ico_document, "");
-    document->setToolTip("Créer un nouveau document");
-    buttons->layout()->addWidget(document);
-
-    QPushButton *image = new QPushButton(ico_image, "");
-    image->setToolTip("Créer une nouvelle note image");
-    buttons->layout()->addWidget(image);
-
-    QPushButton *audio = new QPushButton(ico_audio, "");
-    audio->setToolTip("Créer une nouvelle note audio");
-    buttons->layout()->addWidget(audio);
-
-    QPushButton *video = new QPushButton(ico_video, "");
-    video->setToolTip("Créer une nouvelle note vidéo");
-    buttons->layout()->addWidget(video);
-
-    ask.layout()->addWidget(buttons);
-
-    /*QObject::connect(workspaces, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(showNotes(QListWidgetItem*)));
-    QObject::connect(workspaces, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(showNotes(QListWidgetItem*)));
-    QObject::connect(open, SIGNAL(clicked()), this, SLOT(loadWS()));
-    QObject::connect(clone, SIGNAL(clicked()), this, SLOT(cloneWS()));
-    QObject::connect(del, SIGNAL(clicked()), this, SLOT(safeDel()));
-    QObject::connect(create, SIGNAL(clicked()), this, SLOT(newWS()));*/
-
-    ask.exec();
+    ask->exec();
 }
 
-void DocumentEditor::insertNote(QWidget *wid){
+void DocumentEditor::insertNote(NoteEditor *ne, QWidget *parent){
     //insérer une note à la suite
-    QWidget *subNote = new QWidget(zone);
+    QWidget *subNote = new QWidget(parent);
     subNote->move(this->pos() + QPoint(10, 0));
     subNote->setLayout(new QVBoxLayout);
 
@@ -214,8 +217,18 @@ void DocumentEditor::insertNote(QWidget *wid){
     QObject::connect(detach, SIGNAL(clicked()), detach, SLOT(getWid()));
     QObject::connect(detach, SIGNAL(sendWid(QWidget*)), this, SLOT(detachNote(QWidget*)));
 
-    subNote->layout()->addWidget(wid);
+    ((Document*)ressource)->addSubNote(&(ne->getRessource()));
+
+    subNote->layout()->addWidget(ne);
+    ne->show();
     zone->layout()->addWidget(subNote);
+
+    if(ask)
+        ask->close();
+}
+
+void DocumentEditor::openNote(QListEditorItem *nt){
+    insertNote(nt->getRessource(), ask);
 }
 
 void DocButton::getWid(){

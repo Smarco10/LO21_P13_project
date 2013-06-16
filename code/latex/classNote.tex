@@ -1,0 +1,126 @@
+\hypertarget{classNote}{\section{\-Note \-Class \-Reference}
+\label{classNote}\index{\-Note@{\-Note}}
+}
+\-Inheritance diagram for \-Note\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classNote}
+\end{center}
+\end{figure}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classNote_a3138630ccdb6b6d422424fa94b6e4222}{{\bfseries \-Note} (const \-Q\-String \&ty, const \-Q\-String \&i, const \-Q\-String \&tt)}\label{classNote_a3138630ccdb6b6d422424fa94b6e4222}
+
+\item 
+\hypertarget{classNote_afac5dd460bebdc9f52f265b0c01f54df}{\-Q\-String \& {\bfseries get\-Id} ()}\label{classNote_afac5dd460bebdc9f52f265b0c01f54df}
+
+\item 
+\hypertarget{classNote_ad2630e09ed1356d80f1db4283cd9e4be}{\-Q\-String \& {\bfseries get\-Type} ()}\label{classNote_ad2630e09ed1356d80f1db4283cd9e4be}
+
+\item 
+\hypertarget{classNote_aef7f23af8457fede2bc63f91f32d4d0c}{\-Q\-String \& {\bfseries get\-Title} ()}\label{classNote_aef7f23af8457fede2bc63f91f32d4d0c}
+
+\item 
+\hypertarget{classNote_a86584195d7aa4a2cc1673447741c98b2}{void {\bfseries set\-Title} (const \-Q\-String \&tt)}\label{classNote_a86584195d7aa4a2cc1673447741c98b2}
+
+\item 
+\hypertarget{classNote_a2d7ffa23fe66a9e3749fc172f490350b}{void {\bfseries set\-Modified} (const bool m)}\label{classNote_a2d7ffa23fe66a9e3749fc172f490350b}
+
+\item 
+\hypertarget{classNote_abe3ea587b0371292768ce5b6cccfc796}{bool {\bfseries is\-Modified} () const }\label{classNote_abe3ea587b0371292768ce5b6cccfc796}
+
+\item 
+\hypertarget{classNote_a277285eef69e663a22180860f6c2f75c}{void {\bfseries set\-Loaded} (const bool l)}\label{classNote_a277285eef69e663a22180860f6c2f75c}
+
+\item 
+\hypertarget{classNote_a4bd73aa83650b929464c3f52d6e8e008}{bool {\bfseries get\-Loaded} () const }\label{classNote_a4bd73aa83650b929464c3f52d6e8e008}
+
+\item 
+\hypertarget{classNote_ac41c579a824b2343f969f9ab6cc4ad23}{\-Q\-String {\bfseries get\-W\-S} () const }\label{classNote_ac41c579a824b2343f969f9ab6cc4ad23}
+
+\item 
+\hypertarget{classNote_a1307f7d1b6bfbfc6d21dca0de8cc9d2e}{void {\bfseries set\-W\-S} (const \-Q\-String \&p=\char`\"{}\char`\"{})}\label{classNote_a1307f7d1b6bfbfc6d21dca0de8cc9d2e}
+
+\item 
+\hypertarget{classNote_aba4239202c30b1bf7780168e5785669d}{virtual void {\bfseries add\-Sub\-Note} (\hyperlink{classNote}{\-Note} $\ast$n)}\label{classNote_aba4239202c30b1bf7780168e5785669d}
+
+\item 
+\hypertarget{classNote_a8215d0746043be730aa9a38d7d3285f9}{virtual void {\bfseries add\-Sub\-Note} (\hyperlink{classNote}{\-Note} $\ast$n, unsigned int)}\label{classNote_a8215d0746043be730aa9a38d7d3285f9}
+
+\item 
+\hypertarget{classNote_a3d294d3e99587a0ad11a3e7c34b5ce5a}{virtual void {\bfseries remove\-Sub\-Note} (unsigned int)}\label{classNote_a3d294d3e99587a0ad11a3e7c34b5ce5a}
+
+\item 
+\hypertarget{classNote_ab5e66e683b06741279d1d985415d7aa6}{virtual \hyperlink{classNote}{\-Note} $\ast$ {\bfseries get\-Sub\-Note} (unsigned int pos=0)}\label{classNote_ab5e66e683b06741279d1d985415d7aa6}
+
+\item 
+\hypertarget{classNote_a9ac7c1fdeff4f4c5abc16a00d3363e7c}{bool {\bfseries operator==} (const \hyperlink{classNote}{\-Note} $\ast$n) const }\label{classNote_a9ac7c1fdeff4f4c5abc16a00d3363e7c}
+
+\item 
+\hypertarget{classNote_ae461ebd3ed6cefc5120467ce9e8a0c54}{bool {\bfseries operator$<$} (const \hyperlink{classNote}{\-Note} $\ast$n) const }\label{classNote_ae461ebd3ed6cefc5120467ce9e8a0c54}
+
+\item 
+\hypertarget{classNote_a445fbd0c16993baf1c13c0afed75edb2}{bool {\bfseries less} (const \hyperlink{classNote}{\-Note} $\ast$n) const }\label{classNote_a445fbd0c16993baf1c13c0afed75edb2}
+
+\item 
+\hypertarget{classNote_a61c1426d4ebaa250b0f5824686ab0418}{virtual \-Q\-Text\-Stream \& {\bfseries save} (\-Q\-Text\-Stream \&)=0}\label{classNote_a61c1426d4ebaa250b0f5824686ab0418}
+
+\item 
+\hypertarget{classNote_a7085a1f824cf244f0ce8b83294bbffc6}{\-Q\-String {\bfseries to\-H\-T\-M\-L} ()}\label{classNote_a7085a1f824cf244f0ce8b83294bbffc6}
+
+\item 
+\hypertarget{classNote_a5126f046068ca9d4762685c4f9b1b131}{virtual void {\bfseries makehtmlbody} (\-Q\-Xml\-Stream\-Writer $\ast$qw)=0}\label{classNote_a5126f046068ca9d4762685c4f9b1b131}
+
+\item 
+\hypertarget{classNote_ae677cec085c722e939736823d3b6c242}{virtual \-Q\-String {\bfseries to\-T\-E\-X} ()=0}\label{classNote_ae677cec085c722e939736823d3b6c242}
+
+\item 
+\hypertarget{classNote_a14650fab181136a122541b83d51b24f5}{virtual \-Q\-String {\bfseries to\-T\-E\-X\-T} ()=0}\label{classNote_a14650fab181136a122541b83d51b24f5}
+
+\item 
+\hypertarget{classNote_a2cdb1d951f9983306c3d937c1a4a76ac}{virtual \hyperlink{classNoteEditor}{\-Note\-Editor} $\ast$ {\bfseries get\-Editor} (\-Q\-Widget $\ast$parent=\-N\-U\-L\-L)=0}\label{classNote_a2cdb1d951f9983306c3d937c1a4a76ac}
+
+\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classNote_afd8122ada6839ee48f0d92f5646186a0}{virtual void {\bfseries load} ()=0}\label{classNote_afd8122ada6839ee48f0d92f5646186a0}
+
+\item 
+\hypertarget{classNote_a3b20f80c2cf8511f0581e28d4927b6ee}{void {\bfseries create\-Tex\-Header} (\-Q\-Buffer $\ast$)}\label{classNote_a3b20f80c2cf8511f0581e28d4927b6ee}
+
+\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classNote_a277563af352bd04c5603bdb0bb30869e}{\-Q\-String {\bfseries path\-W\-S}}\label{classNote_a277563af352bd04c5603bdb0bb30869e}
+
+\item 
+\hypertarget{classNote_ae8e10911c66931c9285925e1760816fd}{\-Q\-String {\bfseries title}}\label{classNote_ae8e10911c66931c9285925e1760816fd}
+
+\item 
+\hypertarget{classNote_a9edcd23344e067ded660deb97bc5ca4a}{bool {\bfseries loaded}}\label{classNote_a9edcd23344e067ded660deb97bc5ca4a}
+
+\item 
+\hypertarget{classNote_aaa3ed93cab78b04eebb5b5ba52722871}{bool {\bfseries modified}}\label{classNote_aaa3ed93cab78b04eebb5b5ba52722871}
+
+\item 
+\hypertarget{classNote_aeae11c0f8281ba3bfc7ec907cc9cf0b9}{bool {\bfseries deleted}}\label{classNote_aeae11c0f8281ba3bfc7ec907cc9cf0b9}
+
+\item 
+\hypertarget{classNote_a76bf0fff374aed4c754c262eeffc62bc}{\-Q\-Byte\-Array $\ast$ {\bfseries file}}\label{classNote_a76bf0fff374aed4c754c262eeffc62bc}
+
+\item 
+\hypertarget{classNote_ad1def1d9f3e46da1b0a577ac17c73401}{\-Q\-Buffer $\ast$ {\bfseries buffer}}\label{classNote_ad1def1d9f3e46da1b0a577ac17c73401}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\-Correspond au schéma de base pour une \hyperlink{classNote}{\-Note} contenant\-: \-Un titre \-Un workspace \-Un \-I\-D \-Un espace de stockage pour les exports et le prototype de toutes les fonctions obligatoirement nécessaire à une \hyperlink{classNote}{\-Note} un type d'éditeur i.\-e. un graphisme spécifique 
+
+\-The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+\-Note.\-h\item 
+\-Note.\-cpp\end{DoxyCompactItemize}

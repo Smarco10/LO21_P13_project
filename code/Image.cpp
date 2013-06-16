@@ -36,6 +36,7 @@ QTextStream& Image::save(QTextStream& f){
 }
 
 NoteEditor* Image::getEditor(QWidget* parent){
+    load();
     return new ImageEditor(this, parent);
 }
 

@@ -2,6 +2,7 @@
 #define DOCUMENT_H
 
 #include "Note.h"
+<<<<<<< HEAD
 ///\class Document
 ///Correspond à la spécification de Note pour contenir:
 ///des sous-notes (Audio, Article, Image, Video)
@@ -62,6 +63,13 @@ public:
     ConstIterator getIterator() const { return ConstIterator(articles,nbArticles); }
 };
 //*/
+=======
+#include "NotesManager.h"
+#include "MainWindow.h"
+
+class QListEditor;
+class QListEditorItem;
+>>>>>>> c6b565c36fe857b07d27aadd946a665ed8f577da
 
 class DocButton:public QPushButton{
     Q_OBJECT
@@ -89,7 +97,10 @@ public:
     void addSubNote(Note* n);
     void addSubNote(Note *n, unsigned int);
     void removeSubNote(unsigned int);
+    void removeSubNote(const Note*);
     Note* getSubNote(unsigned int pos);
+    bool isNote(const Note*);
+    bool isNote(const QString&);
 
     unsigned int getNbSubNotes() {return content.size();}
     QTextStream& save(QTextStream& f);
@@ -104,16 +115,19 @@ class DocumentEditor: public NoteEditor{
 Q_OBJECT
 protected:
     std::list<QWidget*> content;
+    QDialog *ask;
+    QListEditor *notes;
 
 public:
-    DocumentEditor(Document* d, QWidget* parent=0);
+    DocumentEditor(Document* d, QWidget* parent = NULL);
     ~DocumentEditor(){}
 
-    void insertNote(QWidget*);
+    void insertNote(NoteEditor*, QWidget* parent = NULL);
 
 public slots:
     void detachNote(QWidget*);
     void selectNote();
+    void openNote(QListEditorItem*);
 };
 
 #endif // DOCUMENT_H

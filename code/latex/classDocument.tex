@@ -1,0 +1,58 @@
+\hypertarget{classDocument}{\section{\-Document \-Class \-Reference}
+\label{classDocument}\index{\-Document@{\-Document}}
+}
+
+
+{\ttfamily \#include $<$\-Document.\-h$>$}
+
+\-Inheritance diagram for \-Document\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classDocument}
+\end{center}
+\end{figure}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classDocument_a981b6426029d44d63384548cb347ea9f}{{\bfseries \-Document} (const \-Q\-String \&id, const \-Q\-String \&title, const std\-::list$<$ \hyperlink{classNote}{\-Note} $\ast$ $>$ content=std\-::list$<$ \hyperlink{classNote}{\-Note} $\ast$ $>$())}\label{classDocument_a981b6426029d44d63384548cb347ea9f}
+
+\item 
+\hypertarget{classDocument_a497e0d38a648361bbc5f9e8eb6da04a7}{void {\bfseries add\-Sub\-Note} (\hyperlink{classNote}{\-Note} $\ast$n)}\label{classDocument_a497e0d38a648361bbc5f9e8eb6da04a7}
+
+\item 
+\hypertarget{classDocument_a9bd7efe91c8d6e7d7076b1abf0b066fb}{void {\bfseries add\-Sub\-Note} (\hyperlink{classNote}{\-Note} $\ast$n, unsigned int)}\label{classDocument_a9bd7efe91c8d6e7d7076b1abf0b066fb}
+
+\item 
+\hypertarget{classDocument_a66a3b9b6cb032fdafc7eb279d2c87966}{void {\bfseries remove\-Sub\-Note} (unsigned int)}\label{classDocument_a66a3b9b6cb032fdafc7eb279d2c87966}
+
+\item 
+\hypertarget{classDocument_a0d28a68344f71d71c44b6f5ef27b97cb}{\hyperlink{classNote}{\-Note} $\ast$ {\bfseries get\-Sub\-Note} (unsigned int pos)}\label{classDocument_a0d28a68344f71d71c44b6f5ef27b97cb}
+
+\item 
+\hypertarget{classDocument_ae61276d28ebbc3ceb5f91907e226868f}{unsigned int {\bfseries get\-Nb\-Sub\-Notes} ()}\label{classDocument_ae61276d28ebbc3ceb5f91907e226868f}
+
+\item 
+\hypertarget{classDocument_afeeecb69d4ed6095ffd0b06881d6417c}{\-Q\-Text\-Stream \& {\bfseries save} (\-Q\-Text\-Stream \&f)}\label{classDocument_afeeecb69d4ed6095ffd0b06881d6417c}
+
+\item 
+\hypertarget{classDocument_a3fbc8eb1a50ec40c7cd74e5a969921a6}{\hyperlink{classNoteEditor}{\-Note\-Editor} $\ast$ {\bfseries get\-Editor} (\-Q\-Widget $\ast$parent=\-N\-U\-L\-L)}\label{classDocument_a3fbc8eb1a50ec40c7cd74e5a969921a6}
+
+\item 
+\hypertarget{classDocument_aeca93d0a046ccf87ff54daa56ea4fbcc}{virtual void {\bfseries makehtmlbody} (\-Q\-Xml\-Stream\-Writer $\ast$qw)}\label{classDocument_aeca93d0a046ccf87ff54daa56ea4fbcc}
+
+\item 
+\hypertarget{classDocument_abfe8c70f4db8563d41b1fed8ddbe268c}{\-Q\-String {\bfseries to\-T\-E\-X} ()}\label{classDocument_abfe8c70f4db8563d41b1fed8ddbe268c}
+
+\item 
+\hypertarget{classDocument_a47012344c13c7b6f43cce93d23e5f636}{\-Q\-String {\bfseries to\-T\-E\-X\-T} ()}\label{classDocument_a47012344c13c7b6f43cce93d23e5f636}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\-Correspond à la spécification de \hyperlink{classNote}{\-Note} pour contenir\-: des sous-\/notes (\hyperlink{classAudio}{\-Audio}, \hyperlink{classArticle}{\-Article}, \hyperlink{classImage}{\-Image}, \hyperlink{classVideo}{\-Video}) un type d'éditeur i.\-e. un graphisme spécifique et des exports \-H\-T\-M\-L,\-Tex,\-T\-E\-X\-T correspondants 
+
+\-The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+\-Document.\-h\item 
+\-Document.\-cpp\end{DoxyCompactItemize}
