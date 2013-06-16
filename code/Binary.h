@@ -2,6 +2,13 @@
 #define BINARY_H
 
 #include "Note.h"
+///\class Binary (abstraite)
+///Correspond à la spécification de Note pour contenir:
+///un fichier binaire
+///une description
+///un Path( chemin d'accès)
+///un type d'éditeur i.e. un graphisme spécifique
+///
 
 class Binary: public Note{
 protected:

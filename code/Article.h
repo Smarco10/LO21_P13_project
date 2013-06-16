@@ -2,6 +2,10 @@
 #define ARTICLE_H
 
 #include "Note.h"
+///classe Article
+///Correspond à la spécification de Note pour contenir:
+///un article (texte)
+///et des exports HTML,Tex,TEXT correspondants
 
 class Article: public Note{
     QString content;

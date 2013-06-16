@@ -4,12 +4,17 @@
 #include "QHeader.h"
 #include "Config.h"
 #include "Workspace.h"
+#include "tagmanager.h"
 #include "Note.h"
 #include "Article.h"
 #include "Document.h"
 #include "Audio.h"
 #include "Image.h"
 #include "Video.h"
+///classe NoteManager
+///Gère la création des Notes,leur destruction et gère leurs accès
+//Note manager est de type Instance unique
+//De plus, il possède le Workspace et le TagManager
 
 class NotesManager {
 private:
@@ -24,6 +29,7 @@ private:
     void reset();
 
     static Workspace *workspace;
+    static TagManager *tagmanager;
     static void loadWSNotes();
 
     friend class Document;
