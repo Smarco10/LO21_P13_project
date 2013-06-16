@@ -3,12 +3,15 @@
 
 #include "QHeader.h"
 
+class NoteEditor;
+
 class Note{
 private:
     QString id;
     QString type;
 
 protected:
+    NoteEditor *editor;
     QString pathWS;
     QString title;
     bool loaded;
@@ -20,7 +23,7 @@ protected:
     void createTexHeader(QBuffer*);
 
 public:
-    Note(const QString& ty, const QString& i, const QString& tt):id(i),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray(""); buffer=new QBuffer(file);}
+    Note(const QString& ty, const QString& i, const QString& tt):id(i),editor(NULL),type(ty),title(tt),loaded(false),modified(false){ file =new QByteArray(""); buffer=new QBuffer(file);}
 
     QString& getId() {return id;}
     QString& getType() {return type;}

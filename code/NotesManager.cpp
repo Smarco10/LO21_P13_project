@@ -26,7 +26,10 @@ Note* NotesManager::getNote(unsigned int i){
 
 Note& NotesManager::getNote(const QString& id){
     //regarde si la note est dans la liste
-   std::set<Note*>::iterator it = notes.end()/*notes.find(id)*/;
+    std::set<Note*>::iterator it = notes.begin();
+   for(; it != notes.end(); it++)
+       if(((Note*)(*it))->getId() == id)
+           break;
 
    if(it == notes.end())
    {

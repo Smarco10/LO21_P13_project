@@ -37,6 +37,7 @@ QTextStream& Audio::save(QTextStream& f){
 }
 
 NoteEditor* Audio::getEditor(QWidget* parent){
+    load();
     return new AudioEditor(this, parent);
 }
 

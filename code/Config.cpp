@@ -192,6 +192,7 @@ QList<QString> Config::listWS(){
 ConfigManager::ConfigManager(QWidget *parent):QDialog(parent){
     setParent(parent);
     setWindowTitle("Espaces de travail");
+    setWindowIcon(ico_workspaces);
 
     conf = new Config;
 

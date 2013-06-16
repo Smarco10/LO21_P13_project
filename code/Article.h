@@ -36,11 +36,7 @@ public:
     ArticleEditor(Article* a, QWidget* parent=0);
     ~ArticleEditor(){}
 
-signals:
-    void updateS(QString);
-
 public slots:
-    void update(QString s="");
     void contentMod();
 };
 

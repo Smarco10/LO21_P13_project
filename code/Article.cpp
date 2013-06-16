@@ -33,6 +33,9 @@ QTextStream& Article::save(QTextStream& f){
 }
 
 NoteEditor* Article::getEditor(QWidget* parent){
+    load();
+    /*if(!editor) editor = new ArticleEditor(this, parent);
+    return editor;*/
     return new ArticleEditor(this, parent);
 }
 
@@ -76,9 +79,4 @@ ArticleEditor::ArticleEditor(Article* a, QWidget* parent):NoteEditor(a, parent){
 void ArticleEditor::contentMod(){
     ((Article*)ressource)->setContent(content->toPlainText());
 }
-
-void ArticleEditor::update(QString s){
-
-}
-
 

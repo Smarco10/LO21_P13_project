@@ -36,6 +36,7 @@ QTextStream& Video::save(QTextStream& f){
 }
 
 NoteEditor* Video::getEditor(QWidget* parent){
+    load();
     return new VideoEditor(this, parent);
 }
 
